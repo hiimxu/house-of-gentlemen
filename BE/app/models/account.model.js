@@ -1,58 +1,77 @@
 
 
 const res = require('express/lib/response');
-const db= require('../common/connect');
-const Account=function (acc) {
-    this.account_id=acc.account_id;
-    this.account=acc.account;
-    this.password=acc.password;
-    this.role= acc.role;
+const db = require('../common/connect');
+const Account = function (acc) {
+    this.account_id = acc.account_id;
+    this.account = acc.account;
+    this.password = acc.password;
+    this.role = acc.role;
 
 }
-Account.getAll= function(result) {
+Account.getAll = function (result) {
 
 
-    db.query("SELECT * FROM swp490_g11.Account",(err,rows,fields)=>{
-    if (err) {
-        console.log(err);
-        result(err);
-    } else {
-        data = rows;
-    // console.log(data);
-    result(data)
-    }    
-    
-     
-    })
-    
-    
-}
-Account.getAccountById= function(id,result) {
-    // var data= {account_id:id,account:'admin',password:'123',role:'admin'}
-    db.query(`SELECT * FROM swp490_g11.Account where account_id =${id}`,(err,account,fields)=>{
+    db.query("SELECT * FROM swp490_g11.Account", (err, rows, fields) => {
         if (err) {
             console.log(err);
             result(err);
         } else {
-         result(account)
-        }  
-        })
-  
-    
+            data = rows;
+            // console.log(data);
+            result(data)
+        }
+
+
+    })
+
+
 }
-Account.createAccount= function (data,result) {
-    db.query(`INSERT INTO swp490_g11.Account SET?`,data,function(err,acc) {
+Account.getAccountById = function (id, result) {
+    // var data= {account_id:id,account:'admin',password:'123',role:'admin'}
+    db.query(`SELECT * FROM swp490_g11.Account where account_id =${id}`, (err, account, fields) => {
+        if (err) {
+            console.log(err);
+            result(err);
+        } else {
+            result(account)
+        }
+    })
+
+
+}
+Account.createAccount = function (data, result) {
+
+    db.query(`INSERT INTO account SET?`, data, (err,rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result("you are created new account");
+        }
+    });
+    
+
+
+
+
+
+
+
+
+    }
+    Account.checkAccount = function (data, result) {
+        db.query(`select*from account where account_name like '${data.account_name}'`, (err, rows, fields) => {
             if (err) {
-                result(err);
+                result(null,err)
             } else {
-                result({data});
+                result(rows)
             }
-        })
+            
+        });
+
         
-   
-    
-}
-Account.removeAccount= function (id,result) {
-    result("xoa thanh cong id:"+id)
-}
-module.exports= Account;
+    };
+    Account.removeAccount = function (id, result) {
+        result("xoa thanh cong id:" + id)
+    }
+    module.exports = Account;
