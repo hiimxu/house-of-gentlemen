@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const accountController = require('../controllers/account.controller');
 
-router.get('/api/account',accountController.account);
-router.get('/api/account/detail/:id',accountController.get_accountbyid);
-router.post('/api/account/add',accountController.add_account);
-router.delete('/api/account/delete/:id',accountController.delete_accountbyid);
+router.post('/login',accountController.login_account);
+router.get('/detail/:id',accountController.get_accountbyid);
+router.post('/add',accountController.add_account);
+router.delete('/delete/:id',accountController.delete_accountbyid);
+router.get('/',accountController.account);
 
 module.exports = router;

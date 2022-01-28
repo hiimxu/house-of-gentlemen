@@ -13,6 +13,15 @@ exports.get_accountbyid = function (req, res, next) {
 
 
 }
+exports.login_account = function (req, res, next) {
+    var acc = req.body.account;
+    var pass = req.body.password;
+    var data = Account.getAccountToLogin(acc,pass, function (data) {
+        res.json({ data });
+    });
+
+
+}
 exports.add_account = function (req, res, next) {
     var acc = req.body.account;
     var pass = req.body.password;

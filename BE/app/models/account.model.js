@@ -27,6 +27,17 @@ Account.getAll = function (result) {
 
 
 }
+Account.getAccountToLogin=function (acc,pass,result) {
+    db.query(`SELECT * FROM swp490_g11.Account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
+        if (err) {
+            console.log(err);
+            result(err);
+        } else {
+            result(account)
+        }
+    })
+    
+}
 Account.getAccountById = function (id, result) {
     // var data= {account_id:id,account:'admin',password:'123',role:'admin'}
     db.query(`SELECT * FROM swp490_g11.Account where account_id =${id}`, (err, account, fields) => {
@@ -72,6 +83,13 @@ Account.createAccount = function (data, result) {
         
     };
     Account.removeAccount = function (id, result) {
-        result("xoa thanh cong id:" + id)
+        db.query(`delete from account where account_id = ${id}`, (err, rows, fields) => {
+            if (err) {
+                result(null,err)
+            } else {
+                result("xoa account co account_id ="+id+" thanh cong");
+            }
+            
+        });
     }
     module.exports = Account;
