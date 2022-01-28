@@ -22,7 +22,7 @@ exports.change_password = function(req, res, next) {
 
     var data = Account.checkPassword(acc,old_pass,function(data) {
         if (data.length==1) {
-            var data = Account.updatePasswordAccount(id,new_pass, function (response) {
+            var data = Account.updatePasswordAccount(data[0].account_id,new_pass, function (response) {
                 res.json({ response });
             });
         } else {
