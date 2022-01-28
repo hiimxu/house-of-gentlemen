@@ -14,7 +14,7 @@ exports.get_accountbyid = function (req, res, next) {
 
 }
 exports.change_password = function(req, res, next) {
-    var id = req.body.id;
+    
     var new_pass = req.body.new_password;
     var old_pass = req.body.old_password;
     var acc = req.body.account_name;
