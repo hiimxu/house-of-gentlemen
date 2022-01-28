@@ -27,7 +27,7 @@ Account.getAll = function (result) {
 
 
 }
-Account.getAccountToLogin=function (acc,pass,result) {
+Account.getAccountToLogin = function (acc, pass, result) {
     db.query(`SELECT * FROM swp490_g11.Account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
         if (err) {
             console.log(err);
@@ -36,7 +36,7 @@ Account.getAccountToLogin=function (acc,pass,result) {
             result(account)
         }
     })
-    
+
 }
 Account.getAccountById = function (id, result) {
     // var data= {account_id:id,account:'admin',password:'123',role:'admin'}
@@ -53,43 +53,67 @@ Account.getAccountById = function (id, result) {
 }
 Account.createAccount = function (data, result) {
 
-    db.query(`INSERT INTO account SET?`, data, (err,rows, res) => {
+    db.query(`INSERT INTO account SET?`, data, (err, rows, res) => {
         if (err) {
             result(err)
         } else {
             result("you are created new account");
         }
     });
+
+
+
+
+
+
+
+
+
+}
+Account.checkAccount = function (data, result) {
+    db.query(`select*from account where account_name like '${data.account_name}'`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows)
+        }
+
+    });
+
+
+};
+Account.checkPassword = function (acc,pass, result) {
+    db.query(`select*from account where account_name like '${acc}' and password like '${pass}'`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows)
+        }
+
+    });
+
+
+};
+Account.removeAccount = function (id, result) {
+    db.query(`delete from account where account_id = ${id}`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result("xoa account co account_id =" + id + " thanh cong");
+        }
+
+    });
+}
+Account.updatePasswordAccount= function (id,new_pass, result) {
     
+    db.query(`update account set password=${new_pass} WHERE (account_id = '${id}')`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result("updated password")
+        }
 
+    });
+}
 
-
-
-
-
-
-
-    }
-    Account.checkAccount = function (data, result) {
-        db.query(`select*from account where account_name like '${data.account_name}'`, (err, rows, fields) => {
-            if (err) {
-                result(null,err)
-            } else {
-                result(rows)
-            }
-            
-        });
-
-        
-    };
-    Account.removeAccount = function (id, result) {
-        db.query(`delete from account where account_id = ${id}`, (err, rows, fields) => {
-            if (err) {
-                result(null,err)
-            } else {
-                result("xoa account co account_id ="+id+" thanh cong");
-            }
-            
-        });
-    }
-    module.exports = Account;
+module.exports = Account;

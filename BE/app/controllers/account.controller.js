@@ -13,6 +13,26 @@ exports.get_accountbyid = function (req, res, next) {
 
 
 }
+exports.change_password = function(req, res, next) {
+    var id = req.body.id;
+    var new_pass = req.body.new_password;
+    var old_pass = req.body.old_password;
+    var acc = req.body.account_name;
+    // res.json(acc +" "+ old_pass +" "+new_pass);
+
+    var data = Account.checkPassword(acc,old_pass,function(data) {
+        if (data.length==1) {
+            var data = Account.updatePasswordAccount(id,new_pass, function (response) {
+                res.json({ response });
+            });
+        } else {
+            res.json("kiem tra lai old_password");
+        }
+    })
+    
+    
+    
+}
 exports.login_account = function (req, res, next) {
     var acc = req.body.account;
     var pass = req.body.password;
