@@ -1,4 +1,7 @@
 var Account = require('../models/account.model');
+var SalonOwner = require('../models/salonOwner.model');
+var Customer = require('../models/customer.model');
+
 
 exports.account = function (req, res, next) {
     Account.getAll(function (data) {
@@ -43,7 +46,7 @@ exports.login_account = function (req, res, next) {
 
 }
 exports.add_account = function (req, res, next) {
-    var acc = req.body.account;
+    var acc = req.body.account_name;
     var pass = req.body.password;
     var rol = req.body.role;
     var save_data = { account_name: acc, password: pass, role: rol }
@@ -53,9 +56,38 @@ exports.add_account = function (req, res, next) {
             res.json("tai khoan da ton tai")
         }
         else {
-            data = Account.createAccount(save_data, function (data) {
-                res.json({ data })
-            })
+            // data = Account.createAccount(save_data, function (data) {
+            //     res.json({ data })
+            // })
+            if (rol=='salon') {
+                data = Account.createAccount(save_data, function (data) {
+                    // res.json("da tao account co role la salon voi accountId la"+data)
+                    var accountId=data;
+                    var nameSalon= req.body.nameSalon;
+                    var phone= req.body.phone;
+                    var possibility= req.body.possibility;
+                    var taxCode= req.body.taxCode;
+                    var save_salonOwner={accountId:accountId,nameSalon:nameSalon,phone:phone,possibility:possibility,taxCode:taxCode};
+                    data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
+                        res.json(data);
+    
+                    })
+
+                })
+            }else{
+                data = Account.createAccount(save_data, function (data) {
+                    var accountId=data;
+                    var phone= req.body.phone;
+                    var address=req.body.address;
+                    var birthday = req.body.birthday;//1993/03/30  yyyy/mm/dd
+                    var save_customer={accountId:accountId,phone:phone,address:address,birthday:birthday}
+                    data = Customer.createCustomer(save_customer, function (data) {
+                        res.json(data);
+    
+                    })
+                })
+
+            }
 
         }
 

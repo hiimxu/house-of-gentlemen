@@ -5,7 +5,6 @@ const SalonOwner = function (salon) {
     this.salonId = salon.salonId;
     this.nameSalon=salon.nameSalon;
     this.phone=salon.phone;
-    this.addressId=salon.addressId;
     this.possibility=salon.possibility;
     this.accountId=salon.accountId;
 
@@ -26,6 +25,17 @@ SalonOwner.getAll = function (result) {
 
     })
 
+
+}
+SalonOwner.createSalonOwner = function (data, result) {
+
+    db.query(`INSERT INTO salonowner SET?`, data, (err, rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result("updated success!!!");
+        }
+    });
 
 }
 module.exports = SalonOwner;

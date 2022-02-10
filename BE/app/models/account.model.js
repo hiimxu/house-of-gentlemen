@@ -27,6 +27,7 @@ Account.getAll = function (result) {
 
 
 }
+
 Account.getAccountToLogin = function (acc, pass, result) {
     db.query(`SELECT * FROM swp490_g11.Account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
         if (err) {
@@ -57,17 +58,9 @@ Account.createAccount = function (data, result) {
         if (err) {
             result(err)
         } else {
-            result("you are created new account");
+            result(rows.insertId);
         }
     });
-
-
-
-
-
-
-
-
 
 }
 Account.checkAccount = function (data, result) {
