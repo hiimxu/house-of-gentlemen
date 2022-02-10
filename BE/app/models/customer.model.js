@@ -14,7 +14,7 @@ Customer.createCustomer = function (data, result) {
         if (err) {
             result(err)
         } else {
-            result("updated success customer!!!");
+            result("created success customer!!!");
         }
     });
 

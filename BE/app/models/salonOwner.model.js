@@ -33,7 +33,7 @@ SalonOwner.createSalonOwner = function (data, result) {
         if (err) {
             result(err)
         } else {
-            result("updated success!!!");
+            result("created salon owner success!!!");
         }
     });
 

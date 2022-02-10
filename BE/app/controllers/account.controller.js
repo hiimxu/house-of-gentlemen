@@ -80,7 +80,8 @@ exports.add_account = function (req, res, next) {
                     var phone= req.body.phone;
                     var address=req.body.address;
                     var birthday = req.body.birthday;//1993/03/30  yyyy/mm/dd
-                    var save_customer={accountId:accountId,phone:phone,address:address,birthday:birthday}
+                    var nameCustomer=req.body.nameCustomer;
+                    var save_customer={accountId:accountId,nameCustomer:nameCustomer,phone:phone,address:address,birthday:birthday}
                     data = Customer.createCustomer(save_customer, function (data) {
                         res.json(data);
     
