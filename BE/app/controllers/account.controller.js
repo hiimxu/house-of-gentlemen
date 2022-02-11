@@ -1,6 +1,7 @@
 var Account = require('../models/account.model');
 var SalonOwner = require('../models/salonOwner.model');
 var Customer = require('../models/customer.model');
+var md5 = require('md5');
 
 
 exports.account = function (req, res, next) {
@@ -19,13 +20,15 @@ exports.get_accountbyid = function (req, res, next) {
 exports.change_password = function(req, res, next) {
     
     var new_pass = req.body.new_password;
+    var md5_new_pass=md5(md5_new_pass);
     var old_pass = req.body.old_password;
+    var md5_old_pass=md5(md5_old_pass);
     var acc = req.body.account_name;
     // res.json(acc +" "+ old_pass +" "+new_pass);
 
-    var data = Account.checkPassword(acc,old_pass,function(data) {
+    var data = Account.checkPassword(acc,md5_old_pass,function(data) {
         if (data.length==1) {
-            var data = Account.updatePasswordAccount(data[0].account_id,new_pass, function (response) {
+            var data = Account.updatePasswordAccount(data[0].account_id,md5_new_pass, function (response) {
                 res.json({ response });
             });
         } else {
@@ -39,7 +42,8 @@ exports.change_password = function(req, res, next) {
 exports.login_account = function (req, res, next) {
     var acc = req.body.account;
     var pass = req.body.password;
-    var data = Account.getAccountToLogin(acc,pass, function (data) {
+    var md5_pass=md5(pass);
+    var data = Account.getAccountToLogin(acc,md5_pass, function (data) {
         res.json({ data });
     });
 
@@ -48,8 +52,9 @@ exports.login_account = function (req, res, next) {
 exports.add_account = function (req, res, next) {
     var acc = req.body.account_name;
     var pass = req.body.password;
+    var md5_pass=md5(pass);
     var rol = req.body.role;
-    var save_data = { account_name: acc, password: pass, role: rol }
+    var save_data = { account_name: acc, password: md5_pass, role: rol }
     console.log("acc la:" + acc);
     var check = Account.checkAccount(save_data, function (data) {
         if (data.length == 1) {
