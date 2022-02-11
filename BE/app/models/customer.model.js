@@ -6,10 +6,8 @@ const Customer = function (customer) {
     this.address=customer.address;
     this.birthday=customer.birthday;
     this.accountId=customer.accountId;
-
 }
 Customer.createCustomer = function (data, result) {
-
     db.query(`INSERT INTO customer SET?`, data, (err, rows, res) => {
         if (err) {
             result(err)
@@ -17,6 +15,5 @@ Customer.createCustomer = function (data, result) {
             result("created success customer!!!");
         }
     });
-
 }
 module.exports=Customer;
