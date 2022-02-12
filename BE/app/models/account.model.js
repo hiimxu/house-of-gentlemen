@@ -7,7 +7,7 @@ const Account = function (acc) {
     this.role = acc.role;
 }
 Account.getAll = function (result) {
-    db.query("SELECT * FROM swp490_g11.Account", (err, rows, fields) => {
+    db.query("SELECT * FROM swp490_g11.account", (err, rows, fields) => {
         if (err) {
             console.log(err);
             result(err);
@@ -19,7 +19,7 @@ Account.getAll = function (result) {
     });
 }
 Account.getAccountToLogin = function (acc, pass, result) {
-    db.query(`SELECT * FROM swp490_g11.Account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
+    db.query(`SELECT * FROM swp490_g11.account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
         if (err) {
             console.log(err);
             result(err);
@@ -29,7 +29,7 @@ Account.getAccountToLogin = function (acc, pass, result) {
     })
 }
 Account.getAccountById = function (id, result) {
-    db.query(`SELECT * FROM swp490_g11.Account where account_id =${id}`, (err, account, fields) => {
+    db.query(`SELECT * FROM swp490_g11.account where account_id =${id}`, (err, account, fields) => {
         if (err) {
             console.log(err);
             result(err);
