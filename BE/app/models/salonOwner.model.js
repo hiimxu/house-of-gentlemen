@@ -28,4 +28,26 @@ SalonOwner.createSalonOwner = function (data, result) {
         }
     });
 }
+SalonOwner.getPrifileSalon =function (id, result) {
+    db.query("SELECT * FROM swp490_g11.salonowner where salonId="+id, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(err);
+        } else {
+           var data = rows;
+            result(data)
+        }
+    });
+}
+SalonOwner.updateProfileSalon =function (id,dataUpdate, result) {
+    db.query(`UPDATE swp490_g11.salonowner SET nameSalon = '${dataUpdate.nameSalon}', taxCode = '${dataUpdate.taxCode}', phone = '${dataUpdate.phone}'  WHERE (salonId = '${id}');`, (err, rows, fields) => {
+        console.log(dataUpdate)
+        if (err) {
+            result(null, err)
+        } else {
+            result("updated profile 's salon success!!!")
+        }
+    });
+}
+
 module.exports = SalonOwner;
