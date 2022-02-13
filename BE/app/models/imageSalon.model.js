@@ -17,6 +17,25 @@ ImageSalon.getAllImage = function (id,result) {
         }
     });
 }
+ImageSalon.addImageToImageSalon = function(dataImage,result){
+    db.query(`INSERT INTO image_salon SET?`, dataImage, (err, rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result({id : rows.insertId,...dataImage});
+        }
+    });
+}
+ImageSalon.deleteImageOfImageSalon = function(id,result){
+    db.query(`delete from image_salon where imageId = ${id}`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result("xoa image co imageId =" + id + " thanh cong");
+        }
+    });
+
+}
 
 
 module.exports = ImageSalon;
