@@ -27,5 +27,15 @@ CategoryService.deleteCategoryService = function(id,result){
     });
 
 }
+CategoryService.deleteCategoryServiceByServiceId = function(id,result){
+    db.query(`delete from category_service where serviceId = ${id}`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result("xoa category_service co serviceId =" + id + " thanh cong");
+        }
+    });
+
+}
 
 module.exports =CategoryService;

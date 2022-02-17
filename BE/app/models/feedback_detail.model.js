@@ -40,6 +40,16 @@ Feedback_detail.deleteFeedbackDetailByFeedbackDetailId= function (id,result) {
         }
     });
 }
+Feedback_detail.deleteFeedbackDetailByFeedbackId= function (id,result) {
+   
+    db.query(`delete from feedback_detail where feedBackId = ${id}`, (err, rows, fields) => {
+        if (err) {
+            result(null, err);
+        } else {
+            result("xoa feedback_detail co feedBacklId =" + id + " thanh cong");
+        }
+    });
+}
 Feedback_detail.updateFeedbackDetail=function (id,dataUpdate, result) {
     db.query(`UPDATE swp490_g11.feedback_detail SET ?  WHERE (feedBackDetailId= '${id}');`,dataUpdate,(err, rows, fields) => {
       console.log(dataUpdate.dateUpdate);

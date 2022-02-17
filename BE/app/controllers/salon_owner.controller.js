@@ -64,8 +64,13 @@ exports.addServiceSalon = function (req, res, next) {
         res.json({ result: data });
     });
 }
+// van chua xong delete service vi thieu register service
 exports.deleteServiceSalon =function (req, res, next) {
     var id= req.params.idService;
+    CategoryService.deleteCategoryServiceByServiceId(id,function (data) {
+    });
+    ImageService.deleteImageServiceByServiceId(id,function (data) {
+    });
     ServiceSalon.deleteServiceSalon(id,function (data) {
 
         res.json({ result: data });
@@ -145,10 +150,13 @@ exports.getFeedbackOfSalon = function (req, res, next) {
 exports.deleteFeedback=function (req, res, next) {
     var id= req.params.id;
     // chu y phai xoa feedback_detail truoc
-    FeedBack.deleteFeedback(id,function (data) {
+    FeedbackDetail.deleteFeedbackDetailByFeedbackId(id,function (data) {
+        FeedBack.deleteFeedback(id,function (data) {
 
-        res.json({ result: data });
+            res.json({ result: data });
+        });
     });
+    
 }
 exports.updateFeedback = function (req, res, next) {
     var id = req.params.id;
@@ -180,7 +188,7 @@ exports.getFeedbackDetail = function (req, res, next) {
 }
 exports.deleteFeedbackDetailByFeedbackDetailId=function (req, res, next) {
     var id= req.params.id;
-    // chu y phai xoa feedback_detail truoc
+   
     FeedbackDetail.deleteFeedbackDetailByFeedbackDetailId(id,function (data) {
 
         res.json({ result: data });

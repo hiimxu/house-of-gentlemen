@@ -34,7 +34,7 @@ Feedback.deleteFeedback = function (id,result) {
    
     db.query(`delete from feedback where feedBackId = ${id}`, (err, rows, fields) => {
         if (err) {
-            result(null, err);
+            result(err);
         } else {
             result("xoa feedback co feedBackId =" + id + " thanh cong");
         }

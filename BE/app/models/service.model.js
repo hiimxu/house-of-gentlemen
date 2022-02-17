@@ -20,9 +20,9 @@ Service.addServiceSalon = function(dataService,result){
     
 }
 Service.deleteServiceSalon = function(id,result){
-    db.query(`delete from service where seviceId = ${id}`, (err, rows, fields) => {
+    db.query(`delete from service where serviceId = ${id}`, (err, rows, fields) => {
         if (err) {
-            result(null, err)
+            result( err)
         } else {
             result("xoa service co seviceId =" + id + " thanh cong");
         }

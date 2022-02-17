@@ -36,5 +36,13 @@ ImageService.deleteImageService = function(id,result){
         }
     });
 }
-
+ImageService.deleteImageServiceByServiceId = function(id,result){
+    db.query(`delete from image_service where serviceId = ${id}`, (err, rows, fields) => {
+        if (err) {
+            result(null, err);
+        } else {
+            result("xoa image co serviceId =" + id + " thanh cong");
+        }
+    });
+}
 module.exports =ImageService;
