@@ -9,5 +9,45 @@ const Feedback_detail = function (feedbackDetail) {
     this.wsend = feedbackDetail.wsend;
     
 }
-
+Feedback_detail.addFeedBackDetailBySalon = function(data,result){
+    db.query(`INSERT INTO feedback_detail SET?`, data, (err, rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result({id : rows.insertId,...data});
+        }
+    });
+}
+Feedback_detail.getFeedbackDetail = function (id,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackId='${id}' order by dateCreate desc`, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
+Feedback_detail.deleteFeedbackDetailByFeedbackDetailId= function (id,result) {
+   
+    db.query(`delete from feedback_detail where feedBackDetailId = ${id}`, (err, rows, fields) => {
+        if (err) {
+            result(null, err);
+        } else {
+            result("xoa feedback_detail co feedBackDetailId =" + id + " thanh cong");
+        }
+    });
+}
+Feedback_detail.updateFeedbackDetail=function (id,dataUpdate, result) {
+    db.query(`UPDATE swp490_g11.feedback_detail SET ?  WHERE (feedBackDetailId= '${id}');`,dataUpdate,(err, rows, fields) => {
+      console.log(dataUpdate.dateUpdate);
+        if (err) {
+            result( err)
+        } else {
+            result("updated FeedbackDetail success!!!")
+        }
+    });
+}
 module.exports =Feedback_detail;

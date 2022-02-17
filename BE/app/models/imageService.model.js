@@ -23,8 +23,18 @@ ImageService.getAllImageServiceByServiceId = function (id,result) {
             result(err);
         } else {
             data = rows;
-            result(data)
+            result(data);
         }
     });
 }
+ImageService.deleteImageService = function(id,result){
+    db.query(`delete from image_service where imageId = ${id}`, (err, rows, fields) => {
+        if (err) {
+            result(null, err);
+        } else {
+            result("xoa image co imageId =" + id + " thanh cong");
+        }
+    });
+}
+
 module.exports =ImageService;

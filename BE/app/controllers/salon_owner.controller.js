@@ -3,6 +3,9 @@ var ImageSalon = require('../models/imageSalon.model');
 var ServiceSalon = require('../models/service.model');
 var CategoryService = require('../models/categoryService.model');
 var ImageService = require('../models/imageService.model');
+var FeedBack = require('../models/feedBack.model');
+var FeedbackDetail = require('../models/feedback_detail.model');
+const Feedback = require('../models/feedBack.model');
 
 exports.salonOwner = function (req, res, next) {
     SalonOwner.getAll(function (data) {
@@ -110,6 +113,86 @@ exports.addImageService= function (req, res, next) {
 exports.getImageService=function (req, res, next) {
     var id = req.params.id;
     ImageService.getAllImageServiceByServiceId(id,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.deleteImageService=function (req, res, next) {
+    var id= req.params.id;
+    ImageService.deleteImageService(id,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.addFeedBackBySalon=function (req, res, next) {
+    var dataFeedBack= req.body;
+    var wsend="salon";
+    var dateCreate = new Date();
+    dataFeedBack={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
+    // res.json(dataFeedBack);
+    FeedBack.addFeedBackBySalon(dataFeedBack,function (data) {
+         res.json({ result: data });
+    });
+}
+exports.getFeedbackOfSalon = function (req, res, next) {
+    var id = req.params.id;
+    FeedBack.getFeedbackOfSalon(id,function (data) {
+
+        res.json({ result: data });
+    });
+}
+
+exports.deleteFeedback=function (req, res, next) {
+    var id= req.params.id;
+    // chu y phai xoa feedback_detail truoc
+    FeedBack.deleteFeedback(id,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.updateFeedback = function (req, res, next) {
+    var id = req.params.id;
+    var dataUpdate=req.body;
+    var dateUpdate=new Date();
+    dataUpdate={dateUpdate:dateUpdate,...dataUpdate};
+    
+    Feedback.updateFeedback(id,dataUpdate,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.addFeedBackDetailBySalon = function (req, res, next) {
+    var dataFeedBack= req.body;
+    var wsend="salon";
+    var dateCreate = new Date();
+    dataFeedBackDetail={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
+    // res.json(dataFeedBack);
+    FeedbackDetail.addFeedBackDetailBySalon(dataFeedBackDetail,function (data) {
+         res.json({ result: data });
+    });
+}
+exports.getFeedbackDetail = function (req, res, next) {
+    var id = req.params.feedBackId;
+    FeedbackDetail.getFeedbackDetail(id,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.deleteFeedbackDetailByFeedbackDetailId=function (req, res, next) {
+    var id= req.params.id;
+    // chu y phai xoa feedback_detail truoc
+    FeedbackDetail.deleteFeedbackDetailByFeedbackDetailId(id,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.updateFeedbackDetail= function (req, res, next) {
+    var id = req.params.id;
+    var dataUpdate=req.body;
+    var dateUpdate=new Date();
+    dataUpdate={dateUpdate:dateUpdate,...dataUpdate};
+    
+    FeedbackDetail.updateFeedbackDetail(id,dataUpdate,function (data) {
 
         res.json({ result: data });
     });
