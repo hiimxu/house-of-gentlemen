@@ -6,5 +6,15 @@ const StaffCanleder = function (staffCanleder) {
     this.date = staffCanleder.date;
     this.statusId = staffCanleder.statusId;
 }
+StaffCanleder.addStaffCanderToRegisterService = function(dataStaffCanleder,result){
+    db.query(`INSERT INTO staff_canleder SET?`, dataStaffCanleder, (err, rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result({staffCanlederId : rows.insertId,...dataStaffCanleder});
+        }
+    });
+    
+}
 
 module.exports =StaffCanleder;

@@ -32,5 +32,14 @@ Register_service.getRegisterServiceByCustomer=function (id, result) {
         }
     });
 }
-
+Register_service.addRegisterService = function(dataRegisterService,result){
+    db.query(`INSERT INTO register_service SET?`, dataRegisterService, (err, rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result({registerServiceId : rows.insertId,...dataRegisterService});
+        }
+    });
+    
+}
 module.exports =Register_service;
