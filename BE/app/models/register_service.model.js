@@ -10,5 +10,15 @@ const Register_service = function (registerService) {
     this.promotionSpical = registerService.promotionSpical;
     this.staffId = registerService.staffId;
 }
-
+Register_service.getRegisterServiceById=function (id, result) {
+    db.query("SELECT * FROM swp490_g11.register_service where registerServiceId =?",id,(err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(err);
+        } else {
+           var data = rows;
+            result(data)
+        }
+    });
+}
 module.exports =Register_service;
