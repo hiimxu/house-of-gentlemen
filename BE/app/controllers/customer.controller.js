@@ -45,3 +45,11 @@ exports.getRegisterServiceById = function (req, res, next) {
     });
    
 }
+exports.getRegisterServiceByCustomer= function (req, res, next) {
+    var id=req.params.id;
+    RegisterService.getRegisterServiceByCustomer(id,function (data) {
+
+        res.json({ result: data });
+    });
+   
+}

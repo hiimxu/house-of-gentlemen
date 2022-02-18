@@ -8,5 +8,6 @@ router.put('/update/profile/:id',customerController.updateCustomerProfile);
 router.get('/statusRegisterService',customerController.getStatusRegisterService);
 router.get('/statusRegisterServiceById/:id',customerController.getStatusRegisterServiceById);
 router.get('/registerService/:id',customerController.getRegisterServiceById);
+router.get('/registerServiceByCustomer/:id',customerController.getRegisterServiceByCustomer);
 
 module.exports = router;
