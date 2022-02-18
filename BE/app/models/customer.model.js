@@ -16,4 +16,25 @@ Customer.createCustomer = function (data, result) {
         }
     });
 }
+Customer.getCustomerSalon =function (id, result) {
+    db.query("SELECT * FROM swp490_g11.customer where accountId="+id, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(err);
+        } else {
+           var data = rows;
+            result(data)
+        }
+    });
+}
+Customer.updateProfileCustomer =function (id,dataUpdate, result) {
+    db.query(`UPDATE swp490_g11.customer SET ?  WHERE (customerId = '${id}');`,dataUpdate, (err, rows, fields) => {
+        console.log(dataUpdate)
+        if (err) {
+            result( err)
+        } else {
+            result("updated profile 's customer success!!!")
+        }
+    });
+}
 module.exports=Customer;
