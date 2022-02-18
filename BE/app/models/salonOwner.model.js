@@ -29,7 +29,7 @@ SalonOwner.createSalonOwner = function (data, result) {
     });
 }
 SalonOwner.getPrifileSalon =function (id, result) {
-    db.query("SELECT * FROM swp490_g11.salonowner where salonId="+id, (err, rows, fields) => {
+    db.query("SELECT * FROM swp490_g11.salonowner where accountId="+id, (err, rows, fields) => {
         if (err) {
             console.log(err);
             result(err);
