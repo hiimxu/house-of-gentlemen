@@ -60,4 +60,13 @@ Feedback_detail.updateFeedbackDetail=function (id,dataUpdate, result) {
         }
     });
 }
+Feedback_detail.addFeedBackDetailByCustomer= function(data,result){
+    db.query(`INSERT INTO feedback_detail SET?`, data, (err, rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result({id : rows.insertId,...data});
+        }
+    });
+}
 module.exports =Feedback_detail;

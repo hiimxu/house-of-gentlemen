@@ -51,5 +51,15 @@ Feedback.updateFeedback =function (id,dataUpdate, result) {
     });
 }
 
+Feedback.addFeedBackByCustomer = function(data,result){
+    db.query(`INSERT INTO feedback SET?`, data, (err, rows, res) => {
+        if (err) {
+            result(err)
+        } else {
+            result({id : rows.insertId,...data});
+        }
+    });
+}
+
 
 module.exports =Feedback;
