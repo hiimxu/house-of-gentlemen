@@ -5,7 +5,8 @@ var CategoryService = require('../models/categoryService.model');
 var ImageService = require('../models/imageService.model');
 var FeedBack = require('../models/feedBack.model');
 var FeedbackDetail = require('../models/feedback_detail.model');
-const Feedback = require('../models/feedBack.model');
+var Feedback = require('../models/feedBack.model');
+var Staff = require('../models/satff.model');
 
 exports.salonOwner = function (req, res, next) {
     SalonOwner.getAll(function (data) {
@@ -202,6 +203,37 @@ exports.updateFeedbackDetail= function (req, res, next) {
     
     FeedbackDetail.updateFeedbackDetail(id,dataUpdate,function (data) {
 
+        res.json({ result: data });
+    });
+}
+exports.getStaff= function (req, res, next) {
+    var id = req.params.id;
+    
+    Staff.getStaff(id,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.addStaff= function (req, res, next) {
+    var data=req.body
+    
+    Staff.addStaff(data,function (data) {
+
+        res.json({ result: data });
+    });
+}
+exports.updateStaff= function (req, res, next) {
+    var id = req.params.id;
+    var data=req.body
+    
+    Staff.updateStaff(id,data,function (data) {
+        res.json({ result: data });
+    });
+}
+exports.deleteStaff= function (req, res, next) {
+    var id = req.params.id;
+    
+    Staff.deleteStaff(id,function (data) {
         res.json({ result: data });
     });
 }

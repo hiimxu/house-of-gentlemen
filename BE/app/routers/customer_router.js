@@ -10,11 +10,11 @@ router.get('/statusRegisterServiceById/:id',customerController.getStatusRegister
 router.get('/registerService/:id',customerController.getRegisterServiceById);
 router.get('/registerServiceByCustomer/:id',customerController.getRegisterServiceByCustomer);
 router.post('/create/registerService',customerController.addRegisterService);
-router.post('/createFeedBackByCustomer',customerController.addFeedBackByCustomer);
-router.post('/deleteFeedback/:id',customerController.deleteFeedback);
+router.post('/create/feedbackByCustomer',customerController.addFeedBackByCustomer);
+router.post('/delete/feedback/:id',customerController.deleteFeedback);
 router.put('/update/feedback/:id',customerController.updateFeedback);
-router.post('/createFeedBackDetailByCustomer',customerController.addFeedBackDetailByCustomer);
-router.delete('/deleteFeedbackDetail/:id',customerController.deleteFeedbackDetailByFeedbackDetailId);
+router.post('/create/feedbackdetailbycustomer',customerController.addFeedBackDetailByCustomer);
+router.delete('/delete/feedbackdetail/:id',customerController.deleteFeedbackDetailByFeedbackDetailId);
 router.put('/update/feedbackDetail/:id',customerController.updateFeedbackDetail);
 router.get('/getFeedbackOfSalon/:id',customerController.getFeedbackOfSalon);
 router.get('/getFeedbackDetail/:feedBackId',customerController.getFeedbackDetail);
