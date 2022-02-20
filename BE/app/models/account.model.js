@@ -18,6 +18,18 @@ Account.getAll = function (result) {
         }
     });
 }
+Account.getAllAccountSalon = function (result) {
+    db.query("SELECT * FROM swp490_g11.account where role='salon'", (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(err);
+        } else {
+            data = rows;
+            // console.log(data);
+            result(data)
+        }
+    });
+}
 Account.getAccountToLogin = function (acc, pass, result) {
     db.query(`SELECT * FROM swp490_g11.account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
         if (err) {

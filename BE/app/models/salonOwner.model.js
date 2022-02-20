@@ -28,7 +28,7 @@ SalonOwner.createSalonOwner = function (data, result) {
         }
     });
 }
-SalonOwner.getPrifileSalon =function (id, result) {
+SalonOwner.getProfileSalon =function (id, result) {
     db.query("SELECT * FROM swp490_g11.salonowner where accountId="+id, (err, rows, fields) => {
         if (err) {
             console.log(err);
@@ -49,5 +49,14 @@ SalonOwner.updateProfileSalon =function (id,dataUpdate, result) {
         }
     });
 }
-
+SalonOwner.setPossitiveSalonOwner=function (id,possibility, result) {
+    db.query(`UPDATE swp490_g11.salonowner SET possibility = '${possibility}' WHERE (salonId = '${id}');`, (err, rows, fields) => {
+       
+        if (err) {
+            result(null, err)
+        } else {
+            result("updated possitive 's salon success!!!")
+        }
+    });
+}
 module.exports = SalonOwner;

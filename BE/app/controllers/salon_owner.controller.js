@@ -16,7 +16,7 @@ exports.salonOwner = function (req, res, next) {
 
 exports.getSalonOwnerProfile = function (req, res, next) {
     var id = req.params.id;
-    SalonOwner.getPrifileSalon(id,function (data) {
+    SalonOwner.getProfileSalon(id,function (data) {
 
         res.json({ result: data });
     });
