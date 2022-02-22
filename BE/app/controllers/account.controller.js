@@ -88,3 +88,8 @@ exports.delete_accountbyid = function (req, res, next) {
             res.json(response);
         })
 }
+exports.getSalonAccount = function (req, res, next) {
+    var data = Account.getAllAccountSalon( function (data) {
+        res.json({ data });
+    });
+}
