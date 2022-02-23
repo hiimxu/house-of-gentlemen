@@ -1,6 +1,5 @@
 var StatusRegisterService = require('../models/statusRegisterService.model');
 exports.getStatusRegisterService = function (req, res, next) {
-
     try {
         StatusRegisterService.getAllSatusRegisterService(function (data) {
             res.json(data);
