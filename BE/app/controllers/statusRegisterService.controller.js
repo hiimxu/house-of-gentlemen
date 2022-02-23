@@ -1,17 +1,25 @@
 var StatusRegisterService = require('../models/statusRegisterService.model');
 exports.getStatusRegisterService = function (req, res, next) {
 
-    StatusRegisterService.getAllSatusRegisterService(function (data) {
+    try {
+        StatusRegisterService.getAllSatusRegisterService(function (data) {
 
-        res.json(data);
-    });
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 
 }
 exports.getStatusRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
-    StatusRegisterService.getSatusRegisterServiceById(id, function (data) {
+    try {
+        StatusRegisterService.getSatusRegisterServiceById(id, function (data) {
 
-        res.json(data);
-    });
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 
 }

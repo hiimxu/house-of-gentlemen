@@ -5,35 +5,50 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
     var dateCreate = new Date();
     dataFeedBackDetail={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
     // res.json(dataFeedBack);
-    FeedbackDetail.addFeedBackDetailBySalon(dataFeedBackDetail,function (data) {
-         res.json(data);
-    });
+    try {
+        FeedbackDetail.addFeedBackDetailBySalon(dataFeedBackDetail,function (data) {
+            res.json(data);
+       });
+    } catch (error) {
+        res.json(error);
+    }
 }
 exports.getFeedbackDetail = function (req, res, next) {
     var id = req.params.feedBackId;
-    FeedbackDetail.getFeedbackDetail(id,function (data) {
+    try {
+        FeedbackDetail.getFeedbackDetail(id,function (data) {
 
-        res.json(data);
-    });
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 }
 exports.deleteFeedbackDetailByFeedbackDetailId=function (req, res, next) {
     var id= req.params.id;
-   
+   try {
     FeedbackDetail.deleteFeedbackDetailByFeedbackDetailId(id,function (data) {
 
         res.json(data);
     });
+   } catch (error) {
+       res.json(error);
+   }
+    
 }
 exports.updateFeedbackDetail= function (req, res, next) {
     var id = req.params.id;
     var dataUpdate=req.body;
     var dateUpdate=new Date();
     dataUpdate={dateUpdate:dateUpdate,...dataUpdate};
+    try {
+        FeedbackDetail.updateFeedbackDetail(id,dataUpdate,function (data) {
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
     
-    FeedbackDetail.updateFeedbackDetail(id,dataUpdate,function (data) {
-
-        res.json(data);
-    });
 }
 exports.addFeedBackDetailByCustomer = function (req, res, next) {
     var dataFeedBack= req.body;
@@ -41,7 +56,11 @@ exports.addFeedBackDetailByCustomer = function (req, res, next) {
     var dateCreate = new Date();
     dataFeedBackDetail={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
     // res.json(dataFeedBack);
-    FeedbackDetail.addFeedBackDetailByCustomer(dataFeedBackDetail,function (data) {
-         res.json(data);
-    });
+    try {
+        FeedbackDetail.addFeedBackDetailByCustomer(dataFeedBackDetail,function (data) {
+            res.json(data);
+       });
+    } catch (error) {
+        res.json(error);
+    }
 }

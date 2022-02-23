@@ -10,19 +10,28 @@ exports.getAllCustomer = function (req, res, next) {
 }
 exports.getCustomerProfile = function (req, res, next) {
     var id = req.params.id;
-    Customer.getCustomerSalon(id, function (data) {
+    try {
+        Customer.getCustomerSalon(id, function (data) {
 
-        res.json(data);
-    });
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 }
 exports.updateCustomerProfile = function (req, res, next) {
     var id = req.params.id;
     var dataUpdate = req.body;
+    try {
+        Customer.updateProfileCustomer(id, dataUpdate, function (data) {
 
-    Customer.updateProfileCustomer(id, dataUpdate, function (data) {
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 
-        res.json(data);
-    });
+    
 }
 
 

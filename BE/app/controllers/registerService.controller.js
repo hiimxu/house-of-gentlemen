@@ -1,18 +1,26 @@
 var RegisterService = require('../models/register_service.model');
 exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
-    RegisterService.getRegisterServiceById(id, function (data) {
+    try {
+        RegisterService.getRegisterServiceById(id, function (data) {
 
-        res.json(data);
-    });
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 
 }
 exports.getRegisterServiceByCustomer = function (req, res, next) {
     var id = req.params.id;
-    RegisterService.getRegisterServiceByCustomer(id, function (data) {
+    try {
+        RegisterService.getRegisterServiceByCustomer(id, function (data) {
 
-        res.json(data);
-    });
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 
 }
 exports.addRegisterService = function (req, res, next) {
@@ -25,14 +33,16 @@ exports.addRegisterService = function (req, res, next) {
     var dataRegisterService = req.body;
     dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
     // res.json(dataRegisterService);
-    StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-        var staffCanlederId = data.staffCanlederId;
-        dataRegisterService = { staffCanlederId, ...dataRegisterService };
-        
-        RegisterService.addRegisterService(dataRegisterService, function (data) {
-           res.json( data); 
+    try {
+        StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
+            var staffCanlederId = data.staffCanlederId;
+            dataRegisterService = { staffCanlederId, ...dataRegisterService };
             
-        });
-        
-    });
+            RegisterService.addRegisterService(dataRegisterService, function (data) {
+               res.json( data); 
+                });
+            });
+    } catch (error) {
+        res.json(error);
+    }
 }
