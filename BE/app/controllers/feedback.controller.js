@@ -1,51 +1,67 @@
 var FeedBack = require('../models/feedBack.model');
+var FeedbackDetail = require('../models/feedback_detail.model');
 
-exports.addFeedBackBySalon=function (req, res, next) {
-    var dataFeedBack= req.body;
-    var wsend="salon";
+exports.addFeedBackBySalon = function (req, res, next) {
+    var dataFeedBack = req.body;
+    var wsend = "salon";
     var dateCreate = new Date();
-    dataFeedBack={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
+    dataFeedBack = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
     // res.json(dataFeedBack);
-    FeedBack.addFeedBackBySalon(dataFeedBack,function (data) {
-         res.json(data);
-    });
+    try {
+        FeedBack.addFeedBackBySalon(dataFeedBack, function (data) {
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 }
 exports.getFeedbackOfSalon = function (req, res, next) {
     var id = req.params.id;
-    FeedBack.getFeedbackOfSalon(id,function (data) {
-
-        res.json(data);
-    });
+    try {
+        FeedBack.getFeedbackOfSalon(id, function (data) {
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 }
-exports.deleteFeedback=function (req, res, next) {
-    var id= req.params.id;
+exports.deleteFeedback = function (req, res, next) {
+    var id = req.params.id;
     // chu y phai xoa feedback_detail truoc
-    FeedbackDetail.deleteFeedbackDetailByFeedbackId(id,function (data) {
-        FeedBack.deleteFeedback(id,function (data) {
+    FeedbackDetail.deleteFeedbackDetailByFeedbackId(id, function (data) {
+        FeedBack.deleteFeedback(id, function (data) {
 
             res.json(data);
         });
     });
-    
+
 }
 exports.updateFeedback = function (req, res, next) {
     var id = req.params.id;
-    var dataUpdate=req.body;
-    var dateUpdate=new Date();
-    dataUpdate={dateUpdate:dateUpdate,...dataUpdate};
-    
-    Feedback.updateFeedback(id,dataUpdate,function (data) {
+    var dataUpdate = req.body;
+    var dateUpdate = new Date();
+    dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
+    try {
+        Feedback.updateFeedback(id, dataUpdate, function (data) {
+            res.json({ result: data });
+        });
+    } catch (error) {
+        res.json(error);
+    }
 
-        res.json({ result: data });
-    });
+    
 }
 exports.addFeedBackByCustomer = function (req, res, next) {
-    var dataFeedBack= req.body;
-    var wsend="customer";
+    var dataFeedBack = req.body;
+    var wsend = "customer";
     var dateCreate = new Date();
-    dataFeedBack={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
+    dataFeedBack = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
     // res.json(dataFeedBack);
-    FeedBack.addFeedBackByCustomer(dataFeedBack,function (data) {
-         res.json({ result: data });
-    });
+    try {
+        FeedBack.addFeedBackByCustomer(dataFeedBack, function (data) {
+            res.json({ result: data });
+        });
+    } catch (error) {
+        res.json(error);
+    }
 }

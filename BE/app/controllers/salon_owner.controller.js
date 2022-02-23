@@ -1,26 +1,36 @@
 var SalonOwner = require('../models/salonOwner.model');
 
 exports.salonOwner = function (req, res, next) {
-    SalonOwner.getAll(function (data) {
-        res.json(data);
-    });
+    try {
+        SalonOwner.getAll(function (data) {
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
 }
 
 exports.getSalonOwnerProfile = function (req, res, next) {
     var id = req.params.id;
-    SalonOwner.getProfileSalon(id,function (data) {
-
-        res.json(data);
-    });
+    try {
+        SalonOwner.getProfileSalon(id,function (data) {
+            res.json(data);
+       });
+    } catch (error) {
+        res.json(error);
+    }
 }
 exports.updateSalonOwnerProfile= function (req, res, next) {
     var id = req.params.id;
     var dataUpdate=req.body;
+    try {
+        SalonOwner.updateProfileSalon(id,dataUpdate,function (data) {
+            res.json(data);
+        });
+    } catch (error) {
+        res.json(error);
+    }
     
-    SalonOwner.updateProfileSalon(id,dataUpdate,function (data) {
-
-        res.json(data);
-    });
 }
 
 

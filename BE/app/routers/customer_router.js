@@ -7,7 +7,7 @@ const feedbackController = require('../controllers/feedback.controller');
 const feedbackDetailController = require('../controllers/feedbacDetail.controller');
 const salonOwnerController = require('../controllers/salonOwner.controller');
 
-router.get('/',customerController.getAllCustomer);
+
 router.get('/profile/:id',customerController.getCustomerProfile);
 router.put('/update/profile/:id',customerController.updateCustomerProfile);
 router.get('/statusRegisterService',statusRegisterServiceController.getStatusRegisterService);
