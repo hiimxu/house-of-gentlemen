@@ -6,7 +6,7 @@ exports.addCategoryService = function (req, res, next) {
     CategoryService.addCategoryService(dataCategoryService,function (data) {
         
 
-        res.json({ result: data });
+        res.json(data);
     });
 }
 
@@ -14,6 +14,6 @@ exports.deleteCategoryService =function (req, res, next) {
     var id= req.params.id;
     CategoryService.deleteCategoryService(id,function (data) {
 
-        res.json({ result: data });
+        res.json(data);
     });
 }

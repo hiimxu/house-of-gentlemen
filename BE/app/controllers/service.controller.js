@@ -3,13 +3,10 @@ var CategoryService = require('../models/categoryService.model');
 var ImageService = require('../models/imageService.model');
 
 exports.addServiceSalon = function (req, res, next) {
-   
     var dataService= req.body;
     console.log(dataService);
     ServiceSalon.addServiceSalon(dataService,function (data) {
-        
-
-        res.json({ result: data });
+       res.json(data);
     });
 }
 
@@ -22,7 +19,7 @@ exports.deleteServiceSalon =function (req, res, next) {
     });
     ServiceSalon.deleteServiceSalon(id,function (data) {
 
-        res.json({ result: data });
+        res.json(data);
     });
 }
 
@@ -30,7 +27,7 @@ exports.getServiceOfSalon = function (req, res, next) {
     var id = req.params.idSalon;
     ServiceSalon.getServiceOfSalon(id,function (data) {
 
-        res.json({ result: data });
+        res.json(data);
     });
 }
 exports.updateServiceSalon= function (req, res, next) {
@@ -39,6 +36,6 @@ exports.updateServiceSalon= function (req, res, next) {
     
     ServiceSalon.updateServiceSalon(id,dataUpdate,function (data) {
         
-        res.json({ result: data });
+        res.json(data);
     });
 }

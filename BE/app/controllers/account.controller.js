@@ -6,13 +6,13 @@ var md5 = require('md5');
 
 exports.account = function (req, res, next) {
     Account.getAll(function (data) {
-        res.json({ result: data });
+        res.json({  data });
     });
 }
 exports.get_accountbyid = function (req, res, next) {
     var id = req.params.id;
     var data = Account.getAccountById(id, function (data) {
-        res.json({ data });
+        res.json(data);
     });
 }
 exports.change_password = function (req, res, next) {
@@ -26,7 +26,7 @@ exports.change_password = function (req, res, next) {
     var data = Account.checkPassword(acc, md5_old_pass, function (data) {
         if (data.length == 1) {
             var data = Account.updatePasswordAccount(data[0].account_id, md5_new_pass, function (response) {
-                res.json({ response });
+                res.json(response);
             });
         } else {
             res.json("kiem tra lai old_password");
@@ -90,6 +90,6 @@ exports.delete_accountbyid = function (req, res, next) {
 }
 exports.getSalonAccount = function (req, res, next) {
     var data = Account.getAllAccountSalon( function (data) {
-        res.json({ data });
+        res.json(data);
     });
 }

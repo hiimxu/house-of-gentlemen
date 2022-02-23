@@ -7,14 +7,14 @@ exports.addFeedBackBySalon=function (req, res, next) {
     dataFeedBack={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
     // res.json(dataFeedBack);
     FeedBack.addFeedBackBySalon(dataFeedBack,function (data) {
-         res.json({ result: data });
+         res.json(data);
     });
 }
 exports.getFeedbackOfSalon = function (req, res, next) {
     var id = req.params.id;
     FeedBack.getFeedbackOfSalon(id,function (data) {
 
-        res.json({ result: data });
+        res.json(data);
     });
 }
 exports.deleteFeedback=function (req, res, next) {
@@ -23,7 +23,7 @@ exports.deleteFeedback=function (req, res, next) {
     FeedbackDetail.deleteFeedbackDetailByFeedbackId(id,function (data) {
         FeedBack.deleteFeedback(id,function (data) {
 
-            res.json({ result: data });
+            res.json(data);
         });
     });
     
@@ -37,5 +37,15 @@ exports.updateFeedback = function (req, res, next) {
     Feedback.updateFeedback(id,dataUpdate,function (data) {
 
         res.json({ result: data });
+    });
+}
+exports.addFeedBackByCustomer = function (req, res, next) {
+    var dataFeedBack= req.body;
+    var wsend="customer";
+    var dateCreate = new Date();
+    dataFeedBack={wsend:wsend,dateCreate:dateCreate,...dataFeedBack}
+    // res.json(dataFeedBack);
+    FeedBack.addFeedBackByCustomer(dataFeedBack,function (data) {
+         res.json({ result: data });
     });
 }

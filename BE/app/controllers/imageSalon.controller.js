@@ -6,7 +6,7 @@ exports.getImageSalon= function (req, res, next) {
     
     ImageSalon.getAllImage(id,function (data) {
 
-        res.json({ result: data });
+        res.json(data);
     });
 }
 
@@ -15,13 +15,13 @@ exports.addImageToImageSalon = function (req, res, next) {
     var dataImage= req.body;
     ImageSalon.addImageToImageSalon(dataImage,function (data) {
 
-        res.json({ result: data });
+        res.json(data);
     });
 }
 exports.deleteImageOfImageSalon =function (req, res, next) {
     var id= req.params.id;
     ImageSalon.deleteImageOfImageSalon(id,function (data) {
 
-        res.json({ result: data });
+        res.json(data);
     });
 }
