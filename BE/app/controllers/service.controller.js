@@ -32,6 +32,9 @@ exports.deleteServiceSalon =function (req, res, next) {
 
 exports.getServiceOfSalon = function (req, res, next) {
     var id = req.params.idSalon;
+    res.header('Access-Control-Allow-Origin', 'example.com');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
     try {
         ServiceSalon.getServiceOfSalon(id,function (data) {
             res.json(data);
