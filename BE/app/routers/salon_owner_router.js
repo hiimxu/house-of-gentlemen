@@ -1,6 +1,4 @@
 const express = require('express');
-var cors = require('cors');
-app.use(cors());
 const router = express.Router();
 const salonOwnerController = require('../controllers/salon_owner.controller');
 const imageSalonController = require('../controllers/imageSalon.controller');
@@ -12,7 +10,7 @@ const feedbackDetailController = require('../controllers/feedbacDetail.controlle
 const staffController = require('../controllers/staff.controller');
 
 router.get('/',salonOwnerController.salonOwner);
-router.get('/profile/:id',cors,salonOwnerController.getSalonOwnerProfile);
+router.get('/profile/:id',salonOwnerController.getSalonOwnerProfile);
 router.put('/update/profile/:id',salonOwnerController.updateSalonOwnerProfile);
 router.get('/imageSalon/:idSalon',imageSalonController.getImageSalon);
 router.post('/create/imageToImageSalon',imageSalonController.addImageToImageSalon);
