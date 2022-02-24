@@ -49,6 +49,15 @@ Service.updateServiceSalon =function (id,dataUpdate, result) {
     });
     
 }
+Service.getAllService= function (result) {
+    db.query(`select* from service `, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
+}
 
 
 module.exports =Service;

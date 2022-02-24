@@ -7,6 +7,7 @@ const registerServiceController = require('../controllers/registerService.contro
 const feedbackController = require('../controllers/feedback.controller');
 const feedbackDetailController = require('../controllers/feedbacDetail.controller');
 const salonOwnerController = require('../controllers/salonOwner.controller');
+const serviceController = require('../controllers/service.controller');
 
 router.get('/',cors(),customerController.getAllCustomer);
 router.get('/profile/:id',cors(),customerController.getCustomerProfile);
@@ -25,4 +26,5 @@ router.put('/update/feedbackDetail/:id',cors(),feedbackDetailController.updateFe
 router.get('/getFeedbackOfSalon/:id',cors(),feedbackController.getFeedbackOfSalon);
 router.get('/getFeedbackDetail/:feedBackId',cors(),feedbackDetailController.getFeedbackDetail);
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
+router.get('/get/AllService',cors(),serviceController.getAllService);
 module.exports = router;

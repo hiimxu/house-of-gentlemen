@@ -8,13 +8,13 @@ exports.addServiceSalon = function (req, res, next) {
     try {
         ServiceSalon.addServiceSalon(dataService,function (data) {
            if (data== null) {
-            res.json({data:data,success:"add service fail"});
+            res.json({data:data,message:"add service fail"});
            } else {
-            res.json({data:data,success:"add service success"});
+            res.json({data:data,message:"add service success"});
            }
          });
     } catch (error) {
-        res.json({data:error,success:"add service fail"});
+        res.json({data:error,message:"add service fail"});
     }
 }
 
@@ -41,13 +41,28 @@ exports.getServiceOfSalon = function (req, res, next) {
         ServiceSalon.getServiceOfSalon(id,function (data) {
 
             if (data== null) {
-                res.json({data:data,success:"get service fail"});
+                res.json({data:data,message:"get service fail"});
                } else {
-                res.json({data:data,success:"get service success"});
+                res.json({data:data,message:"get service success"});
                }
         });
     } catch (error) {
-        res.json({data:error,success:"get service fail"});
+        res.json({data:error,message:"get service fail"});
+    }
+}
+exports.getAllService= function (req, res, next) {
+   
+    try {
+        ServiceSalon.getAllService(function (data) {
+
+            if (data== null) {
+                res.json({data:data,message:"get service fail"});
+               } else {
+                res.json({data:data,message:"get service success"});
+               }
+        });
+    } catch (error) {
+        res.json({data:error,message:"get service fail"});
     }
 }
 exports.updateServiceSalon= function (req, res, next) {
@@ -57,13 +72,13 @@ exports.updateServiceSalon= function (req, res, next) {
         ServiceSalon.updateServiceSalon(id,dataUpdate,function (data) {
         
             if (data== null) {
-                res.json({data:data,success:"update service fail"});
+                res.json({data:data,message:"update service fail"});
                } else {
-                res.json({data:data,success:"update service success"});
+                res.json({data:data,message:"update service success"});
                }
         });
     } catch (error) {
-        res.json({data:error,success:"update service fail"});
+        res.json({data:error,message:"update service fail"});
     }
     
 }

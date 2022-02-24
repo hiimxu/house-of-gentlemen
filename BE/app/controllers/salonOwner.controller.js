@@ -16,13 +16,13 @@ exports.getSalon = function (req, res, next) {
 exports.getAllSalon = function (req, res, next) {
     try {
         var data = SalonOwner.getProfileAllSalon(function (data) {
-            if (data == null) { res.json({ data: data, message: "get salon 's profile failed" }); }
+            if (data == null) { res.json({ data: data, message: "get all salon failed" }); }
             else {
-                res.json({ data: data, message: "get salon 's profile success" });
+                res.json({ data: data, message: "get all salon success" });
             }
         });
     } catch (error) {
-        res.json({ data: data, message: "get salon 's profile failed" });
+        res.json({ data: data, message: "get all salon failed" });
     }
 
 }
