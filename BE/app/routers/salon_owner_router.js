@@ -1,7 +1,7 @@
 const express = require('express');
 const cors =require('cors');
 const router = express.Router();
-const salonOwnerController = require('../controllers/salon_owner.controller');
+const salonOwnerController = require('../controllers/salonOwner.controller');
 const imageSalonController = require('../controllers/imageSalon.controller');
 const serviceController = require('../controllers/service.controller');
 const categoryServiceController = require('../controllers/categoryService.controller');

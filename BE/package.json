@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --inspect index.js"
+    "start": "nodemon --inspect index.js",
+    "test": "mocha --timeout 10000"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
+    "mocha": "^9.2.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.15"
   }
