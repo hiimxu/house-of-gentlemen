@@ -9,7 +9,7 @@ const StaffCanleder = function (staffCanleder) {
 StaffCanleder.addStaffCanderToRegisterService = function(dataStaffCanleder,result){
     db.query(`INSERT INTO staff_canleder SET?`, dataStaffCanleder, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
             result({staffCanlederId : rows.insertId,...dataStaffCanleder});
         }

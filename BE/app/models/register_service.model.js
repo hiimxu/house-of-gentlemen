@@ -13,8 +13,7 @@ const Register_service = function (registerService) {
 Register_service.getRegisterServiceById=function (id, result) {
     db.query("SELECT * FROM swp490_g11.register_service where registerServiceId =?",id,(err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+            result(null,err);
         } else {
            var data = rows;
             result(data);
@@ -24,8 +23,7 @@ Register_service.getRegisterServiceById=function (id, result) {
 Register_service.getRegisterServiceByCustomer=function (id, result) {
     db.query("SELECT * FROM swp490_g11.register_service where customerId =?",id,(err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+            result(null,err);
         } else {
            var data = rows;
             result(data);
@@ -35,7 +33,7 @@ Register_service.getRegisterServiceByCustomer=function (id, result) {
 Register_service.addRegisterService = function(dataRegisterService,result){
     db.query(`INSERT INTO register_service SET?`, dataRegisterService, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err);
         } else {
             result({registerServiceId : rows.insertId,...dataRegisterService});
         }

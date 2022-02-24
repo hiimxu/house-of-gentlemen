@@ -12,7 +12,7 @@ const Feedback = function (feedback) {
 Feedback.addFeedBackBySalon = function(data,result){
     db.query(`INSERT INTO feedback SET?`, data, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err);
         } else {
             result({id : rows.insertId,...data});
         }
@@ -23,7 +23,7 @@ Feedback.getFeedbackOfSalon = function (id,result) {
     db.query(`SELECT * FROM swp490_g11.feedback where salonId='${id}' order by dateCreate desc`, (err, rows, fields) => {
         if (err) {
             console.log(err);
-            result(err);
+            result(null,err);
         } else {
             data = rows;
             result(data);
@@ -34,7 +34,7 @@ Feedback.deleteFeedback = function (id,result) {
    
     db.query(`delete from feedback where feedBackId = ${id}`, (err, rows, fields) => {
         if (err) {
-            result(err);
+            result(null,err);
         } else {
             result("xoa feedback co feedBackId =" + id + " thanh cong");
         }
@@ -44,7 +44,7 @@ Feedback.updateFeedback =function (id,dataUpdate, result) {
     db.query(`UPDATE swp490_g11.feedback SET ?  WHERE (feedBackId= '${id}');`,dataUpdate,(err, rows, fields) => {
       console.log(dataUpdate.dateUpdate);
         if (err) {
-            result( err)
+            result( null,err)
         } else {
             result("updated Feedback success!!!")
         }
@@ -54,7 +54,7 @@ Feedback.updateFeedback =function (id,dataUpdate, result) {
 Feedback.addFeedBackByCustomer = function(data,result){
     db.query(`INSERT INTO feedback SET?`, data, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
             result({id : rows.insertId,...data});
         }

@@ -10,7 +10,7 @@ Staff.getStaff = function (id,result) {
    
     db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}'`, (err, rows, fields) => {
         if (err) {
-            result(err);
+            result(null,err);
         } else {
             data = rows;
             result(data);
@@ -21,7 +21,7 @@ Staff.addStaff= function (data,result) {
    
     db.query(`INSERT INTO staff SET?`,data, (err, rows, fields) => {
         if (err) {
-            result(err);
+            result(null,err);
         } else {
             result({id : rows.insertId,...data});
         }
@@ -31,7 +31,7 @@ Staff.updateStaff=function (id,data, result) {
     db.query(`UPDATE swp490_g11.staff SET ?  WHERE (saffId"= '${id}');`,data,(err, rows, fields) => {
      
         if (err) {
-            result( err)
+            result(null, err)
         } else {
             result("updated staff success!!!")
         }

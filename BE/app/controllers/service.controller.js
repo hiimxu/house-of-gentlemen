@@ -7,10 +7,14 @@ exports.addServiceSalon = function (req, res, next) {
     console.log(dataService);
     try {
         ServiceSalon.addServiceSalon(dataService,function (data) {
-            res.json(data);
+           if (data== null) {
+            res.json({data:data,success:"add service fail"});
+           } else {
+            res.json({data:data,success:"add service success"});
+           }
          });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,success:"add service fail"});
     }
 }
 
@@ -36,10 +40,14 @@ exports.getServiceOfSalon = function (req, res, next) {
     try {
         ServiceSalon.getServiceOfSalon(id,function (data) {
 
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,success:"get service fail"});
+               } else {
+                res.json({data:data,success:"get service success"});
+               }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,success:"get service fail"});
     }
 }
 exports.updateServiceSalon= function (req, res, next) {
@@ -48,10 +56,14 @@ exports.updateServiceSalon= function (req, res, next) {
     try {
         ServiceSalon.updateServiceSalon(id,dataUpdate,function (data) {
         
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,success:"update service fail"});
+               } else {
+                res.json({data:data,success:"update service success"});
+               }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,success:"update service fail"});
     }
     
 }

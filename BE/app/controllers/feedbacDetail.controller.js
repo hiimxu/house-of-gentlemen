@@ -37,10 +37,14 @@ exports.deleteFeedbackDetailByFeedbackDetailId=function (req, res, next) {
    try {
     FeedbackDetail.deleteFeedbackDetailByFeedbackDetailId(id,function (data) {
 
-        res.json(data);
+        if (data== null) {
+           res.json({data:data,message:"detete feedback detail failed"});
+        } else {
+            res.json({data:data,message:"detete feedback detail success"});
+        }
     });
    } catch (error) {
-       res.json(error);
+    res.json({data:error,message:"detete feedback detail failed"});
    }
     
 }
@@ -51,10 +55,14 @@ exports.updateFeedbackDetail= function (req, res, next) {
     dataUpdate={dateUpdate:dateUpdate,...dataUpdate};
     try {
         FeedbackDetail.updateFeedbackDetail(id,dataUpdate,function (data) {
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,message:"update feedback detail failed"});
+            } else {
+                res.json({data:data,message:"update feedback detail success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:data,message:"update feedback detail failed"});
     }
     
 }
@@ -66,9 +74,13 @@ exports.addFeedBackDetailByCustomer = function (req, res, next) {
     // res.json(dataFeedBack);
     try {
         FeedbackDetail.addFeedBackDetailByCustomer(dataFeedBackDetail,function (data) {
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,message:"add feedback detail failed"});
+            } else {
+                res.json({data:data,message:"add feedback detail success"});
+            }
        });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"add feedback detail failed"});
     }
 }

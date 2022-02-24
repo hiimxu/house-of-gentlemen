@@ -4,10 +4,14 @@ exports.getStaff= function (req, res, next) {
     try {
         Staff.getStaff(id,function (data) {
 
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,success:"get staff fail"});
+            } else {
+                res.json({data:data,success:"get staff success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,success:"get staff fail"});
     }
     
 }
@@ -16,10 +20,14 @@ exports.addStaff= function (req, res, next) {
     try {
         Staff.addStaff(data,function (data) {
 
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,success:"add staff fail"});
+            } else {
+                res.json({data:data,success:"add staff success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,success:"add staff fail"});
     }
     
 }

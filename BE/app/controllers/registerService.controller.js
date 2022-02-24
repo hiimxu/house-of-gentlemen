@@ -1,13 +1,17 @@
 var RegisterService = require('../models/register_service.model');
+var StaffCanleder = require('../models/staffCanleder.model');
 exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
     try {
         RegisterService.getRegisterServiceById(id, function (data) {
-
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,message:"get booking service failed"});
+            } else {
+                res.json({data:data,message:"get booking service success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"get booking service failed"});
     }
 
 }
@@ -16,10 +20,14 @@ exports.getRegisterServiceByCustomer = function (req, res, next) {
     try {
         RegisterService.getRegisterServiceByCustomer(id, function (data) {
 
-            res.json(data);
+           if (data== null) {
+            res.json({data:data,message:"get booking service failed"});
+           } else {
+            res.json({data:data,message:"get booking service success"});
+           }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"get booking service failed"});
     }
 
 }
@@ -37,12 +45,20 @@ exports.addRegisterService = function (req, res, next) {
         StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
             var staffCanlederId = data.staffCanlederId;
             dataRegisterService = { staffCanlederId, ...dataRegisterService };
+            if (data== null) {
+                res.json({data:data,message:"add staff cander failed"});
+            } else {
+                RegisterService.addRegisterService(dataRegisterService, function (data) {
+                    if (data== null) {
+                        res.json( {data:data,message:"add register success failed"}); 
+                    } else {
+                        res.json( {data:data,message:"add register success success"}); 
+                    }
+                     }); 
+            }
             
-            RegisterService.addRegisterService(dataRegisterService, function (data) {
-               res.json( data); 
-                });
             });
     } catch (error) {
-        res.json(error);
+        res.json( {data:error,message:"add register success failed"}); 
     }
 }

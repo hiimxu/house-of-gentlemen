@@ -9,8 +9,8 @@ ImageSalon.getAllImage = function (id,result) {
    
     db.query(`SELECT * FROM swp490_g11.image_salon where salonId='${id}'`, (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+            
+            result(null,err);
         } else {
             data = rows;
             result(data)
@@ -20,7 +20,7 @@ ImageSalon.getAllImage = function (id,result) {
 ImageSalon.addImageToImageSalon = function(dataImage,result){
     db.query(`INSERT INTO image_salon SET?`, dataImage, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
             result({id : rows.insertId,...dataImage});
         }

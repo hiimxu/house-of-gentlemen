@@ -8,20 +8,28 @@ exports.addFeedBackBySalon=function (req, res, next) {
     // res.json(dataFeedBack);
     try {
         FeedBack.addFeedBackBySalon(dataFeedBack,function (data) {
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,message:"add feedback failed"});
+            } else {
+                res.json({data:data,message:"add feedback success"});
+            }
        });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"add feedback failed"});
     }
 }
 exports.getFeedbackOfSalon = function (req, res, next) {
     var id = req.params.id;
     try {
         FeedBack.getFeedbackOfSalon(id,function (data) {
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,message:"get feedback failed"});
+            } else {
+                res.json({data:data,message:"get feedback success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"get feedback failed"});
     }
 }
 exports.deleteFeedback=function (req, res, next) {
@@ -31,11 +39,15 @@ exports.deleteFeedback=function (req, res, next) {
         FeedbackDetail.deleteFeedbackDetailByFeedbackId(id,function (data) {
             FeedBack.deleteFeedback(id,function (data) {
     
-                res.json(data);
+                if (data== null) {
+                    res.json({data:data,message:"delete feedback failed"});
+                } else {
+                    res.json({data:data,message:"delete feedback success"});
+                }
             });
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"get feedback failed"});
     }
     
 }
@@ -47,10 +59,14 @@ exports.updateFeedback = function (req, res, next) {
     try {
         Feedback.updateFeedback(id,dataUpdate,function (data) {
 
-            res.json({ result: data });
+            if (data== null) {
+                res.json({ result: data ,message :"update feedback failed"});
+            } else {
+                res.json({ result: data ,message :"update feedback success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({ result:error ,message :"update feedback failed"});
     }
     
 }
@@ -62,9 +78,13 @@ exports.addFeedBackByCustomer = function (req, res, next) {
     // res.json(dataFeedBack);
     try {
         FeedBack.addFeedBackByCustomer(dataFeedBack,function (data) {
-            res.json({ result: data });
+           if (data== null) {
+            res.json({ result: data ,message :"add feedback failed"});
+           } else {
+            res.json({ result: data ,message :"add feedback success"});
+           }
        });
     } catch (error) {
-        res.json(error);
+        res.json({ result: error ,message :"add feedback failed"});
     }
 }

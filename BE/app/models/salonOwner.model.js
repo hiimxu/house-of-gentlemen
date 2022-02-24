@@ -66,7 +66,7 @@ SalonOwner.setPossitiveSalonOwner=function (id,possibility, result) {
         if (err) {
             result(null, err)
         } else {
-            result("updated possitive 's salon success!!!")
+            result(rows);
         }
     });
 }
