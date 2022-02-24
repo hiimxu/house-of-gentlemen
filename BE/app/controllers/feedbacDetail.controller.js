@@ -7,10 +7,14 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
     // res.json(dataFeedBack);
     try {
         FeedbackDetail.addFeedBackDetailBySalon(dataFeedBackDetail,function (data) {
-            res.json(data);
+           if (data== null) {
+            res.json({data:data,message:"add feedback detail failed"});
+           } else {
+            res.json({data:data,message:"add feedback detail success"});
+           }
        });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"add feedback detail failed"});
     }
 }
 exports.getFeedbackDetail = function (req, res, next) {
@@ -18,10 +22,14 @@ exports.getFeedbackDetail = function (req, res, next) {
     try {
         FeedbackDetail.getFeedbackDetail(id,function (data) {
 
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,message:"get feedback detail failed"});
+            } else {
+                res.json({data:data,message:"get feedback detail success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"get feedback detail failed"});
     }
 }
 exports.deleteFeedbackDetailByFeedbackDetailId=function (req, res, next) {

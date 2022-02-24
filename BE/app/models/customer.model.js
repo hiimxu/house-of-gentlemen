@@ -10,7 +10,7 @@ const Customer = function (customer) {
 Customer.createCustomer = function (data, result) {
     db.query(`INSERT INTO customer SET?`, data, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
             result("created success customer!!!");
         }
@@ -19,8 +19,8 @@ Customer.createCustomer = function (data, result) {
 Customer.getCustomerSalon =function (id, result) {
     db.query("SELECT * FROM swp490_g11.customer where accountId="+id, (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+           
+            result(null,err);
         } else {
            var data = rows;
             result(data)
@@ -29,9 +29,9 @@ Customer.getCustomerSalon =function (id, result) {
 }
 Customer.updateProfileCustomer =function (id,dataUpdate, result) {
     db.query(`UPDATE swp490_g11.customer SET ?  WHERE (customerId = '${id}');`,dataUpdate, (err, rows, fields) => {
-        console.log(dataUpdate)
+       
         if (err) {
-            result( err)
+            result(null, err)
         } else {
             result("updated profile 's customer success!!!")
         }

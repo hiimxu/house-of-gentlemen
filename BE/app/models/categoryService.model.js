@@ -10,7 +10,7 @@ CategoryService.addCategoryService = function(dataCategoryService,result){
     console.log(dataCategoryService)
     db.query(`INSERT INTO category_service SET?`, dataCategoryService, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
             result({id : rows.insertId,...dataCategoryService});
         }

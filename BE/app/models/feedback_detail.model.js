@@ -12,7 +12,7 @@ const Feedback_detail = function (feedbackDetail) {
 Feedback_detail.addFeedBackDetailBySalon = function(data,result){
     db.query(`INSERT INTO feedback_detail SET?`, data, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
             result({id : rows.insertId,...data});
         }
@@ -22,8 +22,8 @@ Feedback_detail.getFeedbackDetail = function (id,result) {
    
     db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackId='${id}' order by dateCreate desc`, (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+           
+            result(null,err);
         } else {
             data = rows;
             result(data);
@@ -54,7 +54,7 @@ Feedback_detail.updateFeedbackDetail=function (id,dataUpdate, result) {
     db.query(`UPDATE swp490_g11.feedback_detail SET ?  WHERE (feedBackDetailId= '${id}');`,dataUpdate,(err, rows, fields) => {
       console.log(dataUpdate.dateUpdate);
         if (err) {
-            result( err)
+            result(null, err)
         } else {
             result("updated FeedbackDetail success!!!")
         }
@@ -63,7 +63,7 @@ Feedback_detail.updateFeedbackDetail=function (id,dataUpdate, result) {
 Feedback_detail.addFeedBackDetailByCustomer= function(data,result){
     db.query(`INSERT INTO feedback_detail SET?`, data, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
             result({id : rows.insertId,...data});
         }

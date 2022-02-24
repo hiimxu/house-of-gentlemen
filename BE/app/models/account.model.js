@@ -9,11 +9,9 @@ const Account = function (acc) {
 Account.getAll = function (result) {
     db.query("SELECT * FROM swp490_g11.account", (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+            result(null,err);
         } else {
             data = rows;
-            // console.log(data);
             result(data)
         }
     });
@@ -21,8 +19,8 @@ Account.getAll = function (result) {
 Account.getAllAccountSalon = function (result) {
     db.query("SELECT * FROM swp490_g11.account where role='salon'", (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+            
+            result(null,err);
         } else {
             data = rows;
             // console.log(data);
@@ -33,8 +31,8 @@ Account.getAllAccountSalon = function (result) {
 Account.getAccountToLogin = function (acc, pass, result) {
     db.query(`SELECT * FROM swp490_g11.account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+          
+            result(null,err);
         } else {
             result(account)
         }
@@ -43,15 +41,15 @@ Account.getAccountToLogin = function (acc, pass, result) {
 Account.getAccountById = function (id, result) {
     db.query(`SELECT * FROM swp490_g11.account where account_id =${id}`, (err, account, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+            result(null,err);
         } else {
             result(account)
         }
     })
 }
-Account.createAccount = function (data, result) {
-    db.query(`INSERT INTO account SET?`, data, (err, rows, res) => {
+Account.createAccount = function( save_data, result) {
+    db.query(`INSERT INTO account SET?`, save_data, (err, rows, res) => {
+        console.log(save_data)
         if (err) {
             result(err)
         } else {

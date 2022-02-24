@@ -12,11 +12,14 @@ exports.getCustomerProfile = function (req, res, next) {
     var id = req.params.id;
     try {
         Customer.getCustomerSalon(id, function (data) {
-
-            res.json(data);
+            if (data== null) {
+                res.json({data:data,message:"get data customer 's profile failed"});
+            } else {
+                res.json({data:data,message:"get data customer 's profile success"});
+            }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"get data customer 's profile failed"});
     }
 }
 exports.updateCustomerProfile = function (req, res, next) {
@@ -25,10 +28,14 @@ exports.updateCustomerProfile = function (req, res, next) {
     try {
         Customer.updateProfileCustomer(id, dataUpdate, function (data) {
 
-            res.json(data);
+           if (data== null) {
+            res.json({data:data,message:"update data customer 's profile failed"});
+           } else {
+            res.json({data:data,message:"update data customer 's profile success"});
+           }
         });
     } catch (error) {
-        res.json(error);
+        res.json({data:error,message:"update data customer 's profile failed"});
     }
 
     
@@ -40,17 +47,6 @@ exports.updateCustomerProfile = function (req, res, next) {
 
 
 
-exports.updateFeedback = function (req, res, next) {
-    var id = req.params.id;
-    var dataUpdate=req.body;
-    var dateUpdate=new Date();
-    dataUpdate={dateUpdate:dateUpdate,...dataUpdate};
-    
-    FeedBack.updateFeedback(id,dataUpdate,function (data) {
-
-        res.json({ result: data });
-    });
-}
 
 
 

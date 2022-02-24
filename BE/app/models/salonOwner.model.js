@@ -11,8 +11,8 @@ const SalonOwner = function (salon) {
 SalonOwner.getAll = function (result) {
     db.query("SELECT * FROM swp490_g11.salonowner", (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+           
+            result(null,err);
         } else {
             data = rows;
             result(data)
@@ -22,17 +22,17 @@ SalonOwner.getAll = function (result) {
 SalonOwner.createSalonOwner = function (data, result) {
     db.query(`INSERT INTO salonowner SET?`, data, (err, rows, res) => {
         if (err) {
-            result(err)
+            result(null,err)
         } else {
-            result("created salon owner success!!!");
+            result({id : rows.insertId,...data});
         }
     });
 }
 SalonOwner.getProfileSalon =function (id, result) {
     db.query("SELECT * FROM swp490_g11.salonowner where accountId="+id, (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+           
+            result(null,err);
         } else {
            var data = rows;
             result(data)
@@ -42,8 +42,8 @@ SalonOwner.getProfileSalon =function (id, result) {
 SalonOwner.getProfileAllSalon =function (result) {
     db.query("SELECT * FROM swp490_g11.salonowner ", (err, rows, fields) => {
         if (err) {
-            console.log(err);
-            result(err);
+           
+            result(null,err);
         } else {
            var data = rows;
             result(data)
@@ -56,7 +56,7 @@ SalonOwner.updateProfileSalon =function (id,dataUpdate, result) {
         if (err) {
             result(null, err)
         } else {
-            result("updated profile 's salon success!!!")
+            result({id : rows.insertId,...dataUpdate})
         }
     });
 }
