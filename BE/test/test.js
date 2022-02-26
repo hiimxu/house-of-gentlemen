@@ -9,14 +9,8 @@ var md5 = require('md5');
 const { describe } = require('mocha');
 // var server = require('../server');
 // var should = chai.should();
-describe('Array', function () {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal([1, 2, 3, -1, -1].indexOf(4), -1);
-    });
-  });
-});
 
+// get all account
 describe('test for get: /api/account', () => {
   it('should be true if message:"get all salon success"', function () {
     chai.request('http://localhost:3000')
@@ -31,7 +25,7 @@ describe('test for get: /api/account', () => {
   });
 });
 
-// test post service
+// test post service update service
 describe('test for post:/api/salonowner/create/service', function () {
   it('should be true if message:"add service success"', function () {
     let service = {
@@ -50,6 +44,7 @@ describe('test for post:/api/salonowner/create/service', function () {
       });
     });
   });
+  // get all service
 describe('test for get: /api/customer/get/AllService', () => {
   it('should be true if message:"get service success"', function () {
     chai.request('http://localhost:3000')
@@ -61,6 +56,7 @@ describe('test for get: /api/customer/get/AllService', () => {
       });
     });
 });
+// login account
 describe('test for loginAccount post:/api/account/login', function () {
   it('should be true if message:"login successed"', function () {
     let data = {
@@ -78,3 +74,19 @@ describe('test for loginAccount post:/api/account/login', function () {
   });
 
 });
+// get profile of salon
+describe('test for get salon profile get:/api/salonowner/profile/:id', function () {
+  it('should be true if message:"get all salon success"', function () {
+    var accountId=2;
+    chai.request('http://localhost:3000')
+      .get(`/api/salonowner/profile/${accountId}`).end((err, res) => {
+        res.should.have.status(200);
+        res.should.to.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('message').eql("get salon 's profile success");
+
+      });
+
+  });
+});
+
