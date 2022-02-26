@@ -26,4 +26,5 @@ StatusRegisterService.getSatusRegisterServiceById =function (id, result) {
     });
 }
 
+
 module.exports =StatusRegisterService;

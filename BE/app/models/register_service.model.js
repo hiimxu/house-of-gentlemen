@@ -40,4 +40,14 @@ Register_service.addRegisterService = function(dataRegisterService,result){
     });
     
 }
+Register_service.cancelBooking= function(id,result){
+    db.query(`UPDATE register_service SET status_register_id='2' where registerServiceId=?`,id, (err, rows, res) => {
+        if (err) {
+            result(null,err);
+        } else {
+            result(rows);
+        }
+    });
+    
+}
 module.exports =Register_service;

@@ -50,15 +50,28 @@ exports.addRegisterService = function (req, res, next) {
             } else {
                 RegisterService.addRegisterService(dataRegisterService, function (data) {
                     if (data== null) {
-                        res.json( {data:data,message:"add register success failed"}); 
+                        res.json( {data:data,message:"booking service failed"}); 
                     } else {
-                        res.json( {data:data,message:"add register success success"}); 
+                        res.json( {data:data,message:"booking service success"}); 
                     }
                      }); 
             }
             
             });
     } catch (error) {
-        res.json( {data:error,message:"add register success failed"}); 
+        res.json( {data:error,message:"booking service failed"}); 
     }
+}
+exports.cancelBooking = function (req, res, next) {
+   var id = req.params.id;
+   RegisterService.cancelBooking(id,function (data){
+    if (data== null) {
+        res.json( {data:data,message:"cancel booking failed"}); 
+    } else {
+        res.json( {data:data,message:"cancel booking success"}); 
+    }
+     }); 
+
+    
+
 }

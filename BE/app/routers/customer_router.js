@@ -14,6 +14,7 @@ router.get('/profile/:id',cors(),customerController.getCustomerProfile);
 router.put('/update/profile/:id',cors(),customerController.updateCustomerProfile);
 router.get('/statusRegisterService',cors(),statusRegisterServiceController.getStatusRegisterService);
 router.get('/statusRegisterServiceById/:id',cors(),statusRegisterServiceController.getStatusRegisterServiceById);
+router.put('/cancel/registerservice/:id',cors(),registerServiceController.cancelBooking);
 router.get('/registerService/:id',cors(),registerServiceController.getRegisterServiceById);
 router.get('/registerServiceByCustomer/:id',cors(),registerServiceController.getRegisterServiceByCustomer);
 router.post('/create/registerService',cors(),registerServiceController.addRegisterService);
