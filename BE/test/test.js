@@ -40,6 +40,7 @@ describe('test for post:/api/salonowner/create/service', function () {
       .post('/api/salonowner/create/service').send(service).end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('object');
+        res.should.to.be.json;
         res.body.should.have.property('message').eql('add service success');
       });
     });
@@ -67,6 +68,7 @@ describe('test for loginAccount post:/api/account/login', function () {
     chai.request('http://localhost:3000')
       .post('/api/account/login').send(data).end((err, res) => {
         res.should.have.status(200);
+        res.should.to.be.json;
         res.body.should.be.a('object');
         res.body.should.have.property('message').eql('login successed');
       });
@@ -102,6 +104,7 @@ describe('test for salonOwner update profile put:/api/salonowner/update/profile/
     chai.request('http://localhost:3000')
       .put(`/api/salonowner/update/profile/${salonId}`).send(data).end((err, res) => {
         res.should.have.status(200);
+        res.should.to.be.json;
         res.body.should.be.a('object');
         res.body.should.have.property('message').eql("update salon 's profile success");
       });
