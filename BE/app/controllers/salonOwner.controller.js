@@ -74,14 +74,14 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     try {
         SalonOwner.updateProfileSalon(id, dataUpdate, function (data) {
             if (data == null) {
-                res.json({ data: data, message: "get salon 's profile failed" });
+                res.json({ data: data, message: "update salon 's profile failed" });
             }
             else {
-                res.json({ data: data, message: "get salon 's profile success" });
+                res.json({ data: data, message: "update salon 's profile success" });
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get salon 's profile failed" })
+        res.json({ data: error, message: "update salon 's profile failed" })
     }
 
 }

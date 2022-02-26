@@ -25,7 +25,7 @@ describe('test for get: /api/account', () => {
   });
 });
 
-// test post service update service
+// test post service salonowner update service
 describe('test for post:/api/salonowner/create/service', function () {
   it('should be true if message:"add service success"', function () {
     let service = {
@@ -89,4 +89,23 @@ describe('test for get salon profile get:/api/salonowner/profile/:id', function 
 
   });
 });
+// put : test salonowner update profile
 
+describe('test for salonOwner update profile put:/api/salonowner/update/profile/:id', function () {
+  it("should be true if message:update salon 's profile success", function () {
+    var salonId=1;
+    var data = {
+      nameSalon: 'duySalon',
+      phone:0826368193,
+      taxCode:'12345'
+    };
+    chai.request('http://localhost:3000')
+      .put(`/api/salonowner/update/profile/${salonId}`).send(data).end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('message').eql("update salon 's profile success");
+      });
+
+  });
+
+});
