@@ -66,20 +66,20 @@ exports.addRegisterService = function (req, res, next) {
 exports.cancelBooking = function (req, res, next) {
    var id = req.params.id;
    var staffCanlederId= req.body.staffCanlederId;
+   console.log(staffCanlederId)
    StaffCanleder.cancelBooking(staffCanlederId,function (data){
+   
     if (data== null) {
         res.json( {data:data,message:"cancel booking failed"}); 
     } else{
-        RegisterService.cancelBooking(id,function (data){
+        RegisterService.cancelBooking(id,function (data) {
             if (data== null) {
                 res.json( {data:data,message:"cancel booking failed"}); 
-            } else {
+            }else{
                 res.json( {data:data,message:"cancel booking success"}); 
             }
-             }); 
-
-    } 
-
+        } );
+    }
    });
    
 
