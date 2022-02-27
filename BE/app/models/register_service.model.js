@@ -9,6 +9,8 @@ const Register_service = function (registerService) {
     this.status_register_id = registerService.status_register_id;
     this.promotionSpical = registerService.promotionSpical;
     this.staffId = registerService.staffId;
+    this.staffCanlederId=registerServiceId.staffCanlederId;
+    this.price_original= registerServiceId.price_original;
 }
 Register_service.getRegisterServiceById=function (id, result) {
     db.query("SELECT * FROM swp490_g11.register_service where registerServiceId =?",id,(err, rows, fields) => {
