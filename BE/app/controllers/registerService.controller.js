@@ -1,5 +1,6 @@
 var RegisterService = require('../models/register_service.model');
 var StaffCanleder = require('../models/staffCanleder.model');
+
 exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
     try {
@@ -64,13 +65,23 @@ exports.addRegisterService = function (req, res, next) {
 }
 exports.cancelBooking = function (req, res, next) {
    var id = req.params.id;
-   RegisterService.cancelBooking(id,function (data){
+   var staffCanlederId= req.body.staffCanlederId;
+   StaffCanleder.cancelBooking(staffCanlederId,function (data){
     if (data== null) {
         res.json( {data:data,message:"cancel booking failed"}); 
-    } else {
-        res.json( {data:data,message:"cancel booking success"}); 
-    }
-     }); 
+    } else{
+        RegisterService.cancelBooking(id,function (data){
+            if (data== null) {
+                res.json( {data:data,message:"cancel booking failed"}); 
+            } else {
+                res.json( {data:data,message:"cancel booking success"}); 
+            }
+             }); 
+
+    } 
+
+   });
+   
 
     
 
