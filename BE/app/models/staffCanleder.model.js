@@ -17,7 +17,7 @@ StaffCanleder.addStaffCanderToRegisterService = function(dataStaffCanleder,resul
     
 }
 StaffCanleder.cancelBooking= function(id,result){
-    db.query(`UPDATE staff_canleder SET statusId='2' where staffCanlederId=?`, id, (err, rows, res) => {
+    db.query(`UPDATE staff_canleder SET statusId='2' where staffCanlederId=?`,id, (err, rows, res) => {
         if (err) {
             result(null,err)
         } else {

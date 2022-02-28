@@ -1,7 +1,9 @@
+const { body, validationResult } = require('express-validator');
 var Account = require('../models/account.model');
 var SalonOwner = require('../models/salonOwner.model');
 var Customer = require('../models/customer.model');
 var md5 = require('md5');
+
 
 
 exports.account = function (req, res, next) {
@@ -77,11 +79,14 @@ exports.add_account = function (req, res, next) {
     var md5_pass = md5(pass);
     var rol = req.body.role;
     var save_data = { account_name: acc, password: md5_pass, role: rol }
-    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
    try {
     var check = Account.checkAccount(save_data, function (data) {
         if (data.length == 1) {
-            res.json({data:"tai khoan da ton tai",message:"tai khoan da ton tai"});
+            res.json({data:"Account already exists",message:"Account already exists"});
         }
         else {
             if (rol == 'salon') {

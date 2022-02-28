@@ -10,20 +10,6 @@ const { describe } = require('mocha');
 // var server = require('../server');
 // var should = chai.should();
 
-// get all account
-describe('test for get: /api/account', () => {
-  it('should be true if message:"get all salon success", status:200, to be json, be a object ', function () {
-    chai.request('http://localhost:3000')
-      .get('/api/customer/get/AllSalon').end((err, res) => {
-        res.should.have.status(200);
-        res.should.to.be.json;
-        res.body.should.be.a('object');
-        res.body.should.have.property('message').eql('get all salon success');
-
-      });
-
-  });
-});
 
 // test post service salonowner update service
 describe('test for update service post:/api/salonowner/create/service', function () {
@@ -113,15 +99,100 @@ describe('test for salonOwner update profile put:/api/salonowner/update/profile/
   });
 
 });
-// 1. test register account customer tai khoan da ton tai
+
+// 2. test register account customer create account salon success
+// describe('test for register account customer post:/api/account/add', function () {
+//   it('should be true if message:create account salon success, status:200, to be json, be a object ', function () {
+//     let data = {
+//       account_name: 'duytest',
+//       password: 123,
+//       role: 'customer',
+//       nameCustomer: 'duy',
+//       phone: 0826368193,
+//       address: 'tb',
+//       birthday: '1993-03-30'
+//     };
+//     chai.request('http://localhost:3000')
+//       .post('/api/account/add').send(data).end((err, res) => {
+//         res.should.have.status(200);
+//         res.body.should.be.a('object');
+//         res.should.to.be.json;
+//         res.body.should.have.property('message').eql('create account customer success');
+//       });
+//   });
+// });
+//3. testin put account_name is empty
+describe('test for register account customer post:/api/account/add', function () {
+  it(' test in put account_name is empty should be true if  status:400, to be json, be a object,errors ', function () {
+    let data = {
+      account_name: '',
+      password: 123,
+      role: 'customer',
+      nameCustomer: 'duy',
+      phone: 0826368193,
+      address: 'tb',
+      birthday: '1993-03-30'
+    };
+    chai.request('http://localhost:3000')
+      .post('/api/account/add').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.should.to.be.json;
+        res.body.should.have.property('errors');
+      });
+  });
+});
+//4. test input password is empty
+describe('test for register account customer post:/api/account/add', function () {
+  it('test input password is empty should be true if  status:400, to be json, be a object,errors ', function () {
+    let data = {
+      account_name: 'duymc',
+      password: '',
+      role: 'customer',
+      nameCustomer: 'duy',
+      phone: 0826368193,
+      address: 'tb',
+      birthday: '1993-03-30'
+    };
+    chai.request('http://localhost:3000')
+      .post('/api/account/add').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.should.to.be.json;
+        res.body.should.have.property('errors');
+      });
+  });
+});
+//5. test input phone input
+describe('test for register account customer post:/api/account/add', function () {
+  it('test input phone should be true if  status:400, to be json, be a object,errors ', function () {
+    let data = {
+      account_name: 'duymc',
+      password: '123',
+      role: 'customer',
+      nameCustomer: 'duy',
+      phone: 'asdasdad',
+      address: 'tb',
+      birthday: '1993-03-30'
+    };
+    chai.request('http://localhost:3000')
+      .post('/api/account/add').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.should.to.be.json;
+        res.body.should.have.property('errors');
+      });
+  });
+});
+//1. test register account customer tai khoan da ton tai
 describe('test for register account customer post:/api/account/add', function () {
   it('should be true if message:tai khoan da ton tai, status:200, to be json, be a object ', function () {
     let data = {
       account_name: 'duycustomer',
-      password: 123,
+      password: '12323213',
       role: 'customer',
       nameCustomer: 'duy',
-      phone: 0826368193,
+      phone: '0826368193',
       address: 'tb',
       birthday: '1993-03-30'
     };
@@ -130,32 +201,13 @@ describe('test for register account customer post:/api/account/add', function ()
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.should.to.be.json;
-        res.body.should.have.property('message').eql('tai khoan da ton tai');
+        res.body.should.have.property('message').eql('Account already exists');
       });
   });
 });
-// 2. test register account customer create account salon success
-describe('test for register account customer post:/api/account/add', function () {
-  it('should be true if message:create account salon success, status:200, to be json, be a object ', function () {
-    let data = {
-      account_name: 'duycustomer331',
-      password: 123,
-      role: 'customer',
-      nameCustomer: 'duy',
-      phone: 0826368193,
-      address: 'tb',
-      birthday: '1993-03-30'
-    };
-    chai.request('http://localhost:3000')
-      .post('/api/account/add').send(data).end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('object');
-        res.should.to.be.json;
-        res.body.should.have.property('message').eql('create account customer success');
-      });
-  });
-});
-//3.  // get feedback of salon
+
+
+//6.  // get feedback of salon
 describe('test for get feedback get: /api/customer/getFeedbackOfSalon/:id', () => {
   it('should be true if message:"get feedback success", status:200, to be json, be a object ', function () {
     let id = 1;
@@ -168,12 +220,13 @@ describe('test for get feedback get: /api/customer/getFeedbackOfSalon/:id', () =
       });
   });
 });
-// 4.// cancel booking by customer
+// 7.// cancel booking by customer
 describe('test for cancel booking by customer: /api/customer/cancel/registerservice/:id', () => {
   it('should be true if message:cancel booking success, status:200, to be json, be a object ', function () {
-    let id = 6;
+    var id = 6;
+    var data={staffCanlederId : 16};
     chai.request('http://localhost:3000')
-      .put(`/api/customer/cancel/registerservice/${id}`).end((err, res) => {
+      .put(`/api/customer/cancel/registerservice/${id}`).send(data).end((err, res) => {
         res.should.have.status(200);
         res.should.to.be.json;
         res.body.should.be.a('object');
@@ -181,7 +234,7 @@ describe('test for cancel booking by customer: /api/customer/cancel/registerserv
       });
   });
 });
-//5 . booking service
+//8 . booking service
 describe('test for booking service post: /api/customer/create/registerService', function () {
   it('should be true if message:booking service success, status:200, to be json, be a object ', function () {
     let data = {

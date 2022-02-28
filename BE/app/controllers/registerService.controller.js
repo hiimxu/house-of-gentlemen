@@ -70,7 +70,7 @@ exports.cancelBooking = function (req, res, next) {
    StaffCanleder.cancelBooking(staffCanlederId,function (data){
    
     if (data== null) {
-        res.json( {data:data,message:"cancel booking failed"}); 
+        res.json({data:data,message:"cancel booking failed"}); 
     } else{
         RegisterService.cancelBooking(id,function (data) {
             if (data== null) {
