@@ -189,10 +189,10 @@ exports.forgotPassword = async function (req, res, next) {
         if (data.length == 1) {
             var id = data[0].account_id;
             var email = data[0].email;
-             if (!email==emailcheck) {
-                 res.json({ message: "check your email" });
-                
-             }
+            if (!email == emailcheck) {
+                res.json({ message: "check your email" });
+
+            }
             var new_password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
             var md5_new_pass = md5(new_password);
             // var md5_new_pass = md5(new_password);
@@ -205,13 +205,13 @@ exports.forgotPassword = async function (req, res, next) {
                     var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                            user: 'maicongduy300393@gmail.com',
-                            pass: 'Anhduy01'
+                            user: 'mduyxa@gmail.com',
+                            pass: 'Ad12345678'
                         }
                     });
 
                     var mailOptions = {
-                        from: 'maicongduy300393@gmail.com',
+                        from: 'mduyxa@gmail.com',
                         to: email,
                         subject: 'New Password',
                         text: 'your new password:' + new_password
