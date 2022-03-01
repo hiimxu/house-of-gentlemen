@@ -5,6 +5,7 @@ const Account = function (acc) {
     this.account = acc.account;
     this.password = acc.password;
     this.role = acc.role;
+    this.email = acc.email;
 }
 Account.getAll = function (result) {
     db.query("SELECT * FROM swp490_g11.account", (err, rows, fields) => {
@@ -23,20 +24,21 @@ Account.getAllAccountSalon = function (result) {
             result(null,err);
         } else {
             data = rows;
-            // console.log(data);
             result(data)
         }
     });
 }
 Account.getAccountToLogin = function (acc, pass, result) {
-    db.query(`SELECT * FROM swp490_g11.account where account_name like '${acc}' and password like '${pass}' `, (err, account, fields) => {
+    db.query(`SELECT * FROM swp490_g11.account where account_name like '${acc}' and password like '${pass}' `,(err, rows, fields) => {
         if (err) {
           
             result(null,err);
         } else {
-            result(account)
+            
+            result(rows);
         }
     })
+   
 }
 Account.getAccountById = function (id, result) {
     db.query(`SELECT * FROM swp490_g11.account where account_id =${id}`, (err, account, fields) => {
@@ -57,8 +59,8 @@ Account.createAccount = function( save_data, result) {
         }
     });
 }
-Account.checkAccount = function (data, result) {
-    db.query(`select*from account where account_name like '${data.account_name}'`, (err, rows, fields) => {
+Account.checkAccount = function (account_name, result) {
+    db.query(`select*from account where account_name like '${account_name}'`, (err, rows, fields) => {
         if (err) {
             result(null, err)
         } else {
@@ -85,8 +87,11 @@ Account.removeAccount = function (id, result) {
         }
     });
 }
-Account.updatePasswordAccount= function (id,new_pass, result) {
-    db.query(`update account set password=${new_pass} WHERE (account_id = '${id}')`, (err, rows, fields) => {
+Account.updatePasswordAccount= function (id,md5_new_pass, result) {
+    console.log(md5_new_pass)
+    var password='abc'
+    db.query(`UPDATE swp490_g11.account SET password = '${md5_new_pass}' where account_id =?`,id,(err, rows, fields) => {
+        
         if (err) {
             result(null, err)
         } else {
@@ -94,5 +99,6 @@ Account.updatePasswordAccount= function (id,new_pass, result) {
         }
     });
 }
+
 
 module.exports = Account;
