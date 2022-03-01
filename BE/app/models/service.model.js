@@ -58,6 +58,14 @@ Service.getAllService= function (result) {
         }
     });
 }
-
+Service.getAllServiceSalon= function (id,result) {
+    db.query(`select* from service where salonId='${id}'`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
+}
 
 module.exports =Service;

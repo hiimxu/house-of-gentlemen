@@ -28,4 +28,5 @@ router.get('/getFeedbackOfSalon/:id',cors(),feedbackController.getFeedbackOfSalo
 router.get('/getFeedbackDetail/:feedBackId',cors(),feedbackDetailController.getFeedbackDetail);
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
 router.get('/get/AllService',cors(),serviceController.getAllService);
+router.get('/get/serviceOfSalon/:idSalon',cors(),serviceController.getAllServiceSalon);
 module.exports = router;

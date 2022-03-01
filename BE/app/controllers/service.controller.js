@@ -82,3 +82,18 @@ exports.updateServiceSalon= function (req, res, next) {
     }
     
 }
+exports.getAllServiceSalon= function (req, res, next) {
+   var id = req.params.idSalon;
+    try {
+        ServiceSalon.getAllServiceSalon(id,function (data) {
+
+            if (data== null) {
+                res.json({data:data,message:"get service fail"});
+               } else {
+                res.json({data:data,message:"get service success"});
+               }
+        });
+    } catch (error) {
+        res.json({data:error,message:"get service fail"});
+    }
+}
