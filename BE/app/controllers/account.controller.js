@@ -63,7 +63,7 @@ exports.change_password = function (req, res, next) {
         res.json({ message: "kiem tra lai old_password", data: error });
     }
 }
-exports.login_account = function async (req, res, next) {
+exports.login_account = function async(req, res, next) {
     var acc = req.body.account;
     var pass = req.body.password;
     var md5_pass = md5(pass);
@@ -80,7 +80,7 @@ exports.login_account = function async (req, res, next) {
                     res.json({ data: data, message: "login failed" });
                 } else {
                     console.log(process.env.TOKEN_KEY);
-                    
+
                     // Create token
                     const token = jwt.sign(
                         { id: 1, acc },
@@ -89,9 +89,10 @@ exports.login_account = function async (req, res, next) {
                             expiresIn: "2h",
                         }
                     );
-                    data.token=token;
-                    Account.updateToken(acc,token,function (response) {
-                        res.json({ data: data, message: "login successed" });
+                    Account.updateToken(acc, token, function (response) {
+                        var redata = data;
+                        redata[0].token = token;
+                        res.json({ data: redata, message: "login successed", token: token });
                     })
                     // res.json({ data: data, message: "login successed" });
                 }
@@ -103,18 +104,17 @@ exports.login_account = function async (req, res, next) {
         res.json({ data: error, message: "login failed" });
     }
 }
-exports.add_account = function (req, res, next) {
-    var check_role = ["customer", "salon"];
+exports.add_account_customer = function (req, res, next) {
+    
     var acc = req.body.account_name;
     var pass = req.body.password;
     var md5_pass = md5(pass);
     var rol = req.body.role;
     var email = req.body.email;
     var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
+
+    
     const errors = validationResult(req);
-    if (!check_role.includes(rol)) {
-        res.json({ message: "not is role" });
-    }
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
@@ -156,6 +156,51 @@ exports.add_account = function (req, res, next) {
                             }
                         });
                     });
+                }
+            }
+        });
+    } catch (error) {
+        res.json({ data: error, message: "create account success" });
+    }
+}
+exports.add_account_salon = function (req, res, next) {
+    var check_role = ["salon"];
+    var acc = req.body.account_name;
+    var pass = req.body.password;
+    var md5_pass = md5(pass);
+    var rol = req.body.role;
+    var email = req.body.email;
+    var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
+
+   
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+        var check = Account.checkAccount(acc, function (data) {
+            if (data.length == 1) {
+                res.json({ data: "Account already exists", message: "Account already exists" });
+            }
+            else {
+                if (rol == 'salon') {
+                    data = Account.createAccount(save_data, function (data) {
+                        var accountId = data;
+                        var nameSalon = req.body.nameSalon;
+                        var phone = req.body.phone;
+                        var possibility = req.body.possibility;
+                        var taxCode = req.body.taxCode;
+                        var save_salonOwner = { accountId: accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode };
+                        data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
+                            if (data == null) {
+                                res.json({ data: data, message: "create account salon failed" });
+                            } else {
+                                res.json({ data: data, message: "create account salon success" });
+                            }
+                        });
+                    });
+                } else {
+                    res.status(400).json({message:"create account salon failed"})
                 }
             }
         });
