@@ -55,7 +55,7 @@ exports.getCategoryServiceOfService=function (req, res, next) {
             res.json({ data: data, message: "get category service failed" });
         } else {
             if (data.length==0) {
-                res.json({ data: data, message: "get category service failed" });
+                res.json({ data: data, message: "not have category service" });
             } else
              {
                 res.json({ data: data, message: "get category service success" });

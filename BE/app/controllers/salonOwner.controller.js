@@ -67,7 +67,7 @@ exports.getSalonOwnerProfile = function (req, res, next) {
             }
             else {
                 if (data.length==0) {
-                    res.json({ data: data, message: "get salon 's profile failed" });
+                    res.json({ data: data, message: "not have infor to see" });
                 }else
                { res.json({ data: data, message: "get salon 's profile success" });}
             }
@@ -78,14 +78,22 @@ exports.getSalonOwnerProfile = function (req, res, next) {
 }
 exports.updateSalonOwnerProfile = function (req, res, next) {
     var id = req.params.id;
-    var dataUpdate = req.body;
+    console.log(id)
+    var dataUpdate = {nameSalon:req.body.nameSalon,
+        phone:req.body.phone,
+        taxCode:req.body.taxCode
+        };
     try {
         SalonOwner.updateProfileSalon(id, dataUpdate, function (data) {
             if (data == null) {
                 res.json({ data: data, message: "update salon 's profile failed" });
             }
             else {
-                res.json({ data: data, message: "update salon 's profile success" });
+                if (data.affectedRows==0) {
+                    res.json({ data: data, message: "not have salon 's profile to update" });
+                } else {
+                    res.json({ data: data, message: "update salon 's profile success" });
+                }
             }
         });
     } catch (error) {

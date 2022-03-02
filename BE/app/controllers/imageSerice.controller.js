@@ -9,7 +9,11 @@ exports.addImageService= function (req, res, next) {
             if (data== null) {
                 res.json( {data:data,message:"add image failed"} );
             } else {
+               if (data.length==0) {
+                res.json( {data:data,message:"add image failed"} );
+               } else {
                 res.json( {data:data,message:"add image success"} );
+               }
             }
         });
     } catch (error) {

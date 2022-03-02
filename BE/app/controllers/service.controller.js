@@ -19,7 +19,11 @@ exports.addServiceSalon = function (req, res, next) {
             if (data == null) {
                 res.json({ data: data, message: "add service fail" });
             } else {
-                res.json({ data: data, message: "add service success" });
+                if (data.length==0) {
+                    res.json({ data: data, message: "add service failed" });
+                } else {
+                    res.json({ data: data, message: "add service success" });
+                }
             }
         });
     } catch (error) {
@@ -49,10 +53,14 @@ exports.getServiceOfSalon = function (req, res, next) {
     try {
         ServiceSalon.getServiceOfSalon(id, function (data) {
 
-            if (data == null || data.length == 0) {
+            if (data == null) {
                 res.json({ data: data, message: "get service fail" });
             } else {
+            if (data.length == 0) {
+                res.json({ data: data, message: "not have service " });
+            } else {
                 res.json({ data: data, message: "get service success" });
+            }
             }
         });
     } catch (error) {

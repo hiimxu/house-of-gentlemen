@@ -56,7 +56,7 @@ SalonOwner.updateProfileSalon =function (id,dataUpdate, result) {
         if (err) {
             result(null, err)
         } else {
-            result({id : rows.insertId,...dataUpdate})
+            result(rows)
         }
     });
 }
