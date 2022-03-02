@@ -124,23 +124,7 @@ exports.add_account_customer = function (req, res, next) {
                 res.json({ data: "Account already exists", message: "Account already exists" });
             }
             else {
-                if (rol == 'salon') {
-                    data = Account.createAccount(save_data, function (data) {
-                        var accountId = data;
-                        var nameSalon = req.body.nameSalon;
-                        var phone = req.body.phone;
-                        var possibility = req.body.possibility;
-                        var taxCode = req.body.taxCode;
-                        var save_salonOwner = { accountId: accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode };
-                        data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
-                            if (data == null) {
-                                res.json({ data: data, message: "create account salon failed" });
-                            } else {
-                                res.json({ data: data, message: "create account salon success" });
-                            }
-                        });
-                    });
-                } else {
+                if (rol == 'customer')  {
                     data = Account.createAccount(save_data, function (data) {
                         var accountId = data;
                         var phone = req.body.phone;
@@ -156,6 +140,8 @@ exports.add_account_customer = function (req, res, next) {
                             }
                         });
                     });
+                }else{
+                    res.json({  message: "create account customer failed" });
                 }
             }
         });
