@@ -9,9 +9,10 @@ const imageServiceController = require('../controllers/imageSerice.controller');
 const feedbackController = require('../controllers/feedback.controller');
 const feedbackDetailController = require('../controllers/feedbacDetail.controller');
 const staffController = require('../controllers/staff.controller');
+const auth = require('../middleware/auth');
 
 router.get('/',cors(),salonOwnerController.salonOwner);
-router.get('/profile/:id',cors(),salonOwnerController.getSalonOwnerProfile);
+router.get('/profile/:id',cors(),auth,salonOwnerController.getSalonOwnerProfile);
 router.put('/update/profile/:id',cors(),salonOwnerController.updateSalonOwnerProfile);
 router.get('/imageSalon/:idSalon',cors(),imageSalonController.getImageSalon);
 router.post('/create/imageToImageSalon',cors(),imageSalonController.addImageToImageSalon);

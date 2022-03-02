@@ -4,7 +4,9 @@ var SalonOwner = require('../models/salonOwner.model');
 var Customer = require('../models/customer.model');
 const nodemailer = require('nodemailer');
 var md5 = require('md5');
+const jwt = require("jsonwebtoken");
 
+const config = process.env;
 
 
 exports.account = function (req, res, next) {
@@ -40,10 +42,6 @@ exports.get_accountbyid = function (req, res, next) {
     }
 }
 exports.change_password = function (req, res, next) {
-
-    // res.json(acc+md5_new_pass+md5_old_pass);
-
-
     try {
         var new_pass = req.body.new_password;
         var md5_new_pass = md5(new_pass);
@@ -65,7 +63,7 @@ exports.change_password = function (req, res, next) {
         res.json({ message: "kiem tra lai old_password", data: error });
     }
 }
-exports.login_account = function (req, res, next) {
+exports.login_account = function async (req, res, next) {
     var acc = req.body.account;
     var pass = req.body.password;
     var md5_pass = md5(pass);
@@ -81,7 +79,21 @@ exports.login_account = function (req, res, next) {
                 if (data.length == 0) {
                     res.json({ data: data, message: "login failed" });
                 } else {
-                    res.json({ data: data, message: "login successed" });
+                    console.log(process.env.TOKEN_KEY);
+                    
+                    // Create token
+                    const token = jwt.sign(
+                        { id: 1, acc },
+                        process.env.TOKEN_KEY,
+                        {
+                            expiresIn: "2h",
+                        }
+                    );
+                    data.token=token;
+                    Account.updateToken(acc,token,function (response) {
+                        res.json({ data: data, message: "login successed" });
+                    })
+                    // res.json({ data: data, message: "login successed" });
                 }
 
             }
@@ -185,7 +197,6 @@ exports.forgotPassword = async function (req, res, next) {
     var emailcheck = req.body.email;
     // res.json({message:"Account already exists"});
     Account.checkAccount(account_name, function (data) {
-
         if (data.length == 1) {
             var id = data[0].account_id;
             var email = data[0].email;

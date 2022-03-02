@@ -49,7 +49,7 @@ describe('test for loginAccount post:/api/account/login', function () {
   it('should be true if message:"login successed", status:200, to be json, be a object ', function () {
     let data = {
       account: 'customer',
-      password: md5('123')
+      password: '123'
 
     };
     chai.request('http://localhost:3000')

@@ -6,6 +6,7 @@ const Account = function (acc) {
     this.password = acc.password;
     this.role = acc.role;
     this.email = acc.email;
+    this.token = acc.token;
 }
 Account.getAll = function (result) {
     db.query("SELECT * FROM swp490_g11.account", (err, rows, fields) => {
@@ -96,6 +97,18 @@ Account.updatePasswordAccount= function (id,md5_new_pass, result) {
             result(null, err)
         } else {
             result("updated password")
+        }
+    });
+}
+Account.updateToken=function (account_name, token,result) {
+    console.log(token)
+    var password='abc'
+    db.query(`UPDATE swp490_g11.account SET token = '${token}' where account_name =?`,account_name,(err, rows, fields) => {
+        
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows)
         }
     });
 }

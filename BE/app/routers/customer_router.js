@@ -8,10 +8,11 @@ const feedbackController = require('../controllers/feedback.controller');
 const feedbackDetailController = require('../controllers/feedbacDetail.controller');
 const salonOwnerController = require('../controllers/salonOwner.controller');
 const serviceController = require('../controllers/service.controller');
+const auth = require('../middleware/auth');
 
 router.get('/',cors(),customerController.getAllCustomer);
 router.get('/profile/:id',cors(),customerController.getCustomerProfile);
-router.put('/update/profile/:id',cors(),customerController.updateCustomerProfile);
+router.put('/update/profile/:id',cors(),auth,customerController.updateCustomerProfile);
 router.get('/statusRegisterService',cors(),statusRegisterServiceController.getStatusRegisterService);
 router.get('/statusRegisterServiceById/:id',cors(),statusRegisterServiceController.getStatusRegisterServiceById);
 router.put('/cancel/registerservice/:id',cors(),registerServiceController.cancelBooking);
