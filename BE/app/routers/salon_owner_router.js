@@ -22,6 +22,7 @@ router.delete('/delete/service/:idService',cors(),serviceController.deleteServic
 router.get('/Service/:idSalon',cors(),serviceController.getServiceOfSalon);
 router.put('/update/Service/:idService',cors(),serviceController.updateServiceSalon);
 router.post('/create/categoryService',cors(),categoryServiceController.addCategoryService);
+router.get('/get/categoryService/:idService',cors(),categoryServiceController.getCategoryServiceOfService);
 router.delete('/delete/categoryService/:id',cors(),categoryServiceController.deleteCategoryService);
 router.post('/create/imageService',cors(),imageServiceController.addImageService);
 router.get('/imageService/:id',cors(),imageServiceController.getImageService);

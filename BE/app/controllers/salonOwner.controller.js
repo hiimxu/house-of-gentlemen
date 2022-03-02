@@ -6,7 +6,12 @@ exports.getSalon = function (req, res, next) {
             if (data == null) {
                 res.json({ data: data, message: "get salon 's profile failed" });
             } else {
+               if (data.length==0) {
+                res.json({ data: data, message: "get salon 's profile failed" }); 
+               }
+               else{
                 res.json({ data: data, message: "get salon 's profile success" });
+               }
             }
         });
     } catch (error) {
@@ -61,7 +66,10 @@ exports.getSalonOwnerProfile = function (req, res, next) {
                 res.json({ data: data, message: "get salon 's profile failed" });
             }
             else {
-                res.json({ data: data, message: "get salon 's profile success" });
+                if (data.length==0) {
+                    res.json({ data: data, message: "get salon 's profile failed" });
+                }else
+               { res.json({ data: data, message: "get salon 's profile success" });}
             }
         });
     } catch (error) {

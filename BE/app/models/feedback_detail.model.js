@@ -36,7 +36,7 @@ Feedback_detail.deleteFeedbackDetailByFeedbackDetailId= function (id,result) {
         if (err) {
             result(null, err);
         } else {
-            result("xoa feedback_detail co feedBackDetailId =" + id + " thanh cong");
+            result(rows);
         }
     });
 }
@@ -56,7 +56,7 @@ Feedback_detail.updateFeedbackDetail=function (id,dataUpdate, result) {
         if (err) {
             result(null, err)
         } else {
-            result("updated FeedbackDetail success!!!")
+            result(rows)
         }
     });
 }

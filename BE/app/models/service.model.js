@@ -44,7 +44,7 @@ Service.updateServiceSalon =function (id,dataUpdate, result) {
         if (err) {
             result(null,err);
         } else {
-            result("updated profile 's salon success!!!")
+            result(rows)
         }
     });
     

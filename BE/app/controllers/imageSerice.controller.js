@@ -1,6 +1,8 @@
 var ImageService = require('../models/imageService.model');
 exports.addImageService= function (req, res, next) {
-    var dataImage= req.body;
+    var dataImage={serviceId:req.body.serviceId,
+        image:req.body.image
+        };
     try {
         ImageService.addImageService(dataImage,function (data) {
 
@@ -22,7 +24,12 @@ exports.getImageService=function (req, res, next) {
             if (data== null) {
                 res.json( {data:data,message:"get image failed"} );
             } else {
-                res.json( {data:data,message:"get image success"} );
+                if (data.length==0) {
+                    res.json( {data:data,message:"get image failed"} );
+                }else{
+                    res.json( {data:data,message:"get image success"} );
+                }
+               
             }
         });
     } catch (error) {
@@ -36,7 +43,12 @@ exports.deleteImageService=function (req, res, next) {
             if (data== null) {
                 res.json( {data:data,message:"delete image failed"} );
             }else{
-                res.json( {data:data,message:"delete image success"} );
+                if (data.affectedRows) {
+                    res.json( {data:data,message:"not have image to delete"} );
+                } else {
+                    res.json( {data:data,message:"delete image success"} );
+                }
+               
 }
         });
     } catch (error) {

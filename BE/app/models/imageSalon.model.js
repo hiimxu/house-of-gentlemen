@@ -31,7 +31,8 @@ ImageSalon.deleteImageOfImageSalon = function(id,result){
         if (err) {
             result(null, err)
         } else {
-            result("xoa image co imageId =" + id + " thanh cong");
+            
+            result(rows);
         }
     });
 

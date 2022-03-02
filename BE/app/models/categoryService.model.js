@@ -22,7 +22,7 @@ CategoryService.deleteCategoryService = function(id,result){
         if (err) {
             result(null, err)
         } else {
-            result("xoa category_service co category_serviceId =" + id + " thanh cong");
+            result(rows);
         }
     });
 
@@ -33,6 +33,26 @@ CategoryService.deleteCategoryServiceByServiceId = function(id,result){
             result(null, err)
         } else {
             result("xoa category_service co serviceId =" + id + " thanh cong");
+        }
+    });
+
+}
+CategoryService.checkCategoryService= function(dataCategoryService,result){
+    db.query(`select* from category_service where serviceId='${dataCategoryService.serviceId}'and categoryId='${dataCategoryService.categoryId}' `, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
+
+}
+CategoryService.getCategoryServiceByService= function(id,result){
+    db.query(`select* from category_service where serviceId='${id}'`, (err, rows, fields) => {
+        if (err) {
+            result(err)
+        } else {
+            result(rows);
         }
     });
 

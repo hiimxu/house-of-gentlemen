@@ -20,7 +20,7 @@ exports.validateCreateAccountCustomer = () => {
 }
 exports.validateLogin = function () {
     return [
-        body('account').not().isEmpty().withMessage('account_name cannot be empty'),
+        body('account').not().isEmpty().withMessage('account cannot be empty'),
         body('password').not().isEmpty().withMessage('password cannot be empty'),
     ];
 }

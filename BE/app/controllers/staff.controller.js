@@ -7,7 +7,11 @@ exports.getStaff= function (req, res, next) {
             if (data== null) {
                 res.json({data:data,success:"get staff fail"});
             } else {
-                res.json({data:data,success:"get staff success"});
+                if (data.length) {
+                    res.json({data:data,success:"not have staff"});
+                } else {
+                    res.json({data:data,success:"get staff success"});
+                }
             }
         });
     } catch (error) {
@@ -16,12 +20,16 @@ exports.getStaff= function (req, res, next) {
     
 }
 exports.addStaff= function (req, res, next) {
-    var data=req.body
+    var data={salonId: req.body.salonId,
+        name: req.body.name,
+        phone: req.body.phone,
+        address: req.body.address
+        }
     try {
         Staff.addStaff(data,function (data) {
 
             if (data== null) {
-                res.json({data:data,success:"add staff fail"});
+                res.json({data:data,success:"add staff failed"});
             } else {
                 res.json({data:data,success:"add staff success"});
             }
@@ -33,10 +41,24 @@ exports.addStaff= function (req, res, next) {
 }
 exports.updateStaff= function (req, res, next) {
     var id = req.params.id;
-    var data=req.body
+    var data={
+        name: req.body.name,
+        phone: req.body.phone,
+        address: req.body.address
+        }
     try {
         Staff.updateStaff(id,data,function (data) {
-            res.json(data);
+            
+            if (data== null) {
+                res.json({data:data,message:'update failed'});
+            } else {
+                if (data.affectedRows==0) {
+                    res.json({data:data,message:'not have to update'});
+                }else{
+                    res.json({data:data,message:'update success'});
+                }
+                
+            }
         });
     } catch (error) {
         res.json(error);
@@ -47,7 +69,15 @@ exports.deleteStaff= function (req, res, next) {
     var id = req.params.id;
     try {
         Staff.deleteStaff(id,function (data) {
-            res.json( data );
+           if (data==null) {
+            res.json( {data:data,message:"delete staff failed" });
+           } else {
+             if (data.affectedRows==0) {
+                res.json( {data:data,message:"not have staff to delete" });
+             } else {
+                res.json( {data:data,message:"delete staff success" });
+             }  
+           }
         });
     } catch (error) {
         res.json(error);

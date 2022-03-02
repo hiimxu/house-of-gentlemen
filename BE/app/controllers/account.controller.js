@@ -56,11 +56,11 @@ exports.change_password = function (req, res, next) {
                     res.json({ message: "update password success", data: response });
                 });
             } else {
-                res.json({ message: "kiem tra lai old_password", data: "kiem tra lai old_password" });
+                res.json({ message: "kiem tra lai old_password va account_name", data: "update failed" });
             }
         })
     } catch (error) {
-        res.json({ message: "kiem tra lai old_password", data: error });
+        res.json({ message: "kiem tra lai old_password va account_name", data: error });
     }
 }
 exports.login_account = function async(req, res, next) {

@@ -8,7 +8,11 @@ exports.getImageSalon= function (req, res, next) {
             if (data== null) {
                 res.json({data:data,message:"get image failed"});
             } else {
-                res.json({data:data,message:"get image success"});
+                if (data.length==0) {
+                    res.json({data:data,message:"get image failed"});
+                } else {
+                    res.json({data:data,message:"get image success"});
+                }
             }
         });
     } catch (error) {
@@ -20,10 +24,12 @@ exports.getImageSalon= function (req, res, next) {
 
 exports.addImageToImageSalon = function (req, res, next) {
     // res.json("wellcome to  addImageToImageSalon");
-    var dataImage= req.body;
+    var image= req.body.image;
+    var salonId= req.body.salonId;
+    var dataImage ={image:image,salonId:salonId}
     try {
         ImageSalon.addImageToImageSalon(dataImage,function (data) {
-
+            
             if (data== null) {
                 res.json({data:data,message:"add image failed"});
             } else {
@@ -38,11 +44,15 @@ exports.deleteImageOfImageSalon =function (req, res, next) {
     var id= req.params.id;
     try {
         ImageSalon.deleteImageOfImageSalon(id,function (data) {
-
             if (data== null) {
                 res.json({data:data,message:"delete image failed"});
             } else {
-                res.json({data:data,message:"delete image success"});
+                if (data.affectedRows==0) {
+                    res.json({data:data,message:"not have image to delete"});
+                } else {
+                    res.json({data:data,message:"delete image success"});
+                }
+               
             }
         });
     } catch (error) {

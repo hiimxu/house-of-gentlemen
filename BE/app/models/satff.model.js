@@ -28,12 +28,12 @@ Staff.addStaff= function (data,result) {
     });
 }
 Staff.updateStaff=function (id,data, result) {
-    db.query(`UPDATE swp490_g11.staff SET ?  WHERE (saffId"= '${id}');`,data,(err, rows, fields) => {
+    db.query(`UPDATE swp490_g11.staff SET ?  WHERE (saffId= '${id}');`,data,(err, rows, fields) => {
      
         if (err) {
-            result(null, err)
+            result(null,err)
         } else {
-            result("updated staff success!!!")
+            result(rows)
         }
     });
 }
@@ -43,7 +43,7 @@ Staff.deleteStaff= function (id,result) {
         if (err) {
             result(null, err);
         } else {
-            result("xoa Staff co saffId =" + id + " thanh cong");
+            result(rows);
         }
     });
 }
