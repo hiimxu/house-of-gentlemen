@@ -239,36 +239,4 @@ exports.forgotPassword = async function (req, res, next) {
 
 }
 
-exports.sendEmail = async function (req, res, next) {
-    var nodemailer = require('nodemailer');
-
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'maicongduy300393@gmail.com',
-            pass: 'Anhduy01'
-        }
-    });
-
-    var mailOptions = {
-        from: 'maicongduy300393@gmail.com',
-        to: 'duymche130521@fpt.edu.vn',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-    };
-    var new_password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
-
-    transporter.sendMail(mailOptions, function (error, info) {
-
-        if (error) {
-            console.log(error);
-            res.json({ error })
-        } else {
-            console.log('Email sent: ' + info.response);
-            res.json({ info })
-        }
-    });
-}
-
-
 
