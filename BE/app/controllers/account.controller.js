@@ -53,7 +53,7 @@ exports.change_password = function (req, res, next) {
                 var id = data[0].account_id;
 
                 var data = Account.updatePasswordAccount(id, md5_new_pass, function (response) {
-                    res.json(response);
+                    res.json({ message: "update password success", data: response });
                 });
             } else {
                 res.json({ message: "kiem tra lai old_password", data: "kiem tra lai old_password" });
