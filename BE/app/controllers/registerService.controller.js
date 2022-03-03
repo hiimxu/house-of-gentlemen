@@ -42,44 +42,73 @@ exports.getRegisterServiceByCustomer = function (req, res, next) {
 }
 exports.addRegisterService = function (req, res, next) {
     var staffId = req.body.staffId;
-    var date = req.body.timeUse;
+    var date = new Date(req.body.timeUse);
     var statusId = 3;
-    var timeRegister = new Date();
+    var timeRegister=new Date();
     var status_register_id = 1;
-    var dataStaffCanleder = { staffId: staffId, date: date, statusId: statusId };
+    var timeBusy=req.body.service_time;
+    console.log("busy"+timeBusy)
+    var dataStaffCanleder = { staffId: staffId, date: date, statusId: statusId ,timeBusy:timeBusy};
     var dataRegisterService = {serviceId:req.body.serviceId,
         salonId: req.body.salonId,
         customerId: req.body.customerId,
         staffId: req.body.staffId,
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
+        timeRegister: timeRegister
         };
     dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
-    // res.json(dataRegisterService);
-    try {
-        StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-            var staffCanlederId = data.staffCanlederId;
-            dataRegisterService = { staffCanlederId, ...dataRegisterService };
-            if (data== null) {
-                res.json({data:data,message:"add staff cander failed"});
-            } else {
-                RegisterService.addRegisterService(dataRegisterService, function (data) {
-                    if (data== null) {
-                        res.json( {data:data,message:"booking service failed"}); 
-                    } else {
-                        if (data.length==0) {
-                            res.json( {data:data,message:"booking service failed"}); 
-                        } else {
-                            res.json( {data:data,message:"booking service success"}); 
-                        }
-                    }
-                     }); 
+    var check1=new Date(date);
+    var check2=new Date(date);
+    check1.setDate(check1.getDate()-1);
+    check2.setDate(check2.getDate()+1);
+    console.log(check1+" "+check2);
+    var Times=0;
+    StaffCanleder.checkCanleder(check1,check2,staffId, function (data){
+        for (let index = 0; index < data.length; index++) {
+            var check=new Date(data[index].date);
+            check.setMinutes(check.getMinutes()+30);
+            if (check>=date &&date>=new Date(data[index].date)) {
+                Times=Times+1;
             }
             
-            });
-    } catch (error) {
-        res.json( {data:error,message:"booking service failed"}); 
-    }
+            
+        }
+        console.log(Times)
+        if (Times>=1) {
+            res.status(400).json({message:"Staff busy"})
+        } else {
+            try {
+                StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
+                    var staffCanlederId = data.staffCanlederId;
+                    dataRegisterService = { staffCanlederId, ...dataRegisterService };
+                    if (data== null) {
+                        res.json({data:data,message:"add staff cander failed"});
+                    } else {
+                        RegisterService.addRegisterService(dataRegisterService, function (data) {
+                            if (data== null) {
+                                res.json( {data:data,message:"booking service failed"}); 
+                            } else {
+                                if (data.length==0) {
+                                    res.json( {data:data,message:"booking service failed"}); 
+                                } else {
+                                    res.json( {data:data,message:"booking service success"}); 
+                                }
+                            }
+                             }); 
+                    }
+                    
+                    });
+            } catch (error) {
+                res.json( {data:error,message:"booking service failed"}); 
+            }
+        }
+    })
+    
+    
+
+
+    
 }
 exports.cancelBooking = function (req, res, next) {
    var id = req.params.id;

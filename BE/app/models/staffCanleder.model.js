@@ -1,3 +1,4 @@
+const { DATETIME } = require('mysql/lib/protocol/constants/types');
 const db = require('../common/connect');
 const StaffCanleder = function (staffCanleder) {
     this.staffCanlederId = staffCanleder.staffCanlederId;
@@ -5,8 +6,10 @@ const StaffCanleder = function (staffCanleder) {
     this.hour = staffCanleder.hour;
     this.date = staffCanleder.date;
     this.statusId = staffCanleder.statusId;
+    this.timeBusy = staffCanleder.timeBusy;
 }
 StaffCanleder.addStaffCanderToRegisterService = function(dataStaffCanleder,result){
+    console.log(dataStaffCanleder)
     db.query(`INSERT INTO staff_canleder SET?`, dataStaffCanleder, (err, rows, res) => {
         if (err) {
             result(null,err)
@@ -26,4 +29,20 @@ StaffCanleder.cancelBooking= function(id,result){
     });
     
 }
+StaffCanleder.checkCanleder = function (date,date1,staffId,result) {
+    
+  
+    
+    // date1=new Date(date1);
+    db.query(`SELECT * FROM swp490_g11.staff_canleder WHERE ( date >? and ?>date) and staffId=? `,[date,date1,staffId],(err, rows, res)=>{
+        
+        if (err) {
+            result(err)
+        } else {
+            result(rows);
+        }
+    });
+   
+}
+
 module.exports =StaffCanleder;
