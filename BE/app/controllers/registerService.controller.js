@@ -8,7 +8,11 @@ exports.getRegisterServiceById = function (req, res, next) {
             if (data== null) {
                 res.json({data:data,message:"get booking service failed"});
             } else {
-                res.json({data:data,message:"get booking service success"});
+                if (data.length==0) {
+                    res.json({data:data,message:"not have booking service"});
+                } else {
+                    res.json({data:data,message:"get booking service success"});
+                }
             }
         });
     } catch (error) {
@@ -24,7 +28,11 @@ exports.getRegisterServiceByCustomer = function (req, res, next) {
            if (data== null) {
             res.json({data:data,message:"get booking service failed"});
            } else {
-            res.json({data:data,message:"get booking service success"});
+            if (data.length==0) {
+                res.json({data:data,message:"not have booking service"});
+            } else {
+                res.json({data:data,message:"get booking service success"});
+            }
            }
         });
     } catch (error) {
@@ -39,7 +47,13 @@ exports.addRegisterService = function (req, res, next) {
     var timeRegister = new Date();
     var status_register_id = 1;
     var dataStaffCanleder = { staffId: staffId, date: date, statusId: statusId };
-    var dataRegisterService = req.body;
+    var dataRegisterService = {serviceId:req.body.serviceId,
+        salonId: req.body.salonId,
+        customerId: req.body.customerId,
+        staffId: req.body.staffId,
+        timeUse: req.body.timeUse,
+        price_original: req.body.price_original,
+        };
     dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
     // res.json(dataRegisterService);
     try {
@@ -53,7 +67,11 @@ exports.addRegisterService = function (req, res, next) {
                     if (data== null) {
                         res.json( {data:data,message:"booking service failed"}); 
                     } else {
-                        res.json( {data:data,message:"booking service success"}); 
+                        if (data.length==0) {
+                            res.json( {data:data,message:"booking service failed"}); 
+                        } else {
+                            res.json( {data:data,message:"booking service success"}); 
+                        }
                     }
                      }); 
             }

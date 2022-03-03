@@ -116,7 +116,11 @@ exports.getAllServiceSalon = function (req, res, next) {
             if (data == null) {
                 res.json({ data: data, message: "get service fail" });
             } else {
-                res.json({ data: data, message: "get service success" });
+                if (data.length == 0) {
+                    res.json({ data: data, message: "not have service" });
+                } else {
+                    res.json({ data: data, message: "get service success" });
+                }
             }
         });
     } catch (error) {

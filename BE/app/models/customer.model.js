@@ -33,7 +33,7 @@ Customer.updateProfileCustomer =function (id,dataUpdate, result) {
         if (err) {
             result(null, err)
         } else {
-            result("updated profile 's customer success!!!")
+            result(rows)
         }
     });
 }

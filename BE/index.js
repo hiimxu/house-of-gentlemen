@@ -14,8 +14,6 @@ route(app);
 let po = process.env.PA;
 
 app.listen(port, () => {
-  console.log(process.env.VIETNAM);
-  console.log(po)
     console.log(`connect my sql http://localhost:${port}`);
   
   });

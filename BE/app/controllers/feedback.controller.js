@@ -93,7 +93,11 @@ exports.updateFeedback = function (req, res, next) {
 
 }
 exports.addFeedBackByCustomer = function (req, res, next) {
-    var dataFeedBack = req.body;
+    var dataFeedBack = {customerId:req.body.customerId,
+        salonId: req.body.salonId,
+        content:req.body.content,
+        rate:req.body.rate
+        };
     var wsend = "customer";
     var dateCreate = new Date();
     dataFeedBack = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
@@ -103,7 +107,11 @@ exports.addFeedBackByCustomer = function (req, res, next) {
             if (data == null) {
                 res.json({ result: data, message: "add feedback failed" });
             } else {
-                res.json({ result: data, message: "add feedback success" });
+                if (data.length==0) {
+                    res.json({ result: data, message: "add feedback failed" });
+                } else {
+                    res.json({ result: data, message: "add feedback success" });
+                }
             }
         });
     } catch (error) {

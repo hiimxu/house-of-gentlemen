@@ -21,7 +21,11 @@ exports.getStatusRegisterServiceById = function (req, res, next) {
             if (data== null) {
                 res.json({data:data,success:"get status register service fail"});
             } else {
-                res.json({data:data,success:"get status register service success"});
+                if (data.length==0) {
+                    res.json({data:data,success:"not have status register service"});
+                } else {
+                    res.json({data:data,success:"get status register service success"});
+                }
             }
         });
     } catch (error) {
