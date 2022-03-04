@@ -7,6 +7,10 @@ exports.addCategoryService = function (req, res, next) {
         categoryId: req.body.categoryId,
         serviceId: req.body.serviceId,
     };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     var check=CategoryService.checkCategoryService(dataCategoryService, function (data){
         if (data.length==0) {
             try {
@@ -30,6 +34,10 @@ exports.addCategoryService = function (req, res, next) {
 
 exports.deleteCategoryService = function (req, res, next) {
     var id = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         CategoryService.deleteCategoryService(id, function (data) {
 
@@ -50,7 +58,10 @@ exports.deleteCategoryService = function (req, res, next) {
 }
 exports.getCategoryServiceOfService=function (req, res, next) {
     var id = req.params.idService;
-    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     CategoryService.getCategoryServiceByService(id, function (data) {
         if (data == null) {
             res.status(400).json({ data: data, message: "get category service failed" });

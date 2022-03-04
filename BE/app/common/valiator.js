@@ -120,4 +120,66 @@ exports.updateFeedbackDetail=function(){
         body('content').not().isEmpty().withMessage("in put content"),
     ];
 }
+exports.addImageToImageSalon=function(){
+    return[
+        body('salonId').not().isEmpty().isInt().withMessage("salonId:number and not empty"),
+        body('image').not().isEmpty().withMessage("not empty"),
+    ];
+}
+exports.addServiceSalon=function(){
 
+    return[
+        body('salonId').not().isEmpty().isInt().withMessage("salonId:number and not empty"),
+        body('price').not().isEmpty().withMessage("not empty"),
+        body('service_time').not().isEmpty().withMessage("not empty"),
+        body('promotion').not().isEmpty().withMessage("not empty"),
+    ];
+}
+exports.updateServiceSalon=function(){   
+    return[
+        param('idService').not().isEmpty().isInt().withMessage("idService:number and not empty"),
+        body('price').not().isEmpty().withMessage("not empty"),
+        body('service_time').not().isEmpty().withMessage("not empty"),
+        body('promotion').not().isEmpty().withMessage("not empty"),
+    ];
+}
+exports.addCategoryService=function(){ 
+       return[
+        body('categoryId').not().isEmpty().isInt().withMessage("categoryId:number and not empty"),
+        body('serviceId').not().isEmpty().isInt().withMessage("serviceId:number and not empty"),
+    ];
+}
+exports.addImageService=function(){
+    return[
+        body('image').not().isEmpty().withMessage("not empty"),
+        body('serviceId').not().isEmpty().isInt().withMessage("serviceId:number and not empty"),
+    ];
+}
+exports.addFeedBackBySalon=function(){
+    return[
+        body('rate').not().isEmpty().withMessage("not empty").isInt("rate : number"),
+        body('salonId').not().isEmpty().isInt().withMessage("salonId:number and not empty"),
+        body('content').not().isEmpty().withMessage("content: not empty"),
+    ];
+}
+exports.addFeedBackDetailBySalon=function(){
+    return[
+        body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
+        body('content').not().isEmpty().withMessage("in put content"),
+        body('feedbackId').not().isEmpty().isInt().withMessage("feedbackId:number"),
+    ];
+}
+exports.addStaff=function(){
+     return[
+        body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
+        body('name').not().isEmpty().withMessage("in put content"),
+        body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
+    ];
+}
+exports.updateStaff=function(){
+    return[
+       param('id').not().isEmpty().isInt().withMessage("id:number"),
+       body('name').not().isEmpty().withMessage("in put content"),
+       body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
+   ];
+}

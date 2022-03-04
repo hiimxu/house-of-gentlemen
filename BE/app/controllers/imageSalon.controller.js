@@ -2,6 +2,10 @@ var ImageSalon = require('../models/imageSalon.model');
 const { body, validationResult } = require('express-validator');
 exports.getImageSalon= function (req, res, next) {
     var id = req.params.idSalon;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         ImageSalon.getAllImage(id,function (data) {
 
@@ -27,6 +31,10 @@ exports.addImageToImageSalon = function (req, res, next) {
     var image= req.body.image;
     var salonId= req.body.salonId;
     var dataImage ={image:image,salonId:salonId}
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         ImageSalon.addImageToImageSalon(dataImage,function (data) {
             
@@ -46,6 +54,10 @@ exports.addImageToImageSalon = function (req, res, next) {
 }
 exports.deleteImageOfImageSalon =function (req, res, next) {
     var id= req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         ImageSalon.deleteImageOfImageSalon(id,function (data) {
             if (data== null) {

@@ -10,9 +10,14 @@ const salonOwnerController = require('../controllers/salonOwner.controller');
 const serviceController = require('../controllers/service.controller');
 const staffController = require('../controllers/staff.controller');
 const { param,body, validationResult } = require('express-validator');
+const imageServiceController=require('../controllers/imageSerice.controller');
 const {check} = require('express-validator');
 const validate = require('../common/valiator');
+const imageSalonController= require('../controllers/imageSalon.controller');
+const categoryServiceController= require('../controllers/categoryService.controller');
+const categoryController=require('../controllers/category.controller');
 const auth = require('../middleware/auth');
+const statusStaffController= require('../controllers/statusStaff.controller')
 
 router.get('/',cors(),customerController.getAllCustomer);
 router.get('/profile/:id',validate.checkId(),cors(),auth,customerController.getCustomerProfile);
@@ -35,4 +40,13 @@ router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
 router.get('/get/AllService',cors(),serviceController.getAllService);
 router.get('/get/serviceOfSalon/:idSalon',param('idSalon').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),serviceController.getAllServiceSalon);
 router.get('/get/staff/:id',validate.checkId(),cors(),staffController.getStaff)
+router.get('/imageService/:id',validate.checkId(),cors(),imageServiceController.getImageService);
+router.get('/imageSalon/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),imageSalonController.getImageSalon);
+router.get('/Service/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),serviceController.getServiceOfSalon);
+router.get('/get/categoryService/:idService',param('idService').isInt().withMessage("idService : number"),cors(),categoryServiceController.getCategoryServiceOfService);
+router.get('/get/service/:id',validate.checkId(),cors(),serviceController.getServiceByIdService);
+router.get('/get/allCategory',cors(),categoryController.getAllCategory);
+router.get('/get/categoryByCategoryId/:id',validate.checkId(),cors(),categoryController.getCategoryByIdCategory);
+router.get('/get/allStaffStatus',cors(),statusStaffController.getAllStaffStatus);
+router.get('/get/staffStatusById/:id',cors(),statusStaffController.getStaffStatusByIdstatusStaff);
 module.exports = router;

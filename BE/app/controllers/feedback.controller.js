@@ -8,6 +8,10 @@ exports.addFeedBackBySalon = function (req, res, next) {
         rate: req.body.rate,
         content: req.body.content
     };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     var wsend = "salon";
     var dateCreate = new Date();
     dataFeedBack = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
