@@ -34,7 +34,7 @@ StaffCanleder.checkCanleder = function (date,date1,staffId,result) {
   
     
     // date1=new Date(date1);
-    db.query(`SELECT * FROM swp490_g11.staff_canleder WHERE ( date >? and ?>date) and staffId=? `,[date,date1,staffId],(err, rows, res)=>{
+    db.query(`SELECT * FROM swp490_g11.staff_canleder WHERE ( date >? and ?>date) and staffId=? and (statusId=3 or statusId=1) `,[date,date1,staffId],(err, rows, res)=>{
         
         if (err) {
             result(err)

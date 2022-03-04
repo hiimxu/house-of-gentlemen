@@ -58,52 +58,61 @@ exports.addRegisterService = function (req, res, next) {
         timeRegister: timeRegister
         };
     dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
+    var today= new Date();
     var check1=new Date(date);
     var check2=new Date(date);
     check1.setDate(check1.getDate()-1);
     check2.setDate(check2.getDate()+1);
     console.log(check1+" "+check2);
     var Times=0;
-    StaffCanleder.checkCanleder(check1,check2,staffId, function (data){
-        for (let index = 0; index < data.length; index++) {
-            var check=new Date(data[index].date);
-            check.setMinutes(check.getMinutes()+30);
-            if (check>=date &&date>=new Date(data[index].date)) {
-                Times=Times+1;
+    if (date < today) {
+        res.status(400).json({message:"use time must after now"});
+      } else if (date > today.setDate(today.getDate()+5)) {
+        res.status(400).json({message:"use time must be within 5 days"});
+      } else {
+        StaffCanleder.checkCanleder(check1,check2,staffId, function (data){
+            for (let index = 0; index < data.length; index++) {
+                var check=new Date(data[index].date);
+                check.setMinutes(check.getMinutes()+30);
+                console.log(check)
+                if ((check>date) && (date>=new Date(data[index].date))) {
+                    console.log(check)
+                    Times=Times+1;
+                }
             }
-            
-            
-        }
-        console.log(Times)
-        if (Times>=1) {
-            res.status(400).json({message:"Staff busy"})
-        } else {
-            try {
-                StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-                    var staffCanlederId = data.staffCanlederId;
-                    dataRegisterService = { staffCanlederId, ...dataRegisterService };
-                    if (data== null) {
-                        res.json({data:data,message:"add staff cander failed"});
-                    } else {
-                        RegisterService.addRegisterService(dataRegisterService, function (data) {
-                            if (data== null) {
-                                res.json( {data:data,message:"booking service failed"}); 
-                            } else {
-                                if (data.length==0) {
+            console.log(Times)
+            if (Times>0) {
+                res.status(400).json({message:"Staff busy"})
+            } else {
+                try {
+                    StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
+                        var staffCanlederId = data.staffCanlederId;
+                        dataRegisterService = { staffCanlederId, ...dataRegisterService };
+                        if (data== null) {
+                            res.json({data:data,message:"add staff cander failed"});
+                        } else {
+                            RegisterService.addRegisterService(dataRegisterService, function (data) {
+                                if (data== null) {
                                     res.json( {data:data,message:"booking service failed"}); 
                                 } else {
-                                    res.json( {data:data,message:"booking service success"}); 
+                                    if (data.length==0) {
+                                        res.json( {data:data,message:"booking service failed"}); 
+                                    } else {
+                                        res.json( {data:data,message:"booking service success"}); 
+                                    }
                                 }
-                            }
-                             }); 
-                    }
-                    
-                    });
-            } catch (error) {
-                res.json( {data:error,message:"booking service failed"}); 
+                                 }); 
+                        }
+                        
+                        });
+                } catch (error) {
+                    res.json( {data:error,message:"booking service failed"}); 
+                }
             }
-        }
-    })
+        })
+      }
+
+    
     
     
 
