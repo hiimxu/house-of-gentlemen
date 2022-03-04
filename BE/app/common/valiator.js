@@ -20,20 +20,20 @@ exports.validateCreateAccountCustomer = () => {
 
     ];
 }
-exports.validateCreateAccountCustomer() = function () {
+exports.validateLogin = function () {
     return [
         body('account').not().isEmpty().withMessage('account cannot be empty'),
+        body('password').not().isEmpty().withMessage('password cannot be empty'),
+        
+    ];
+}
+exports.validateCreateAccountSalon= function(){
+    return[
+        body('account_name').not().isEmpty().withMessage('account cannot be empty'),
         body('password').not().isEmpty().withMessage('password cannot be empty'),
         body('email').not().isEmpty().withMessage('email cannot be empty').isEmail().withMessage('validate email'),
         body('phone').isMobilePhone("vi-VN"),
         body('role').not().isEmpty(),
-    ];
-}
-exports.validateLogin= function(){
-    return[
-        body('account_name').not().isEmpty().withMessage('account cannot be empty'),
-        body('password').not().isEmpty().withMessage('password cannot be empty'),
-
     ];
 }
 exports.change_password=function(){
