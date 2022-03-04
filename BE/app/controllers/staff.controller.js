@@ -1,6 +1,11 @@
 var Staff = require('../models/satff.model');
+const { body, validationResult } = require('express-validator');
 exports.getStaff= function (req, res, next) {
     var id = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         Staff.getStaff(id,function (data) {
 

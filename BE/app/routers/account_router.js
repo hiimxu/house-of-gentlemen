@@ -12,9 +12,9 @@ router.get('/detail/:id',param('id').not().isEmpty().isInt(),cors(),accountContr
 router.post('/add/customer',validate.validateCreateAccountCustomer(),cors(),accountController.add_account_customer);
 router.post('/add/salon',validate.validateCreateAccountSalon(),cors(),accountController.add_account_salon);
 router.delete('/delete/:id',cors(),accountController.delete_accountbyid);
-router.post('/changePassword',cors(),accountController.change_password);
+router.post('/changePassword',validate.change_password(),cors(),accountController.change_password);
 router.get('/',cors(),accountController.account);
-router.put('/forgotPassword',cors(),accountController.forgotPassword);
+router.put('/forgotPassword',validate.forgotPassword(),cors(),accountController.forgotPassword);
 router.post("/welcome", auth, (req, res) => {
     res.status(200).send("Welcome 🙌 ");
   });

@@ -1,6 +1,11 @@
 var SalonOwner = require('../models/salonOwner.model');
+const { body, validationResult } = require('express-validator');
 exports.getSalon = function (req, res, next) {
     var id = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         var data = SalonOwner.getProfileSalon(id, function (data) {
             if (data == null) {
@@ -34,12 +39,31 @@ exports.getAllSalon = function (req, res, next) {
 exports.setPossitiveSalonOwner = function (req, res, next) {
     var id = req.params.id;
     var possibility = req.body.possibility;
+    var checkPossibility =['1','0'];
+    if (!checkPossibility.includes(req.body.possibility)) {
+        res.status(400).json({message:"check possibility"});
+        return;
+    }
+    console.log(possibility)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         var data = SalonOwner.setPossitiveSalonOwner(id, possibility, function (data) {
             if (data == null) {
                 res.json({ data: data, message: "set salon's possitive failed" });
             } else {
-                res.json({ data: data, message: "set salon's possitive success" });
+                if (data.affectedRows==0) {
+                    res.json({ data: data, message: "not have data update" });
+                } else 
+                if (data.changedRows==0) {
+                    res.json({ data: data, message: "data not change" });
+                } 
+                else
+                 {
+                    res.json({ data: data, message: "set salon's possitive success" });
+                }
             }
         });
     } catch (error) {

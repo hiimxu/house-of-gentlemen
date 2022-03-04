@@ -48,6 +48,10 @@ exports.change_password = function (req, res, next) {
         var old_pass = req.body.old_password;
         var md5_old_pass = md5(old_pass);
         var acc = req.body.account_name;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         var data = Account.checkPassword(acc, md5_old_pass, function (data) {
             if (data.length == 1) {
                 var id = data[0].account_id;
@@ -105,7 +109,7 @@ exports.login_account = function async(req, res, next) {
     }
 }
 exports.add_account_customer = function (req, res, next) {
-    
+
     var acc = req.body.account_name;
     var pass = req.body.password;
     var md5_pass = md5(pass);
@@ -113,7 +117,7 @@ exports.add_account_customer = function (req, res, next) {
     var email = req.body.email;
     var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
 
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -124,25 +128,25 @@ exports.add_account_customer = function (req, res, next) {
                 res.json({ data: "Account already exists", message: "Account already exists" });
             }
             else {
-                if (rol == 'customer')  {
-                     Account.createAccount(save_data, function (data_account) {
+                if (rol == 'customer') {
+                    Account.createAccount(save_data, function (data_account) {
                         var accountId = data_account.accountId;
                         var phone = req.body.phone;
                         var address = req.body.address;
                         var birthday = req.body.birthday;//1993/03/30  yyyy/mm/dd
                         var nameCustomer = req.body.nameCustomer;
                         var save_customer = { accountId: accountId, nameCustomer: nameCustomer, phone: phone, address: address, birthday: birthday }
-                       Customer.createCustomer(save_customer, function (data) {
-                          
+                        Customer.createCustomer(save_customer, function (data) {
+
                             if (data == null) {
                                 res.json({ data: data, message: "create account customer failed" });
                             } else {
-                                res.json({account: data_account,data: data, message: "create account customer success" });
+                                res.json({ account: data_account, data: data, message: "create account customer success" });
                             }
                         });
                     });
-                }else{
-                    res.json({  message: "create account customer failed see role:customer" });
+                } else {
+                    res.json({ message: "create account customer failed see role:customer" });
                 }
             }
         });
@@ -159,12 +163,12 @@ exports.add_account_salon = function (req, res, next) {
     var email = req.body.email;
     var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
     var possibility = req.body.possibility;
-    if (possibility!=1) {
-        res.status(400).json({message:"check possibility"});
+    if (possibility != 1) {
+        res.status(400).json({ message: "check possibility" });
         return;
     }
 
-   
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -186,12 +190,12 @@ exports.add_account_salon = function (req, res, next) {
                             if (data == null) {
                                 res.json({ data: data, message: "create account salon failed" });
                             } else {
-                                res.json({data_account:data_account, data: data, message: "create account salon success" });
+                                res.json({ data_account: data_account, data: data, message: "create account salon success" });
                             }
                         });
                     });
                 } else {
-                    res.status(400).json({message:"create account salon failed"})
+                    res.status(400).json({ message: "create account salon failed" })
                 }
             }
         });
@@ -232,6 +236,10 @@ exports.forgotPassword = async function (req, res, next) {
     var account_name = req.body.account_name;
     var emailcheck = req.body.email;
     // res.json({message:"Account already exists"});
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     Account.checkAccount(account_name, function (data) {
         if (data.length == 1) {
             var id = data[0].account_id;

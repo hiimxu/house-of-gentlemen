@@ -1,7 +1,7 @@
 var ServiceSalon = require('../models/service.model');
 var CategoryService = require('../models/categoryService.model');
 var ImageService = require('../models/imageService.model');
-
+const { body, validationResult } = require('express-validator');
 exports.addServiceSalon = function (req, res, next) {
     var dataService = {
         salonId: req.body.salonId,
@@ -110,6 +110,10 @@ exports.updateServiceSalon = function (req, res, next) {
 }
 exports.getAllServiceSalon = function (req, res, next) {
     var id = req.params.idSalon;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         ServiceSalon.getAllServiceSalon(id, function (data) {
 

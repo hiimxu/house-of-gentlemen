@@ -1,5 +1,6 @@
 var Account = require('../models/account.model')
 var SalonOwner = require('../models/salonOwner.model');
+const { body, validationResult } = require('express-validator');
 exports.setPossitiveSalonOwner = function (req, res, next) {
     var id = req.params.id;
     var possibility=req.body.possibility;

@@ -1,4 +1,5 @@
 var StatusRegisterService = require('../models/statusRegisterService.model');
+const { body, validationResult } = require('express-validator');
 exports.getStatusRegisterService = function (req, res, next) {
     try {
         StatusRegisterService.getAllSatusRegisterService(function (data) {
@@ -15,6 +16,10 @@ exports.getStatusRegisterService = function (req, res, next) {
 }
 exports.getStatusRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         
         StatusRegisterService.getSatusRegisterServiceById(id, function (data) {

@@ -9,6 +9,9 @@ const imageServiceController = require('../controllers/imageSerice.controller');
 const feedbackController = require('../controllers/feedback.controller');
 const feedbackDetailController = require('../controllers/feedbacDetail.controller');
 const staffController = require('../controllers/staff.controller');
+const { param,body, validationResult } = require('express-validator');
+const {check} = require('express-validator');
+const validate = require('../common/valiator');
 const auth = require('../middleware/auth');
 
 router.get('/',cors(),salonOwnerController.salonOwner);

@@ -1,4 +1,5 @@
 var FeedbackDetail = require('../models/feedback_detail.model');
+const { body, validationResult } = require('express-validator');
 exports.addFeedBackDetailBySalon = function (req, res, next) {
     var dataFeedBack = {
         salonId: req.body.salonId,
@@ -28,6 +29,10 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
 }
 exports.getFeedbackDetail = function (req, res, next) {
     var id = req.params.feedBackId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         FeedbackDetail.getFeedbackDetail(id, function (data) {
 
@@ -47,6 +52,10 @@ exports.getFeedbackDetail = function (req, res, next) {
 }
 exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
     var id = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         FeedbackDetail.deleteFeedbackDetailByFeedbackDetailId(id, function (data) {
 
@@ -71,6 +80,10 @@ exports.updateFeedbackDetail = function (req, res, next) {
     var dataUpdate = { content: req.body.content };
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         FeedbackDetail.updateFeedbackDetail(id, dataUpdate, function (data) {
             if (data == null) {
@@ -98,6 +111,10 @@ exports.addFeedBackDetailByCustomer = function (req, res, next) {
     var wsend = "customer";
     var dateCreate = new Date();
     dataFeedBackDetail = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     // res.json(dataFeedBack);
     try {
         FeedbackDetail.addFeedBackDetailByCustomer(dataFeedBackDetail, function (data) {

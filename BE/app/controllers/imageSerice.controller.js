@@ -1,4 +1,5 @@
 var ImageService = require('../models/imageService.model');
+const { body, validationResult } = require('express-validator');
 exports.addImageService= function (req, res, next) {
     var dataImage={serviceId:req.body.serviceId,
         image:req.body.image

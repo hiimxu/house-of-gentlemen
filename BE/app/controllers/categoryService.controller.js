@@ -1,4 +1,5 @@
 var CategoryService = require('../models/categoryService.model');
+const { body, validationResult } = require('express-validator');
 
 exports.addCategoryService = function (req, res, next) {
 

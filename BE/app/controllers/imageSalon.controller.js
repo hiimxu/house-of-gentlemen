@@ -1,5 +1,5 @@
 var ImageSalon = require('../models/imageSalon.model');
-
+const { body, validationResult } = require('express-validator');
 exports.getImageSalon= function (req, res, next) {
     var id = req.params.idSalon;
     try {
