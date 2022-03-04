@@ -8,6 +8,7 @@ const feedbackController = require('../controllers/feedback.controller');
 const feedbackDetailController = require('../controllers/feedbacDetail.controller');
 const salonOwnerController = require('../controllers/salonOwner.controller');
 const serviceController = require('../controllers/service.controller');
+const staffController = require('../controllers/staff.controller');
 const auth = require('../middleware/auth');
 
 router.get('/',cors(),customerController.getAllCustomer);
@@ -30,4 +31,5 @@ router.get('/getFeedbackDetail/:feedBackId',cors(),feedbackDetailController.getF
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
 router.get('/get/AllService',cors(),serviceController.getAllService);
 router.get('/get/serviceOfSalon/:idSalon',cors(),serviceController.getAllServiceSalon);
+router.get('/get/staff/:id',cors(),staffController.getStaff)
 module.exports = router;

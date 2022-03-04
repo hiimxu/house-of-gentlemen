@@ -125,23 +125,24 @@ exports.add_account_customer = function (req, res, next) {
             }
             else {
                 if (rol == 'customer')  {
-                    data = Account.createAccount(save_data, function (data) {
-                        var accountId = data;
+                     Account.createAccount(save_data, function (data_account) {
+                        var accountId = data_account.accountId;
                         var phone = req.body.phone;
                         var address = req.body.address;
                         var birthday = req.body.birthday;//1993/03/30  yyyy/mm/dd
                         var nameCustomer = req.body.nameCustomer;
                         var save_customer = { accountId: accountId, nameCustomer: nameCustomer, phone: phone, address: address, birthday: birthday }
-                        data = Customer.createCustomer(save_customer, function (data) {
+                       Customer.createCustomer(save_customer, function (data) {
+                          
                             if (data == null) {
                                 res.json({ data: data, message: "create account customer failed" });
                             } else {
-                                res.json({ data: data, message: "create account customer success" });
+                                res.json({account: data_account,data: data, message: "create account customer success" });
                             }
                         });
                     });
                 }else{
-                    res.json({  message: "create account customer failed" });
+                    res.json({  message: "create account customer failed see role:customer" });
                 }
             }
         });
@@ -157,6 +158,11 @@ exports.add_account_salon = function (req, res, next) {
     var rol = req.body.role;
     var email = req.body.email;
     var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
+    var possibility = req.body.possibility;
+    if (possibility!=1) {
+        res.status(400).json({message:"check possibility"});
+        return;
+    }
 
    
     const errors = validationResult(req);
@@ -170,18 +176,17 @@ exports.add_account_salon = function (req, res, next) {
             }
             else {
                 if (rol == 'salon') {
-                    data = Account.createAccount(save_data, function (data) {
-                        var accountId = data;
+                    data = Account.createAccount(save_data, function (data_account) {
+                        var accountId = data_account.id;
                         var nameSalon = req.body.nameSalon;
                         var phone = req.body.phone;
-                        var possibility = req.body.possibility;
                         var taxCode = req.body.taxCode;
                         var save_salonOwner = { accountId: accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode };
                         data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
                             if (data == null) {
                                 res.json({ data: data, message: "create account salon failed" });
                             } else {
-                                res.json({ data: data, message: "create account salon success" });
+                                res.json({data_account:data_account, data: data, message: "create account salon success" });
                             }
                         });
                     });

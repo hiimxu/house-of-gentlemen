@@ -7,7 +7,7 @@ exports.getStaff= function (req, res, next) {
             if (data== null) {
                 res.json({data:data,success:"get staff fail"});
             } else {
-                if (data.length) {
+                if (data.length==0) {
                     res.json({data:data,success:"not have staff"});
                 } else {
                     res.json({data:data,success:"get staff success"});

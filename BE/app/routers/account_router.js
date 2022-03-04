@@ -10,7 +10,7 @@ const auth = require('../middleware/auth');
 router.post('/login',validate.validateLogin(),cors(),accountController.login_account);
 router.get('/detail/:id',param('id').not().isEmpty().isInt(),cors(),accountController.get_accountbyid);
 router.post('/add/customer',validate.validateCreateAccountCustomer(),cors(),accountController.add_account_customer);
-router.post('/add/salon',cors(),accountController.add_account_salon);
+router.post('/add/salon',validate.validateCreateAccountSalon(),cors(),accountController.add_account_salon);
 router.delete('/delete/:id',cors(),accountController.delete_accountbyid);
 router.post('/changePassword',cors(),accountController.change_password);
 router.get('/',cors(),accountController.account);

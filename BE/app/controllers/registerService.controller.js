@@ -63,7 +63,6 @@ exports.addRegisterService = function (req, res, next) {
     var check2=new Date(date);
     check1.setDate(check1.getDate()-1);
     check2.setDate(check2.getDate()+1);
-    console.log(check1+" "+check2);
     var Times=0;
     if (date < today) {
         res.status(400).json({message:"use time must after now"});

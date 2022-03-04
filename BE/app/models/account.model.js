@@ -56,7 +56,7 @@ Account.createAccount = function( save_data, result) {
         if (err) {
             result(err)
         } else {
-            result(rows.insertId);
+            result({accountId:rows.insertId,...save_data});
         }
     });
 }

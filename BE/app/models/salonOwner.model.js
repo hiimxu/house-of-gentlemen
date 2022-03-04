@@ -21,8 +21,8 @@ SalonOwner.getAll = function (result) {
 }
 SalonOwner.createSalonOwner = function (data, result) {
     db.query(`INSERT INTO salonowner SET?`, data, (err, rows, res) => {
-        if (err) {
-            result(null,err)
+        if (null,err) {
+            result(err)
         } else {
             result({id : rows.insertId,...data});
         }

@@ -9,10 +9,10 @@ const Customer = function (customer) {
 }
 Customer.createCustomer = function (data, result) {
     db.query(`INSERT INTO customer SET?`, data, (err, rows, res) => {
-        if (err) {
-            result(null,err)
+        if (null,err) {
+            result(err)
         } else {
-            result("created success customer!!!");
+            result({id : rows.insertId,...data});
         }
     });
 }
@@ -33,7 +33,7 @@ Customer.updateProfileCustomer =function (id,dataUpdate, result) {
         if (err) {
             result(null, err)
         } else {
-            result(rows)
+            result({id : rows.insertId,...dataUpdate})
         }
     });
 }
