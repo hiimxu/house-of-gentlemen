@@ -20,7 +20,7 @@ exports.validateCreateAccountCustomer = () => {
 
     ];
 }
-exports.validateLogin = function () {
+exports.validateCreateAccountCustomer() = function () {
     return [
         body('account').not().isEmpty().withMessage('account cannot be empty'),
         body('password').not().isEmpty().withMessage('password cannot be empty'),
@@ -29,7 +29,7 @@ exports.validateLogin = function () {
         body('role').not().isEmpty(),
     ];
 }
-exports.validateCreateAccountSalon= function(){
+exports.validateLogin= function(){
     return[
         body('account_name').not().isEmpty().withMessage('account cannot be empty'),
         body('password').not().isEmpty().withMessage('password cannot be empty'),

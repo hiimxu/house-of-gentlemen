@@ -6,12 +6,12 @@ exports.getAllStaffStatus= function (req, res, next) {
     StatusStaff.getAllStaffStatus( function (data) {
 
         if (data == null) {
-            res.status(400).json({ data: data, message: "get Category fail" });
+            res.status(400).json({ data: data, message: "get status fail" });
         } else {
         if (data.length == 0) {
-            res.status(400).json({ data: data, message: "not have Category " });
+            res.status(400).json({ data: data, message: "not have status " });
         } else {
-            res.json({ data: data, message: "get Category success" });
+            res.json({ data: data, message: "get status success" });
         }
         }
     });
@@ -25,12 +25,12 @@ exports.getStaffStatusByIdstatusStaff= function (req, res, next) {
     StatusStaff.getStaffStatusByIdstatusStaff(id, function (data) {
 
         if (data == null) {
-            res.status(400).json({ data: data, message: "get Category fail" });
+            res.status(400).json({ data: data, message: "get status fail" });
         } else {
         if (data.length == 0) {
-            res.status(400).json({ data: data, message: "not have Category " });
+            res.status(400).json({ data: data, message: "not have status " });
         } else {
-            res.json({ data: data, message: "get Category success" });
+            res.json({ data: data, message: "get status success" });
         }
         }
     });
