@@ -52,17 +52,26 @@ exports.change_password = function (req, res, next) {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        var data = Account.checkPassword(acc, md5_old_pass, function (data) {
-            if (data.length == 1) {
-                var id = data[0].account_id;
+        Account.checkAccount(acc, function(data){
+            if (data.length==0) {
+               return res.status(400).json({message:"please check account_name"});
+                
+            }else{
+                var data = Account.checkPassword(acc, md5_old_pass, function (data) {
+                    if (data.length == 1) {
+                        var id = data[0].account_id;
+        
+                        var data = Account.updatePasswordAccount(id, md5_new_pass, function (response) {
+                            res.json({ message: "update password success", data: response });
+                        });
+                    } else {
+                        res.json({ message: "kiem tra lai old_password ", data: "update failed" });
+                    }
+                })
 
-                var data = Account.updatePasswordAccount(id, md5_new_pass, function (response) {
-                    res.json({ message: "update password success", data: response });
-                });
-            } else {
-                res.json({ message: "kiem tra lai old_password va account_name", data: "update failed" });
             }
         })
+        
     } catch (error) {
         res.json({ message: "kiem tra lai old_password va account_name", data: error });
     }
@@ -75,38 +84,49 @@ exports.login_account = function async(req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    try {
-        var data = Account.getAccountToLogin(acc, md5_pass, function (data) {
-            if (data == null) {
-                res.json({ data: data, message: "login failed" });
-            } else {
-                if (data.length == 0) {
-                    res.json({ data: data, message: "login failed" });
-                } else {
-                    console.log(process.env.TOKEN_KEY);
-
-                    // Create token
-                    const token = jwt.sign(
-                        { id: 1, acc },
-                        process.env.TOKEN_KEY,
-                        {
-                            expiresIn: "2h",
+    Account.checkAccount(acc, function(data){
+        if (data.length==0) {
+           return res.status(400).json({message:"please check account_name"});
+            
+        }
+        else{
+            try {
+                var data = Account.getAccountToLogin(acc, md5_pass, function (data) {
+                    if (data == null) {
+                        res.json({ data: data, message: "login failed" });
+                    } else {
+                        if (data.length == 0) {
+                            res.json({ data: data, message: "please check password" });
+                        } else {
+                            console.log(process.env.TOKEN_KEY);
+        
+                            // Create token
+                            const token = jwt.sign(
+                                { id: 1, acc },
+                                process.env.TOKEN_KEY,
+                                {
+                                    expiresIn: "2h",
+                                }
+                            );
+                            Account.updateToken(acc, token, function (response) {
+                                var redata = data;
+                                redata[0].token = token;
+                                res.json({ data: redata, message: "login successed", token: token });
+                            })
+                            // res.json({ data: data, message: "login successed" });
                         }
-                    );
-                    Account.updateToken(acc, token, function (response) {
-                        var redata = data;
-                        redata[0].token = token;
-                        res.json({ data: redata, message: "login successed", token: token });
-                    })
-                    // res.json({ data: data, message: "login successed" });
-                }
-
+        
+                    }
+        
+                });
+            } catch (error) {
+                res.json({ data: error, message: "login failed" });
             }
 
-        });
-    } catch (error) {
-        res.json({ data: error, message: "login failed" });
-    }
+        }
+
+    }) ;
+    
 }
 exports.add_account_customer = function (req, res, next) {
 
@@ -164,8 +184,8 @@ exports.add_account_salon = function (req, res, next) {
     var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
     var possibility = req.body.possibility;
     if (possibility != 1) {
-        res.status(400).json({ message: "check possibility" });
-        return;
+        return res.status(400).json({ message: "check possibility" });
+        
     }
 
 
