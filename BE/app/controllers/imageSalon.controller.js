@@ -6,17 +6,17 @@ exports.getImageSalon= function (req, res, next) {
         ImageSalon.getAllImage(id,function (data) {
 
             if (data== null) {
-                res.json({data:data,message:"get image failed"});
+                res.status(400).json({data:data,message:"get image failed"});
             } else {
                 if (data.length==0) {
-                    res.json({data:data,message:"not have image"});
+                    res.status(400).json({data:data,message:"not have image"});
                 } else {
                     res.json({data:data,message:"get image success"});
                 }
             }
         });
     } catch (error) {
-        res.json({data:data,message:"get image failed"});
+        res.status(400).json({data:data,message:"get image failed"});
     }
     
     
@@ -31,17 +31,17 @@ exports.addImageToImageSalon = function (req, res, next) {
         ImageSalon.addImageToImageSalon(dataImage,function (data) {
             
             if (data== null) {
-                res.json({data:data,message:"add image failed"});
+                res.status(400).json({data:data,message:"add image failed"});
             } else {
                if (data.length==0) {
-                res.json({data:data,message:"add image failed"});
+                res.status(400).json({data:data,message:"add image failed"});
                } else {
                 res.json({data:data,message:"add image success"});
                }
             }
         });
     } catch (error) {
-        res.json({data:error,message:"add image failed"});
+        res.status(400).json({data:error,message:"add image failed"});
     }
 }
 exports.deleteImageOfImageSalon =function (req, res, next) {
@@ -49,10 +49,10 @@ exports.deleteImageOfImageSalon =function (req, res, next) {
     try {
         ImageSalon.deleteImageOfImageSalon(id,function (data) {
             if (data== null) {
-                res.json({data:data,message:"delete image failed"});
+                res.status(400).json({data:data,message:"delete image failed"});
             } else {
                 if (data.affectedRows==0) {
-                    res.json({data:data,message:"not have image to delete"});
+                    res.status(400).json({data:data,message:"not have image to delete"});
                 } else {
                     res.json({data:data,message:"delete image success"});
                 }
@@ -60,6 +60,6 @@ exports.deleteImageOfImageSalon =function (req, res, next) {
             }
         });
     } catch (error) {
-        res.json({data:data,message:"delete image failed"});
+        res.status(400).json({data:data,message:"delete image failed"});
     }
 }

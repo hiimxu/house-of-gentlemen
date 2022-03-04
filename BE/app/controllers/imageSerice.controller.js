@@ -8,17 +8,17 @@ exports.addImageService= function (req, res, next) {
         ImageService.addImageService(dataImage,function (data) {
 
             if (data== null) {
-                res.json( {data:data,message:"add image failed"} );
+                res.status(400).json( {data:data,message:"add image failed"} );
             } else {
                if (data.length==0) {
-                res.json( {data:data,message:"add image failed"} );
+                res.status(400).json( {data:data,message:"add image failed"} );
                } else {
                 res.json( {data:data,message:"add image success"} );
                }
             }
         });
     } catch (error) {
-        res.json( {data:error,message:"add image failed"} );
+        res.status(400).json( {data:error,message:"add image failed"} );
     }
 }
 exports.getImageService=function (req, res, next) {
@@ -27,10 +27,10 @@ exports.getImageService=function (req, res, next) {
         ImageService.getAllImageServiceByServiceId(id,function (data) {
 
             if (data== null) {
-                res.json( {data:data,message:"get image failed"} );
+                res.status(400).json( {data:data,message:"get image failed"} );
             } else {
                 if (data.length==0) {
-                    res.json( {data:data,message:"get image failed"} );
+                    res.status(400).json( {data:data,message:"get image failed"} );
                 }else{
                     res.json( {data:data,message:"get image success"} );
                 }
@@ -38,7 +38,7 @@ exports.getImageService=function (req, res, next) {
             }
         });
     } catch (error) {
-        res.json(error);
+        res.status(400).json({data:error,message:"get image failed"});
     }
 }
 exports.deleteImageService=function (req, res, next) {
@@ -46,10 +46,10 @@ exports.deleteImageService=function (req, res, next) {
     try {
         ImageService.deleteImageService(id,function (data) {
             if (data== null) {
-                res.json( {data:data,message:"delete image failed"} );
+                res.status(400).json( {data:data,message:"delete image failed"} );
             }else{
                 if (data.affectedRows) {
-                    res.json( {data:data,message:"not have image to delete"} );
+                    res.status(400).json( {data:data,message:"not have image to delete"} );
                 } else {
                     res.json( {data:data,message:"delete image success"} );
                 }
@@ -57,6 +57,6 @@ exports.deleteImageService=function (req, res, next) {
 }
         });
     } catch (error) {
-        res.json( {data:error,message:"delete image failed"} );
+        res.status(400).json( {data:error,message:"delete image failed"} );
     }
 }

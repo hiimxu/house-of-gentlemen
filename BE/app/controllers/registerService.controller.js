@@ -11,17 +11,17 @@ exports.getRegisterServiceById = function (req, res, next) {
     try {
         RegisterService.getRegisterServiceById(id, function (data) {
             if (data == null) {
-                res.json({ data: data, message: "get booking service failed" });
+                res.status(400).json({ data: data, message: "get booking service failed" });
             } else {
                 if (data.length == 0) {
-                    res.json({ data: data, message: "not have booking service" });
+                    res.status(400).json({ data: data, message: "not have booking service" });
                 } else {
                     res.json({ data: data, message: "get booking service success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get booking service failed" });
+        res.status(400).json({ data: error, message: "get booking service failed" });
     }
 
 }
@@ -35,17 +35,17 @@ exports.getRegisterServiceByCustomer = function (req, res, next) {
         RegisterService.getRegisterServiceByCustomer(id, function (data) {
 
             if (data == null) {
-                res.json({ data: data, message: "get booking service failed" });
+                res.status(400).json({ data: data, message: "get booking service failed" });
             } else {
                 if (data.length == 0) {
-                    res.json({ data: data, message: "not have booking service" });
+                    res.status(400).json({ data: data, message: "not have booking service" });
                 } else {
                     res.json({ data: data, message: "get booking service success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get booking service failed" });
+        res.status(400).json({ data: error, message: "get booking service failed" });
     }
 
 }
@@ -103,14 +103,14 @@ exports.addRegisterService = function (req, res, next) {
                         var staffCanlederId = data.staffCanlederId;
                         dataRegisterService = { staffCanlederId, ...dataRegisterService };
                         if (data == null) {
-                            res.json({ data: data, message: "add staff cander failed" });
+                            res.status(400).json({ data: data, message: "add staff cander failed" });
                         } else {
                             RegisterService.addRegisterService(dataRegisterService, function (data) {
                                 if (data == null) {
-                                    res.json({ data: data, message: "booking service failed" });
+                                    res.status(400).json({ data: data, message: "booking service failed" });
                                 } else {
                                     if (data.length == 0) {
-                                        res.json({ data: data, message: "booking service failed" });
+                                        res.status(400).json({ data: data, message: "booking service failed" });
                                     } else {
                                         res.json({ data: data, message: "booking service success" });
                                     }
@@ -120,7 +120,7 @@ exports.addRegisterService = function (req, res, next) {
 
                     });
                 } catch (error) {
-                    res.json({ data: error, message: "booking service failed" });
+                    res.status(400).json({ data: error, message: "booking service failed" });
                 }
             }
         })

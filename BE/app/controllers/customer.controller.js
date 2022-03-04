@@ -18,17 +18,17 @@ exports.getCustomerProfile = function (req, res, next) {
     try {
         Customer.getCustomerSalon(id, function (data) {
             if (data== null) {
-                res.json({data:data,message:"get data customer 's profile failed"});
+                res.status(400).json({data:data,message:"get data customer 's profile failed"});
             } else {
                 if (data.length==0) {
-                    res.json({data:data,message:"not have customer 's profile"});
+                    res.status(400).json({data:data,message:"not have customer 's profile"});
                 } else {
                     res.json({data:data,message:"get data customer 's profile success"});
                 }
             }
         });
     } catch (error) {
-        res.json({data:error,message:"get data customer 's profile failed"});
+        res.status(400).json({data:error,message:"get data customer 's profile failed"});
     }
 }
 exports.updateCustomerProfile = function (req, res, next) {
@@ -46,10 +46,10 @@ exports.updateCustomerProfile = function (req, res, next) {
     };
     Customer.updateProfileCustomer(id,dataUpdate, function (data){
         if (data==null) {
-            res.json({data:data,message:"update data customer 's profile failed"})
+            res.status(400).json({data:data,message:"update data customer 's profile failed"})
         } else {
             if (data.affectedRows==0) {
-                res.json({data:data,message:"not have data customer 's profile to update"})
+                res.status(400).json({data:data,message:"not have data customer 's profile to update"})
             } else {
                 res.json({data:data,message:"get data customer 's profile success"})
             }

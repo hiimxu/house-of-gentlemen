@@ -4,13 +4,13 @@ exports.getStatusRegisterService = function (req, res, next) {
     try {
         StatusRegisterService.getAllSatusRegisterService(function (data) {
             if (data== null) {
-                res.json({data:data,success:"get status register service fail"});
+                res.status(400).json({data:data,success:"get status register service fail"});
             } else {
-                res.json({data:data,success:"get status register service success"});
+                res.status(400).json({data:data,success:"get status register service success"});
             }
         });
     } catch (error) {
-        res.json({data:error,success:"get status register service fail"});
+        res.status(400).json({data:error,success:"get status register service fail"});
     }
 
 }
@@ -24,17 +24,17 @@ exports.getStatusRegisterServiceById = function (req, res, next) {
         
         StatusRegisterService.getSatusRegisterServiceById(id, function (data) {
             if (data== null) {
-                res.json({data:data,success:"get status register service fail"});
+                res.status(400).json({data:data,success:"get status register service fail"});
             } else {
                 if (data.length==0) {
-                    res.json({data:data,success:"not have status register service"});
+                    res.status(400).json({data:data,success:"not have status register service"});
                 } else {
                     res.json({data:data,success:"get status register service success"});
                 }
             }
         });
     } catch (error) {
-        res.json({data:error,success:"get status register service fail"});
+        res.status(400).json({data:error,success:"get status register service fail"});
     }
 
 }

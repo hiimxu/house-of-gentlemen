@@ -14,17 +14,17 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
         FeedbackDetail.addFeedBackDetailBySalon(dataFeedBackDetail, function (data) {
             // res.json({data:data,message:"add feedback detail success"});    
             if (data == null) {
-                res.json({ data: data, message: "add feedback detail failed" });
+                res.status(400).json({ data: data, message: "add feedback detail failed" });
             } else {
                 if (data.length == 0) {
-                    res.json({ data: data, message: "add feedback detail failed" });
+                    res.status(400).json({ data: data, message: "add feedback detail failed" });
                 } else {
                     res.json({ data: data, message: "add feedback detail success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "add feedback detail failed" });
+        res.status(400).json({ data: error, message: "add feedback detail failed" });
     }
 }
 exports.getFeedbackDetail = function (req, res, next) {
@@ -37,17 +37,17 @@ exports.getFeedbackDetail = function (req, res, next) {
         FeedbackDetail.getFeedbackDetail(id, function (data) {
 
             if (data == null) {
-                res.json({ data: data, message: "get feedback detail failed" });
+                res.status(400).json({ data: data, message: "get feedback detail failed" });
             } else {
                 if (data.length == 0) {
-                    res.json({ data: data, message: "not have feedback detail" });
+                    res.status(400).json({ data: data, message: "not have feedback detail" });
                 } else {
                     res.json({ data: data, message: "get feedback detail success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get feedback detail failed" });
+        res.status(400).json({ data: error, message: "get feedback detail failed" });
     }
 }
 exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
@@ -60,10 +60,10 @@ exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
         FeedbackDetail.deleteFeedbackDetailByFeedbackDetailId(id, function (data) {
 
             if (data == null) {
-                res.json({ data: data, message: "detete feedback detail failed" });
+                res.status(400).json({ data: data, message: "detete feedback detail failed" });
             } else {
                 if (data.affectedRows) {
-                    res.json({ data: data, message: "not have feed back detail to delete" });
+                    res.status(400).json({ data: data, message: "not have feed back detail to delete" });
                 } else {
                     res.json({ data: data, message: "detete feedback detail success" });
                 }
@@ -71,7 +71,7 @@ exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "detete feedback detail failed" });
+        res.status(400).json({ data: error, message: "detete feedback detail failed" });
     }
 
 }
@@ -87,10 +87,10 @@ exports.updateFeedbackDetail = function (req, res, next) {
     try {
         FeedbackDetail.updateFeedbackDetail(id, dataUpdate, function (data) {
             if (data == null) {
-                res.json({ data: data, message: "update feedback detail failed" });
+                res.status(400).json({ data: data, message: "update feedback detail failed" });
             } else {
                 if (row.affectedRows == 0) {
-                    res.json({ data: data, message: "not have feedback detail to update" });
+                    res.status(400).json({ data: data, message: "not have feedback detail to update" });
                 } else {
                     res.json({ data: data, message: "update feedback detail success" });
                 }
@@ -98,7 +98,7 @@ exports.updateFeedbackDetail = function (req, res, next) {
             }
         });
     } catch (error) {
-        res.json({ data: data, message: "update feedback detail failed" });
+        res.status(400).json({ data: data, message: "update feedback detail failed" });
     }
 
 }
@@ -119,16 +119,16 @@ exports.addFeedBackDetailByCustomer = function (req, res, next) {
     try {
         FeedbackDetail.addFeedBackDetailByCustomer(dataFeedBackDetail, function (data) {
             if (data == null) {
-                res.json({ data: data, message: "add feedback detail failed" });
+                res.status(400).json({ data: data, message: "add feedback detail failed" });
             } else {
                 if (data.length == 0) {
-                    res.json({ data: data, message: "add feedback detail failed" });
+                    res.status(400).json({ data: data, message: "add feedback detail failed" });
                 } else {
                     res.json({ data: data, message: "add feedback detail success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "add feedback detail failed" });
+        res.status(400).json({ data: error, message: "add feedback detail failed" });
     }
 }

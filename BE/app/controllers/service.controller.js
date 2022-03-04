@@ -17,17 +17,17 @@ exports.addServiceSalon = function (req, res, next) {
         ServiceSalon.addServiceSalon(dataService, function (data) {
             // res.json({ data: data, message: "add service fail" });
             if (data == null) {
-                res.json({ data: data, message: "add service fail" });
+                res.status(400).json({ data: data, message: "add service fail" });
             } else {
                 if (data.length==0) {
-                    res.json({ data: data, message: "add service failed" });
+                    res.status(400).json({ data: data, message: "add service failed" });
                 } else {
                     res.json({ data: data, message: "add service success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "add service fail" });
+        res.status(400).json({ data: error, message: "add service fail" });
     }
 }
 
@@ -54,17 +54,17 @@ exports.getServiceOfSalon = function (req, res, next) {
         ServiceSalon.getServiceOfSalon(id, function (data) {
 
             if (data == null) {
-                res.json({ data: data, message: "get service fail" });
+                res.status(400).json({ data: data, message: "get service fail" });
             } else {
             if (data.length == 0) {
-                res.json({ data: data, message: "not have service " });
+                res.status(400).json({ data: data, message: "not have service " });
             } else {
                 res.json({ data: data, message: "get service success" });
             }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get service fail" });
+        res.status(400).json({ data: error, message: "get service fail" });
     }
 }
 exports.getAllService = function (req, res, next) {
@@ -73,13 +73,13 @@ exports.getAllService = function (req, res, next) {
         ServiceSalon.getAllService(function (data) {
 
             if (data == null) {
-                res.json({ data: data, message: "get service fail" });
+                res.status(400).json({ data: data, message: "get service fail" });
             } else {
                 res.json({ data: data, message: "get service success" });
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get service fail" });
+        res.status(400).json({ data: error, message: "get service fail" });
     }
 }
 exports.updateServiceSalon = function (req, res, next) {
@@ -97,14 +97,14 @@ exports.updateServiceSalon = function (req, res, next) {
         ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
 
             if (data == null|| data.affectedRows==0) {
-                res.json({ data: data, message: "update service fail" });
+                res.status(400).json({ data: data, message: "update service fail" });
             } else {
                 
                 res.json({ data: data, message: "update service success" });
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "update service fail" });
+        res.status(400).json({ data: error, message: "update service fail" });
     }
 
 }
@@ -118,16 +118,16 @@ exports.getAllServiceSalon = function (req, res, next) {
         ServiceSalon.getAllServiceSalon(id, function (data) {
 
             if (data == null) {
-                res.json({ data: data, message: "get service fail" });
+                res.status(400).json({ data: data, message: "get service fail" });
             } else {
                 if (data.length == 0) {
-                    res.json({ data: data, message: "not have service" });
+                    res.status(400).json({ data: data, message: "not have service" });
                 } else {
                     res.json({ data: data, message: "get service success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get service fail" });
+        res.status(400).json({ data: error, message: "get service fail" });
     }
 }

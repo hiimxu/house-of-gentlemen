@@ -15,13 +15,13 @@ exports.addFeedBackBySalon = function (req, res, next) {
     try {
         FeedBack.addFeedBackBySalon(dataFeedBack, function (data) {
             if (data == null) {
-                res.json({ data: data, message: "add feedback failed" });
+                res.status(400).json({ data: data, message: "add feedback failed" });
             } else {
                 res.json({ data: data, message: "add feedback success" });
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "add feedback failed" });
+        res.status(400).json({ data: error, message: "add feedback failed" });
     }
 }
 exports.getFeedbackOfSalon = function (req, res, next) {
@@ -33,17 +33,17 @@ exports.getFeedbackOfSalon = function (req, res, next) {
     try {
         FeedBack.getFeedbackOfSalon(id, function (data) {
             if (data == null) {
-                res.json({ data: data, message: "get feedback failed" });
+                res.status(400).json({ data: data, message: "get feedback failed" });
             } else {
                 if (data.length == 0) {
-                    res.json({ data: data, message: "not have feed back" });
+                    res.status(400).json({ data: data, message: "not have feed back" });
                 } else {
                     res.json({ data: data, message: "get feedback success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get feedback failed" });
+        res.status(400).json({ data: error, message: "get feedback failed" });
     }
 }
 exports.deleteFeedback = function (req, res, next) {
@@ -58,10 +58,10 @@ exports.deleteFeedback = function (req, res, next) {
             FeedBack.deleteFeedback(id, function (data) {
 
                 if (data == null) {
-                    res.json({ data: data, message: "delete feedback failed" });
+                    res.status(400).json({ data: data, message: "delete feedback failed" });
                 } else {
                     if (data.affectedRows == 0) {
-                        res.json({ data: data, message: "not have feedback to delete" });
+                        res.status(400).json({ data: data, message: "not have feedback to delete" });
                     } else {
                         res.json({ data: data, message: "delete feedback success" });
                     }
@@ -70,7 +70,7 @@ exports.deleteFeedback = function (req, res, next) {
             });
         });
     } catch (error) {
-        res.json({ data: error, message: "delete feedback failed" });
+        res.status(400).json({ data: error, message: "delete feedback failed" });
     }
 
 }
@@ -94,10 +94,10 @@ exports.updateFeedback = function (req, res, next) {
         FeedBack.updateFeedback(id, dataUpdate, function (data) {
 
             if (data == null) {
-                res.json({ result: data, message: "update feedback failed" });
+                res.status(400).json({ result: data, message: "update feedback failed" });
             } else {
                 if (data.affectedRows) {
-                    res.json({ result: data, message: "check id feedback to update" });
+                    res.status(400).json({ result: data, message: "check id feedback to update" });
                 } else {
                     res.json({ result: data, message: "update feedback success" });
                 }
@@ -105,7 +105,7 @@ exports.updateFeedback = function (req, res, next) {
             }
         });
     } catch (error) {
-        res.json({ result: error, message: "update feedback failed" });
+        res.status(400).json({ result: error, message: "update feedback failed" });
     }
 
 }
@@ -131,16 +131,16 @@ exports.addFeedBackByCustomer = function (req, res, next) {
     try {
         FeedBack.addFeedBackByCustomer(dataFeedBack, function (data) {
             if (data == null) {
-                res.json({ result: data, message: "add feedback failed" });
+                res.status(400).json({ result: data, message: "add feedback failed" });
             } else {
                 if (data.length == 0) {
-                    res.json({ result: data, message: "add feedback failed" });
+                    res.status(400).json({ result: data, message: "add feedback failed" });
                 } else {
                     res.json({ result: data, message: "add feedback success" });
                 }
             }
         });
     } catch (error) {
-        res.json({ result: error, message: "add feedback failed" });
+        res.status(400).json({ result: error, message: "add feedback failed" });
     }
 }

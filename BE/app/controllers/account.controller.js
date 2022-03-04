@@ -96,7 +96,7 @@ exports.login_account = function async(req, res, next) {
                         res.json({ data: data, message: "login failed" });
                     } else {
                         if (data.length == 0) {
-                            res.json({ data: data, message: "please check password" });
+                            res.status(400).json({ data: data, message: "please check password" });
                         } else {
                             console.log(process.env.TOKEN_KEY);
         
@@ -120,7 +120,7 @@ exports.login_account = function async(req, res, next) {
         
                 });
             } catch (error) {
-                res.json({ data: error, message: "login failed" });
+                res.status(400).json({ data: error, message: "login failed" });
             }
 
         }
@@ -145,7 +145,7 @@ exports.add_account_customer = function (req, res, next) {
     try {
         var check = Account.checkAccount(acc, function (data) {
             if (data.length == 1) {
-                res.json({ data: "Account already exists", message: "Account already exists" });
+                res.status(400).json({ data: "Account already exists", message: "Account already exists" });
             }
             else {
                 if (rol == 'customer') {
@@ -159,19 +159,19 @@ exports.add_account_customer = function (req, res, next) {
                         Customer.createCustomer(save_customer, function (data) {
 
                             if (data == null) {
-                                res.json({ data: data, message: "create account customer failed" });
+                                res.status(400).json({ data: data, message: "create account customer failed" });
                             } else {
                                 res.json({ account: data_account, data: data, message: "create account customer success" });
                             }
                         });
                     });
                 } else {
-                    res.json({ message: "create account customer failed see role:customer" });
+                    res.status(400).json({ message: "create account customer failed see role:customer" });
                 }
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "create account success" });
+        res.status(400).json({ data: error, message: "create account failed" });
     }
 }
 exports.add_account_salon = function (req, res, next) {
@@ -196,7 +196,7 @@ exports.add_account_salon = function (req, res, next) {
     try {
         var check = Account.checkAccount(acc, function (data) {
             if (data.length == 1) {
-                res.json({ data: "Account already exists", message: "Account already exists" });
+                res.status(400).json({ data: "Account already exists", message: "Account already exists" });
             }
             else {
                 if (rol == 'salon') {
@@ -208,7 +208,7 @@ exports.add_account_salon = function (req, res, next) {
                         var save_salonOwner = { accountId: accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode };
                         data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
                             if (data == null) {
-                                res.json({ data: data, message: "create account salon failed" });
+                                res.status(400).json({ data: data, message: "create account salon failed" });
                             } else {
                                 res.json({ data_account: data_account, data: data, message: "create account salon success" });
                             }
@@ -220,7 +220,7 @@ exports.add_account_salon = function (req, res, next) {
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "create account success" });
+        res.status(400).json({ data: error, message: "create account success" });
     }
 }
 exports.delete_accountbyid = function (req, res, next) {
@@ -229,26 +229,26 @@ exports.delete_accountbyid = function (req, res, next) {
         Account.removeAccount
             (id, function (response) {
                 if (response == null) {
-                    res.json({ data: response, message: "delete account failed" });
+                    res.status(400).json({ data: response, message: "delete account failed" });
                 } else {
                     res.json({ data: response, message: "delete account success" });
                 }
             })
     } catch (error) {
-        res.json({ data: error, message: "delete account failed" });
+        res.status(400).json({ data: error, message: "delete account failed" });
     }
 }
 exports.getSalonAccount = function (req, res, next) {
     try {
         Account.getAllAccountSalon(function (data) {
             if (data == null) {
-                res.json({ data: data, message: "get account salon failed" });
+                res.status(400).json({ data: data, message: "get account salon failed" });
             } else {
                 res.json({ data: data, message: "get account salon success" });
             }
         });
     } catch (error) {
-        res.json({ data: error, message: "get account salon failed" });
+        res.status(400).json({ data: error, message: "get account salon failed" });
     }
 }
 exports.forgotPassword = async function (req, res, next) {
@@ -265,7 +265,7 @@ exports.forgotPassword = async function (req, res, next) {
             var id = data[0].account_id;
             var email = data[0].email;
             if (!email == emailcheck) {
-                res.json({ message: "check your email" });
+                res.status(400).json({ message: "check your email" });
 
             }
             var new_password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
@@ -273,7 +273,7 @@ exports.forgotPassword = async function (req, res, next) {
             // var md5_new_pass = md5(new_password);
             Account.updatePasswordAccount(id, md5_new_pass, function (data) {
                 if (data == null) {
-                    res.json({ message: "send email failed", data: data })
+                    res.status(400).json({ message: "send email failed", data: data })
                 } else {
                     var nodemailer = require('nodemailer');
 
@@ -295,7 +295,7 @@ exports.forgotPassword = async function (req, res, next) {
 
                         if (error) {
                             console.log(error);
-                            res.json({ error: error, message: "failed to email" })
+                            res.status(400).json({ error: error, message: "failed to email" })
                         } else {
                             console.log('Email sent: ' + info.response);
                             res.json({ info })

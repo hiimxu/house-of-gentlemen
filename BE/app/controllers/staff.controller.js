@@ -10,17 +10,17 @@ exports.getStaff= function (req, res, next) {
         Staff.getStaff(id,function (data) {
 
             if (data== null) {
-                res.json({data:data,success:"get staff fail"});
+                res.status(400).json({data:data,success:"get staff fail"});
             } else {
                 if (data.length==0) {
-                    res.json({data:data,success:"not have staff"});
+                    res.status(400).json({data:data,success:"not have staff"});
                 } else {
                     res.json({data:data,success:"get staff success"});
                 }
             }
         });
     } catch (error) {
-        res.json({data:error,success:"get staff fail"});
+        res.status(400).json({data:error,success:"get staff fail"});
     }
     
 }
@@ -34,13 +34,13 @@ exports.addStaff= function (req, res, next) {
         Staff.addStaff(data,function (data) {
 
             if (data== null) {
-                res.json({data:data,success:"add staff failed"});
+                res.status(400).json({data:data,success:"add staff failed"});
             } else {
                 res.json({data:data,success:"add staff success"});
             }
         });
     } catch (error) {
-        res.json({data:error,success:"add staff fail"});
+        res.status(400).json({data:error,success:"add staff fail"});
     }
     
 }
@@ -55,10 +55,10 @@ exports.updateStaff= function (req, res, next) {
         Staff.updateStaff(id,data,function (data) {
             
             if (data== null) {
-                res.json({data:data,message:'update failed'});
+                res.status(400).json({data:data,message:'update failed'});
             } else {
                 if (data.affectedRows==0) {
-                    res.json({data:data,message:'not have to update'});
+                    res.status(400).json({data:data,message:'not have to update'});
                 }else{
                     res.json({data:data,message:'update success'});
                 }
@@ -66,7 +66,7 @@ exports.updateStaff= function (req, res, next) {
             }
         });
     } catch (error) {
-        res.json(error);
+        res.status(400).json({data:error, message:"update failed"});
     }
     
 }

@@ -7,26 +7,26 @@ exports.setPossitiveSalonOwner = function (req, res, next) {
     try {
         SalonOwner.setPossitiveSalonOwner(id,possibility, function (data) {
             if (data== null) {
-                res.json({data:data,message:"set possitive for salon failed"});
+                res.status(400).json({data:data,message:"set possitive for salon failed"});
             } else {
                 res.json({data:data,message:"set possitive for salon success"});
             }
         });
     } catch (error) {
-        res.json({data:error,message:"set possitive for salon failed"});
+        res.status(400).json({data:error,message:"set possitive for salon failed"});
     }
 }
 exports.getSalonAccount = function (req, res, next) {
     try {
         var data = Account.getAllAccountSalon( function (data) {
            if (data== null) {
-            res.json({data:data,message:"get account salon failed"});
+            res.status(400).json({data:data,message:"get account salon failed"});
            } else {
             res.json({data:data,message:"get account salon successed"});
            }
         });
     } catch (error) {
-        res.json({data:error,message:"get account salon failed"});
+        res.status(400).json({data:error,message:"get account salon failed"});
     }
 }
 exports.getSalon = function (req, res, next) {
@@ -34,13 +34,13 @@ exports.getSalon = function (req, res, next) {
     try {
         var data = SalonOwner.getProfileSalon(id, function (data) {
             if (data== null) {
-                res.json({data:data,message:"get profile salon failed"});
+                res.status(400).json({data:data,message:"get profile salon failed"});
             } else {
                 res.json({data:data,message:"get profile salon successed"});
             }
         });
     } catch (error) {
-        res.json({data:error,message:"get profile salon failed"});
+        res.status(400).json({data:error,message:"get profile salon failed"});
     }
 }
 
