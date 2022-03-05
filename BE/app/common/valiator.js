@@ -192,3 +192,10 @@ exports.updateSalonOwnerProfile=function(){
        body('taxCode').not().isEmpty().withMessage("not empty"),
    ];
 }
+exports.deleteFeedbackDetailByFeedbackDetailIdBySalon=function(){
+    return[
+        param('id').not().isEmpty().isInt().withMessage("id:number"),
+        body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:int"),
+        
+    ];
+}

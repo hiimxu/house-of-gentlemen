@@ -60,6 +60,18 @@ Feedback.addFeedBackByCustomer = function(data,result){
         }
     });
 }
+Feedback.checkFeedBackofSalon= function (idSalon,idFeedBack,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback where salonId='${idSalon}' and feedBackId='${idFeedBack}'`, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(null,err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 
 
 module.exports =Feedback;

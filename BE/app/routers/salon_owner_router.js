@@ -39,7 +39,7 @@ router.delete('/delete/feedback/:id',validate.checkId(),cors(),feedbackControlle
 router.put('/update/feedback/:id',validate.updateFeedback(),cors(),feedbackController.updateFeedback);
 router.post('/create/feedBackDetailBySalon',validate.addFeedBackDetailBySalon(),cors(),feedbackDetailController.addFeedBackDetailBySalon);
 router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number"),cors(),feedbackDetailController.getFeedbackDetail);
-router.delete('/delete/feedbackdetail/:id',validate.checkId(),cors(),feedbackDetailController.deleteFeedbackDetailByFeedbackDetailId);
+router.delete('/delete/feedbackdetail/:id',validate.deleteFeedbackDetailByFeedbackDetailIdBySalon(),cors(),feedbackDetailController.deleteFeedbackDetailByFeedbackDetailIdBySalon);
 router.put('/update/feedbackdetail/:id',validate.updateFeedbackDetail(),cors(),feedbackDetailController.updateFeedbackDetail);
 router.get('/staff/:id',validate.checkId(),cors(),staffController.getStaff);
 router.post('/create/staff',validate.addStaff(),cors(),staffController.addStaff);

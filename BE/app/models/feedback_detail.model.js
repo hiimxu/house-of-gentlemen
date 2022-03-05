@@ -40,6 +40,7 @@ Feedback_detail.deleteFeedbackDetailByFeedbackDetailId= function (id,result) {
         }
     });
 }
+
 Feedback_detail.deleteFeedbackDetailByFeedbackId= function (id,result) {
    
     db.query(`delete from feedback_detail where feedBackId = ${id}`, (err, rows, fields) => {
@@ -66,6 +67,30 @@ Feedback_detail.addFeedBackDetailByCustomer= function(data,result){
             result(null,err)
         } else {
             result({id : rows.insertId,...data});
+        }
+    });
+}
+Feedback_detail.checkPermissionOfSalon= function (id,idSalon,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackDetailId='${id}' and salonId='${idSalon}' and wsend='salon'`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
+Feedback_detail.checkEmpty= function (id,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackDetailId='${id}'`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
         }
     });
 }

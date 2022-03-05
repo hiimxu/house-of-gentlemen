@@ -70,4 +70,15 @@ SalonOwner.setPossitiveSalonOwner=function (id,possibility, result) {
         }
     });
 }
+SalonOwner.checkSalon=function (id,result) {
+    db.query("SELECT * FROM swp490_g11.salonowner where salonId=?",id, (err, rows, fields) => {
+        if (err) {
+           
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data)
+        }
+    });
+}
 module.exports = SalonOwner;
