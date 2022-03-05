@@ -61,7 +61,7 @@ exports.deleteImageService = function (req, res, next) {
             if (data == null) {
                 res.status(400).json({ data: data, message: "delete image failed" });
             } else {
-                if (data.affectedRows) {
+                if (data.affectedRows==0) {
                     res.status(400).json({ data: data, message: "not have image to delete" });
                 } else {
                     res.json({ data: data, message: "delete image success" });

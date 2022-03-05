@@ -137,6 +137,7 @@ exports.addServiceSalon=function(){
 }
 exports.updateServiceSalon=function(){   
     return[
+        body('name').not().isEmpty().withMessage("not empty"),
         param('idService').not().isEmpty().isInt().withMessage("idService:number and not empty"),
         body('price').not().isEmpty().withMessage("not empty"),
         body('service_time').not().isEmpty().withMessage("not empty"),
