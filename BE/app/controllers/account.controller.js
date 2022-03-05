@@ -1,4 +1,6 @@
 const { body, validationResult } = require('express-validator');
+var Customer = require('../models/customer.model');
+var SalonOwner = require('../models/salonOwner.model');
 var Account = require('../models/account.model');
 var SalonOwner = require('../models/salonOwner.model');
 var Customer = require('../models/customer.model');
@@ -111,7 +113,21 @@ exports.login_account = function async(req, res, next) {
                             Account.updateToken(acc, token, function (response) {
                                 var redata = data;
                                 redata[0].token = token;
-                                res.json({ data: redata, message: "login successed", token: token });
+                               
+                                if (redata[0].role == 'customer') {
+                                    let id=redata[0].account_id;
+                                    console.log(id)
+                                    Customer.getCustomerSalon(id, function (data) {
+                                        res.json({ accountData: redata,customerData:data, message: "login successed", token: token });  
+                                    });
+                                } else  if(redata[0].role=='salon'){
+                                    let id=redata[0].account_id;
+                                    SalonOwner.getProfileSalon(id, function (data) {
+                                        res.json({ accountData: redata,salonData:data, message: "login successed", token: token });  
+                                    });
+                                }else{
+                                    res.json({ data: redata, message: "login successed", token: token });
+                                }
                             })
                             // res.json({ data: data, message: "login successed" });
                         }
