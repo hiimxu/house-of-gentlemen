@@ -3,30 +3,38 @@ var FeedbackDetail = require('../models/feedback_detail.model');
 const { body, validationResult } = require('express-validator');
 
 exports.addFeedBackBySalon = function (req, res, next) {
+    var rate= req.body.rate;
     var dataFeedBack = {
         salonId: req.body.salonId,
         rate: req.body.rate,
         content: req.body.content
     };
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    var wsend = "salon";
-    var dateCreate = new Date();
-    dataFeedBack = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
-    // res.json(dataFeedBack);
-    try {
-        FeedBack.addFeedBackBySalon(dataFeedBack, function (data) {
-            if (data == null) {
-                res.status(400).json({ data: data, message: "add feedback failed" });
-            } else {
-                res.json({ data: data, message: "add feedback success" });
-            }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "add feedback failed" });
+    var checkRate=['1','2','3','4','5','6','7','8','9','10'];
+    if (!checkRate.includes(rate)) {
+        return res.status(400).json({message: "please check rate" });
+    }else{
+        var wsend = "salon";
+        var dateCreate = new Date();
+        dataFeedBack = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
+        // res.json(dataFeedBack);
+        try {
+            FeedBack.addFeedBackBySalon(dataFeedBack, function (data) {
+                if (data == null) {
+                    res.status(400).json({ data: data, message: "add feedback failed" });
+                } else {
+                    res.json({ data: data, message: "add feedback success" });
+                }
+            });
+        } catch (error) {
+            res.status(400).json({ data: error, message: "add feedback failed" });
+        }
     }
+    
 }
 exports.getFeedbackOfSalon = function (req, res, next) {
     var id = req.params.id;
@@ -91,7 +99,7 @@ exports.updateFeedback = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
     var checkRate=['1','2','3','4','5','6','7','8','9','10'];
-    if (!checkRate.includes(rate)) {
+    if (!checkRate.includes(dataUpdate.rate)) {
         return res.status(400).json({message: "please check rate" });
     }
     try {
