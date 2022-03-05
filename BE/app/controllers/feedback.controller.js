@@ -58,32 +58,142 @@ exports.getFeedbackOfSalon = function (req, res, next) {
         res.status(400).json({ data: error, message: "get feedback failed" });
     }
 }
-exports.deleteFeedback = function (req, res, next) {
+exports.deleteFeedbackBySalon = function (req, res, next) {
     var id = req.params.id;
+    var salonId= req.body.salonId;
+    var wsend='salon';
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    try {
-        FeedbackDetail.deleteFeedbackDetailByFeedbackId(id, function (data) {
-            FeedBack.deleteFeedback(id, function (data) {
-
-                if (data == null) {
-                    res.status(400).json({ data: data, message: "delete feedback failed" });
+    FeedBack.checkEmpty(id, function (data){
+        if (data.length==0) {
+            res.status(400).json({ data: data, message:"feedback is empty"})
+        } else {
+            FeedBack.checkPermission(id,salonId,wsend, function (data){
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message:"you not have permission"})
                 } else {
-                    if (data.affectedRows == 0) {
-                        res.status(400).json({ data: data, message: "not have feedback to delete" });
-                    } else {
-                        res.json({ data: data, message: "delete feedback success" });
+                    try {
+                        FeedbackDetail.deleteFeedbackDetailByFeedbackId(id, function (data) {
+                            FeedBack.deleteFeedback(id, function (data) {
+                
+                                if (data == null) {
+                                    res.status(400).json({ data: data, message: "delete feedback failed" });
+                                } else {
+                                    if (data.affectedRows == 0) {
+                                        res.status(400).json({ data: data, message: "not have feedback to delete" });
+                                    } else {
+                                        res.json({ data: data, message: "delete feedback success" });
+                                    }
+                
+                                }
+                            });
+                        });
+                    } catch (error) {
+                        res.status(400).json({ data: error, message: "delete feedback failed" });
                     }
-
                 }
-            });
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "delete feedback failed" });
+
+            })
+        }
+    })
+   
+
+}
+exports.deleteFeedback = function (req, res, next) {
+    var id = req.params.id;
+    var salonId= req.body.salonId;
+    var wsend='salon';
+    // chu y phai xoa feedback_detail truoc
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
+    FeedBack.checkEmpty(id, function (data){
+        if (data.length==0) {
+            res.status(400).json({ data: data, message:"feedback is empty"})
+        } else {
+            FeedBack.checkPermission(id,salonId,wsend, function (data){
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message:"you not have permission"})
+                } else {
+                    try {
+                        FeedbackDetail.deleteFeedbackDetailByFeedbackId(id, function (data) {
+                            FeedBack.deleteFeedback(id, function (data) {
+                
+                                if (data == null) {
+                                    res.status(400).json({ data: data, message: "delete feedback failed" });
+                                } else {
+                                    if (data.affectedRows == 0) {
+                                        res.status(400).json({ data: data, message: "not have feedback to delete" });
+                                    } else {
+                                        res.json({ data: data, message: "delete feedback success" });
+                                    }
+                
+                                }
+                            });
+                        });
+                    } catch (error) {
+                        res.status(400).json({ data: error, message: "delete feedback failed" });
+                    }
+                }
+
+            })
+        }
+    })
+   
+
+}
+exports.updateFeedbackBySalon = function (req, res, next) {
+    var id = req.params.id;
+    var dataUpdate = {
+        content: req.body.content,
+        rate: req.body.rate,
+        salonId: req.body.salonId,
+    };
+    wsend='salon';
+    var dateUpdate = new Date();
+    dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
+    var checkRate=['1','2','3','4','5','6','7','8','9','10'];
+    if (!checkRate.includes(dataUpdate.rate)) {
+        return res.status(400).json({message: "please check rate" });
+    }
+    FeedBack.checkEmpty(id, function (data){
+        if (data.length== 0) {
+            res.status(400).json({ data: data, message:"feedback is empty"})
+        } else {
+            FeedBack.checkPermission(id,dataUpdate.salonId,wsend, function (data){
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message:"you not have permission"})
+                } else {
+                    try {
+                        FeedBack.updateFeedback(id, dataUpdate, function (data) {
+                
+                            if (data == null) {
+                                res.status(400).json({ result: data, message: "update feedback failed" });
+                            } else {
+                                if (data.affectedRows) {
+                                    res.status(400).json({ result: data, message: "check id feedback to update" });
+                                } else {
+                                    res.json({ result: data, message: "update feedback success" });
+                                }
+                
+                            }
+                        });
+                    } catch (error) {
+                        res.status(400).json({ result: error, message: "update feedback failed" });
+                    }
+                }
+            })
+        }
+    })
+    
 
 }
 exports.updateFeedback = function (req, res, next) {

@@ -82,6 +82,17 @@ Feedback_detail.checkPermissionOfSalon= function (id,idSalon,result) {
         }
     });
 }
+Feedback_detail.checkPermission= function (id,idSalon,wsend,result) {
+    db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackDetailId='${id}' and salonId='${idSalon}' and wsend='${wsend}'`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 Feedback_detail.checkEmpty= function (id,result) {
    
     db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackDetailId='${id}'`, (err, rows, fields) => {

@@ -139,31 +139,77 @@ exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
     }
 
 }
-exports.updateFeedbackDetail = function (req, res, next) {
+exports.updateFeedbackDetailBySalon = function (req, res, next) {
     var id = req.params.id;
-    var dataUpdate = { content: req.body.content };
+    var wsend='salon';
+    var dataUpdate = { content: req.body.content,salonId:req.body.salonId };
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    try {
-        FeedbackDetail.updateFeedbackDetail(id, dataUpdate, function (data) {
-            if (data == null) {
-                res.status(400).json({ data: data, message: "update feedback detail failed" });
-            } else {
-                if (row.affectedRows == 0) {
-                    res.status(400).json({ data: data, message: "not have feedback detail to update" });
-                } else {
-                    res.json({ data: data, message: "update feedback detail success" });
+    FeedbackDetail.checkEmpty(id, function (data){
+        if (data.length == 0) {
+            res.status(400).json({ data: data, message: "feedback detail not empty"})
+        } else {
+           FeedbackDetail.checkPermission(id,dataUpdate.salonId,wsend, function (data){
+               if (data.length == 0) {
+                   res.status(400).json({ data: data, message:"you not have permission"})
+               } else {
+                try {
+                    FeedbackDetail.updateFeedbackDetail(id, dataUpdate, function (data) {
+                        if (data == null) {
+                            res.status(400).json({ data: data, message: "update feedback detail failed" });
+                        } else {
+                            if (data.affectedRows == 0) {
+                                res.status(400).json({ data: data, message: "not have feedback detail to update" });
+                            } else {
+                                res.json({ data: data, message: "update feedback detail success" });
+                            }
+            
+                        }
+                    });
+                } catch (error) {
+                    res.status(400).json({ data: data, message: "update feedback detail failed" });
                 }
+               }
 
-            }
-        });
-    } catch (error) {
-        res.status(400).json({ data: data, message: "update feedback detail failed" });
+           })
+        }
+
+    })
+    
+
+}
+exports.updateFeedbackDetail = function (req, res, next) {
+    var id = req.params.id;
+    var dataUpdate = { content: req.body.content,salonId:req.body.salonId };
+    var dateUpdate = new Date();
+    dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
+    FeedbackDetail.checkEmpty(id, function (data){
+res.json(data)
+    })
+    // try {
+    //     FeedbackDetail.updateFeedbackDetail(id, dataUpdate, function (data) {
+    //         if (data == null) {
+    //             res.status(400).json({ data: data, message: "update feedback detail failed" });
+    //         } else {
+    //             if (data.affectedRows == 0) {
+    //                 res.status(400).json({ data: data, message: "not have feedback detail to update" });
+    //             } else {
+    //                 res.json({ data: data, message: "update feedback detail success" });
+    //             }
+
+    //         }
+    //     });
+    // } catch (error) {
+    //     res.status(400).json({ data: data, message: "update feedback detail failed" });
+    // }
 
 }
 exports.addFeedBackDetailByCustomer = function (req, res, next) {

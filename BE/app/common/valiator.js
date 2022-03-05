@@ -105,6 +105,7 @@ exports.updateFeedback =function(){
         param('id').not().isEmpty().isInt().withMessage("id:number"),
         body('content').not().isEmpty().withMessage("in put content"),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),
+        body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:number")
     ];
 }
 exports.addFeedBackDetailByCustomer=function(){
@@ -114,10 +115,18 @@ exports.addFeedBackDetailByCustomer=function(){
         body('feedbackId').not().isEmpty().isInt().withMessage("feedbackId:number"),
     ];
 }
+exports.updateFeedbackDetailBySalon=function(){
+    return[
+        param('id').not().isEmpty().isInt().withMessage("id:number"),
+        body('content').not().isEmpty().withMessage("in put content"),
+        body('salonId').not().isEmpty().withMessage("in put content").isInt("salonId:number"),
+    ];
+}
 exports.updateFeedbackDetail=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
         body('content').not().isEmpty().withMessage("in put content"),
+        // body('salonId').not().isEmpty().withMessage("in put content").isInt("salonId:number"),
     ];
 }
 exports.addImageToImageSalon=function(){
@@ -193,6 +202,13 @@ exports.updateSalonOwnerProfile=function(){
    ];
 }
 exports.deleteFeedbackDetailByFeedbackDetailIdBySalon=function(){
+    return[
+        param('id').not().isEmpty().isInt().withMessage("id:number"),
+        body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:int"),
+        
+    ];
+}
+exports.deleteFeedbackBySalon=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
         body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:int"),

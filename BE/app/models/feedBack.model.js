@@ -71,7 +71,30 @@ Feedback.checkFeedBackofSalon= function (idSalon,idFeedBack,result) {
             result(data);
         }
     });
-}
 
+}
+Feedback.checkEmpty=function(idFeedBack,result){
+    db.query(`SELECT * FROM swp490_g11.feedback where feedBackId='${idFeedBack}'`, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(null,err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
+Feedback.checkPermission= function (id,idSalon,wsend,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback where feedBackId='${id}' and salonId='${idSalon}' and wsend='${wsend}'`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 
 module.exports =Feedback;

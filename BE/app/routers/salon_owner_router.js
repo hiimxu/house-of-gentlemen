@@ -35,12 +35,12 @@ router.get('/imageService/:id',validate.checkId(),cors(),imageServiceController.
 router.delete('/delete/imageService/:id',validate.checkId(),cors(),imageServiceController.deleteImageService);
 router.post('/createFeedBackBySalon',validate.addFeedBackBySalon(),cors(),feedbackController.addFeedBackBySalon);
 router.get('/getFeedbackOfSalon/:id',validate.checkId(),cors(),feedbackController.getFeedbackOfSalon);
-router.delete('/delete/feedback/:id',validate.checkId(),cors(),feedbackController.deleteFeedback);
-router.put('/update/feedback/:id',validate.updateFeedback(),cors(),feedbackController.updateFeedback);
+router.delete('/delete/feedback/:id',validate.deleteFeedbackBySalon(),cors(),feedbackController.deleteFeedbackBySalon);
+router.put('/update/feedback/:id',validate.updateFeedback(),cors(),feedbackController.updateFeedbackBySalon);
 router.post('/create/feedBackDetailBySalon',validate.addFeedBackDetailBySalon(),cors(),feedbackDetailController.addFeedBackDetailBySalon);
 router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number"),cors(),feedbackDetailController.getFeedbackDetail);
 router.delete('/delete/feedbackdetail/:id',validate.deleteFeedbackDetailByFeedbackDetailIdBySalon(),cors(),feedbackDetailController.deleteFeedbackDetailByFeedbackDetailIdBySalon);
-router.put('/update/feedbackdetail/:id',validate.updateFeedbackDetail(),cors(),feedbackDetailController.updateFeedbackDetail);
+router.put('/update/feedbackdetail/:id',validate.updateFeedbackDetailBySalon(),cors(),feedbackDetailController.updateFeedbackDetailBySalon);
 router.get('/staff/:id',validate.checkId(),cors(),staffController.getStaff);
 router.post('/create/staff',validate.addStaff(),cors(),staffController.addStaff);
 router.put('/update/staff/:id',validate.updateStaff(),cors(),staffController.updateStaff);
