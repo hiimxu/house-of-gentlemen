@@ -40,7 +40,7 @@ SalonOwner.getProfileSalon =function (id, result) {
     });
 }
 SalonOwner.getProfileAllSalon =function (result) {
-    db.query("SELECT * FROM swp490_g11.salonowner ", (err, rows, fields) => {
+    db.query("SELECT * FROM swp490_g11.salonowner where possibility=1", (err, rows, fields) => {
         if (err) {
            
             result(null,err);

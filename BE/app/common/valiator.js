@@ -183,3 +183,11 @@ exports.updateStaff=function(){
        body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
    ];
 }
+exports.updateSalonOwnerProfile=function(){
+    return[
+       param('id').not().isEmpty().isInt().withMessage("id:number"),
+       body('nameSalon').not().isEmpty().withMessage("not empty"),
+       body('phone').not().isEmpty().withMessage("not empty").isMobilePhone('vi-VN').withMessage("validate phone vi-VN"),
+       body('taxCode').not().isEmpty().withMessage("not empty"),
+   ];
+}
