@@ -199,7 +199,7 @@ exports.add_account_salon = function (req, res, next) {
     var email = req.body.email;
     var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
     var possibility = req.body.possibility;
-    if (possibility != 1) {
+    if (possibility != 0) {
         return res.status(400).json({ message: "check possibility" });
         
     }
