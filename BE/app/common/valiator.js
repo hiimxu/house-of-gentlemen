@@ -16,7 +16,7 @@ exports.validateCreateAccountCustomer = () => {
         body('role').not().isEmpty(),
         body('phone').isMobilePhone("vi-VN"),
         body('email').not().isEmpty().withMessage('email cannot be empty').isEmail().withMessage('validate email'),
-        body('possibility').not().isEmpty()
+        
 
     ];
 }
