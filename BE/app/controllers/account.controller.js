@@ -314,7 +314,7 @@ exports.forgotPassword = async function (req, res, next) {
                             res.status(400).json({ error: error, message: "failed to email" })
                         } else {
                             console.log('Email sent: ' + info.response);
-                            res.json({ info })
+                            res.json({ info ,message:"send password to your email"})
                         }
                     });
                 }
