@@ -96,5 +96,17 @@ Feedback.checkPermission= function (id,idSalon,wsend,result) {
         }
     });
 }
+Feedback.checkPermissionCustomer= function (id,customerId,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback where feedBackId='${id}' and customer='${customerId}'`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 
 module.exports =Feedback;

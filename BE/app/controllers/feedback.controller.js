@@ -102,10 +102,11 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
    
 
 }
-exports.deleteFeedback = function (req, res, next) {
+exports.deleteFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
-    var salonId= req.body.salonId;
-    var wsend='salon';
+    var customerId= req.body.customerId;
+    var accountId= req.body.accountId;
+
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -113,9 +114,9 @@ exports.deleteFeedback = function (req, res, next) {
     }
     FeedBack.checkEmpty(id, function (data){
         if (data.length==0) {
-            res.status(400).json({ data: data, message:"feedback is empty"})
+           return res.status(400).json({ data: data, message:"feedback is empty"})
         } else {
-            FeedBack.checkPermission(id,salonId,wsend, function (data){
+            FeedBack.checkPermissionCustomer(id,customerId, function (data){
                 if (data.length == 0) {
                     res.status(400).json({ data: data, message:"you not have permission"})
                 } else {
@@ -160,8 +161,8 @@ exports.updateFeedbackBySalon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    var checkRate=['1','2','3','4','5','6','7','8','9','10'];
-    if (!checkRate.includes(dataUpdate.rate)) {
+    var checkRate=[1,2,3,4,5,6,7,8,9,10];
+    if (!checkRate.includes(parseInt(dataUpdate.rate))) {
         return res.status(400).json({message: "please check rate" });
     }
     FeedBack.checkEmpty(id, function (data){
@@ -196,39 +197,55 @@ exports.updateFeedbackBySalon = function (req, res, next) {
     
 
 }
-exports.updateFeedback = function (req, res, next) {
+exports.updateFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
+    var customerId=req.body.customerId;
+    var accountId= req.body.accountId;
     var dataUpdate = {
         content: req.body.content,
-        rate: req.body.rate
+        rate: req.body.rate,
     };
+    wsend='customer';
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    var checkRate=['1','2','3','4','5','6','7','8','9','10'];
-    if (!checkRate.includes(dataUpdate.rate)) {
+    var checkRate=[1,2,3,4,5,6,7,8,9,10];
+    if (!checkRate.includes(parseInt(dataUpdate.rate))) {
         return res.status(400).json({message: "please check rate" });
     }
-    try {
-        FeedBack.updateFeedback(id, dataUpdate, function (data) {
-
-            if (data == null) {
-                res.status(400).json({ result: data, message: "update feedback failed" });
-            } else {
-                if (data.affectedRows) {
-                    res.status(400).json({ result: data, message: "check id feedback to update" });
+    FeedBack.checkEmpty(id, function (data){
+        if (data.length== 0) {
+            res.status(400).json({ data: data, message:"feedback is empty"})
+        } else {
+            FeedBack.checkPermissionCustomer(id,customerId, function (data){
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message:"you not have permission"})
                 } else {
-                    res.json({ result: data, message: "update feedback success" });
+                    try {
+                        FeedBack.updateFeedback(id, dataUpdate, function (data) {
+                
+                            if (data == null) {
+                                res.status(400).json({ result: data, message: "update feedback failed" });
+                            } else {
+                                if (data.affectedRows==0) {
+                                    res.status(400).json({ result: data, message: "check id feedback to update" });
+                                } else {
+                                    res.json({ result: data, message: "update feedback success" });
+                                }
+                
+                            }
+                        });
+                    } catch (error) {
+                        res.status(400).json({ result: error, message: "update feedback failed" });
+                    }
                 }
-
-            }
-        });
-    } catch (error) {
-        res.status(400).json({ result: error, message: "update feedback failed" });
-    }
+            })
+        }
+    })
+    
 
 }
 exports.addFeedBackByCustomer = function (req, res, next) {
@@ -247,7 +264,7 @@ exports.addFeedBackByCustomer = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
     var checkRate=['1','2','3','4','5','6','7','8','9','10'];
-    if (!checkRate.includes(rate)) {
+    if (!checkRate.includes(dataFeedBack.rate)) {
         return res.status(400).json({message: "please check rate" });
     }
     try {

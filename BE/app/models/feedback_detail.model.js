@@ -105,4 +105,16 @@ Feedback_detail.checkEmpty= function (id,result) {
         }
     });
 }
+Feedback_detail.checkEmptyByCustomer= function (id,customerId,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackDetailId='${id}' and customerId='${customerId}'`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 module.exports =Feedback_detail;

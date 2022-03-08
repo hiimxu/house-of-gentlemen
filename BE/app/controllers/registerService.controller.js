@@ -135,26 +135,44 @@ exports.addRegisterService = function (req, res, next) {
 }
 exports.cancelBooking = function (req, res, next) {
     var id = req.params.id;
-    var staffCanlederId = req.body.staffCanlederId;
-    console.log(staffCanlederId);
+    var customerId= req.body.customerId;
+    var accountId= req.body.accountId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    StaffCanleder.cancelBooking(staffCanlederId, function (data) {
-
-        if (data == null) {
-            res.json({ data: data, message: "cancel booking failed" });
+    RegisterService.getRegisterServiceById(id, function (data){
+        if (data.length == 0) {
+            res.status(400).json({ data: data, message: "booking khong ton tai"})
         } else {
-            RegisterService.cancelBooking(id, function (data) {
-                if (data == null) {
-                    res.json({ data: data, message: "cancel booking failed" });
-                } else {
-                    res.json({ data: data, message: "cancel booking success" });
+            RegisterService.checkCustomer(id,customerId, function (data){
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message: "ban khong co quyen"})
                 }
-            });
+                else{
+                    StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
+                        console.log(data)
+
+                        if (data == null) {
+                            res.json({ data: data, message: "cancel booking failed" });
+                        } else {
+                            RegisterService.cancelBooking(id, function (data) {
+                                if (data == null) {
+                                    res.json({ data: data, message: "cancel booking failed" });
+                                } else {
+                                    res.json({ data: data, message: "cancel booking success" });
+                                }
+                            });
+                        }
+                    });
+                }
+
+            })
+
         }
-    });
+
+    })
+ 
 
 
 

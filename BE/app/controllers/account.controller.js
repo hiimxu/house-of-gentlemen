@@ -15,13 +15,13 @@ exports.account = function (req, res, next) {
     try {
         Account.getAll(function (data) {
             if (data == null) {
-                res.json({ message: "get account fail", data: data });
+               return res.json({ message: "get account fail", data: data });
             } else {
-                res.json({ message: "get account success", data: data });
+               return res.json({ message: "get account success", data: data });
             }
         });
     } catch (error) {
-        res.json({ message: "get account fail", data: error });
+       return res.json({ message: "get account fail", data: error });
     }
 }
 exports.get_accountbyid = function (req, res, next) {
@@ -33,14 +33,14 @@ exports.get_accountbyid = function (req, res, next) {
     try {
         var data = Account.getAccountById(id, function (data) {
             if (data == null) {
-                res.json({ message: "get account failed", data: data });
+               return res.status(400).json({ message: "get account failed", data: data });
             } else {
-                res.json({ message: "get account success", data: data });
+               return res.json({ message: "get account success", data: data });
             }
 
         });
     } catch (error) {
-        res.json({ message: "get account fail", data: error });
+       return res.status(400).json({ message: "get account fail", data: error });
     }
 }
 exports.change_password = function (req, res, next) {
@@ -64,10 +64,10 @@ exports.change_password = function (req, res, next) {
                         var id = data[0].account_id;
         
                         var data = Account.updatePasswordAccount(id, md5_new_pass, function (response) {
-                            res.json({ message: "update password success", data: response });
+                           return res.json({ message: "update password success", data: response });
                         });
                     } else {
-                        res.json({ message: "kiem tra lai old_password ", data: "update failed" });
+                       return res.status(400).json({ message: "kiem tra lai old_password ", data: "update failed" });
                     }
                 })
 
@@ -75,7 +75,7 @@ exports.change_password = function (req, res, next) {
         })
         
     } catch (error) {
-        res.json({ message: "kiem tra lai old_password va account_name", data: error });
+       return res.json({ message: "kiem tra lai old_password va account_name", data: error });
     }
 }
 exports.login_account = function async(req, res, next) {
@@ -123,10 +123,10 @@ exports.login_account = function async(req, res, next) {
                                  else  if(redata[0].role=='salon'){
                                     let id=redata[0].account_id;
                                     SalonOwner.getProfileSalon(id, function (data) {
-                                       return res.json({ accountData: redata,salonData:data, message: "login successed", token: token });  
+                                       return res.setHeader("x-access-token",token).json({ accountData: redata,salonData:data, message: "login successed", token: token });  
                                     });
                                 }else{
-                                   return res.json({ data: redata, message: "login successed", token: token });
+                                   return res.setHeader("x-access-token",token).json({ data: redata, message: "login successed", token: token });
                                 }
                             })
                             
@@ -144,74 +144,7 @@ exports.login_account = function async(req, res, next) {
     }) ;
     
 }
-exports.login_account1 = function async(req, res, next) {
-    var acc = req.body.account;
-    var pass = req.body.password;
-    var md5_pass = pass;
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    Account.checkAccount(acc, function(data){
-        if (data.length==0) {
-           return res.status(400).json({message:"please check account_name"});
-            
-        }
-        else{
-            try {
-                var data = Account.getAccountToLogin(acc, md5_pass, function (data) {
-                    if (data == null) {
-                        res.json({ data: data, message: "login failed" });
-                    } else {
-                        if (data.length == 0) {
-                            res.status(400).json({ data: data, message: "please check password" });
-                        } else {
-                            res.json({ data: data, message: "hello"})
 
-        
-                            // Create token
-                            const token = jwt.sign(
-                                { id: 1, acc },
-                                process.env.TOKEN_KEY,
-                                {
-                                    expiresIn: "2h",
-                                }
-                            );
-                            Account.updateToken(acc, token, function (response) {
-                                var redata = data;
-                                redata[0].token = token;
-                                res.setHeader("x-access-token", token).json({ accountData: redata, message: "login successed", token: token });
-                                if (redata[0].role == 'customer') {
-                                    let id=redata[0].account_id;
-                                    console.log(id)
-                                    Customer.getCustomerSalon(id, function (data) {
-                                        res.json({ accountData: redata,customerData:data, message: "login successed", token: token });  
-                                    });
-                                }
-                                 else  if(redata[0].role=='salon'){
-                                    let id=redata[0].account_id;
-                                    SalonOwner.getProfileSalon(id, function (data) {
-                                        res.json({ accountData: redata,salonData:data, message: "login successed", token: token });  
-                                    });
-                                }else{
-                                    res.json({ data: redata, message: "login successed", token: token });
-                                }
-                            })
-                            
-                        }
-        
-                    }
-        
-                });
-            } catch (error) {
-                res.status(400).json({ data: error, message: "login failed" });
-            }
-
-        }
-
-    }) ;
-    
-}
 exports.add_account_customer = function (req, res, next) {
 
     var acc = req.body.account_name;

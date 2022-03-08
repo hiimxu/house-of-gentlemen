@@ -29,11 +29,11 @@ router.get('/registerService/:id',validate.checkId(),cors(),registerServiceContr
 router.get('/registerServiceByCustomer/:id',validate.checkId(),cors(),registerServiceController.getRegisterServiceByCustomer);
 router.post('/create/registerService',cors(),validate.BookingService(),registerServiceController.addRegisterService);
 router.post('/create/feedbackByCustomer',validate.addFeedBackByCustomer(),cors(),feedbackController.addFeedBackByCustomer);
-router.post('/delete/feedback/:id',validate.checkId(),cors(),feedbackController.deleteFeedback);
-router.put('/update/feedback/:id',validate.updateFeedback(),cors(),feedbackController.updateFeedback);
+router.delete('/delete/feedback/:id',validate.checkId(),cors(),feedbackController.deleteFeedbackByCustomer);
+router.put('/update/feedback/:id',validate.updateFeedbackByCustomer(),cors(),feedbackController.updateFeedbackByCustomer);
 router.post('/create/feedbackdetailbycustomer',validate.addFeedBackDetailByCustomer(),cors(),feedbackDetailController.addFeedBackDetailByCustomer);
 router.delete('/delete/feedbackdetail/:id',validate.checkId(),cors(),feedbackDetailController.deleteFeedbackDetailByFeedbackDetailId);
-router.put('/update/feedbackDetail/:id',validate.updateFeedbackDetail(),cors(),feedbackDetailController.updateFeedbackDetail);
+router.put('/update/feedbackDetail/:id',validate.updateFeedbackDetail(),cors(),feedbackDetailController.updateFeedbackDetailByCustomer);
 router.get('/getFeedbackOfSalon/:id',validate.checkId(),cors(),feedbackController.getFeedbackOfSalon);
 router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),feedbackDetailController.getFeedbackDetail);
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);

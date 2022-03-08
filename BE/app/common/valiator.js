@@ -76,7 +76,7 @@ exports.setPossitiveSalonOwner=function(){
 exports.cancelBooking=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('staffCanlederId').not().isEmpty().isInt().withMessage("id:number"),
+       
     ];
 }
 exports.BookingService=function(){
@@ -106,6 +106,16 @@ exports.updateFeedback =function(){
         body('content').not().isEmpty().withMessage("in put content"),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),
         body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:number")
+    ];
+}
+exports.updateFeedbackByCustomer=function(){
+
+    return[
+        param('id').not().isEmpty().isInt().withMessage("id:number"),
+        body('content').not().isEmpty().withMessage("in put content"),
+        body('rate').not().isEmpty().isInt().withMessage("rate:number"),
+        body('accountId').not().isEmpty().withMessage("not empty").isInt().withMessage("accountId:number"),
+        body('customerId').not().isEmpty().withMessage("not empty").isInt().withMessage("accountId:number")
     ];
 }
 exports.addFeedBackDetailByCustomer=function(){

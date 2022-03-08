@@ -43,6 +43,8 @@ Register_service.addRegisterService = function(dataRegisterService,result){
     
 }
 Register_service.cancelBooking= function(id,result){
+    console.log('aaaaa')
+    console.log(id+"aaa");
     db.query(`UPDATE register_service SET status_register_id='2' where registerServiceId=?`,id, (err, rows, res) => {
         if (err) {
             result(null,err);
@@ -52,4 +54,15 @@ Register_service.cancelBooking= function(id,result){
     });
     
 }
+Register_service.checkCustomer=function (id,customerId, result) {
+    db.query("SELECT * FROM swp490_g11.register_service where registerServiceId =? and customerId=?",[id,customerId],(err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data);
+        }
+    });
+}
+
 module.exports =Register_service;

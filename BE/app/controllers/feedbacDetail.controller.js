@@ -116,6 +116,8 @@ exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function (req, res, next
 }
 exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
     var id = req.params.id;
+    var customerId= req.body.customerId;
+    var accountId=req.body.accountId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -126,7 +128,7 @@ exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
             if (data == null) {
                 res.status(400).json({ data: data, message: "detete feedback detail failed" });
             } else {
-                if (data.affectedRows) {
+                if (data.affectedRows==0) {
                     res.status(400).json({ data: data, message: "not have feed back detail to delete" });
                 } else {
                     res.json({ data: data, message: "detete feedback detail success" });
@@ -182,34 +184,36 @@ exports.updateFeedbackDetailBySalon = function (req, res, next) {
     
 
 }
-exports.updateFeedbackDetail = function (req, res, next) {
+exports.updateFeedbackDetailByCustomer = function (req, res, next) {
     var id = req.params.id;
-    var dataUpdate = { content: req.body.content,salonId:req.body.salonId };
+    var accountId=req.body.accountId;
+    var customerId=req.body.customerId;
+    var dataUpdate = { content: req.body.content};
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    FeedbackDetail.checkEmpty(id, function (data){
-res.json(data)
-    })
-    // try {
-    //     FeedbackDetail.updateFeedbackDetail(id, dataUpdate, function (data) {
-    //         if (data == null) {
-    //             res.status(400).json({ data: data, message: "update feedback detail failed" });
-    //         } else {
-    //             if (data.affectedRows == 0) {
-    //                 res.status(400).json({ data: data, message: "not have feedback detail to update" });
-    //             } else {
-    //                 res.json({ data: data, message: "update feedback detail success" });
-    //             }
+    FeedbackDetail.checkEmptyByCustomer(id,customerId, function (data){
+{try {
+    FeedbackDetail.updateFeedbackDetail(id, dataUpdate, function (data) {
+        if (data == null) {
+            res.status(400).json({ data: data, message: "update feedback detail failed" });
+        } else {
+            if (data.affectedRows == 0) {
+                res.status(400).json({ data: data, message: "not have feedback detail to update" });
+            } else {
+                res.json({ data: data, message: "update feedback detail success" });
+            }
 
-    //         }
-    //     });
-    // } catch (error) {
-    //     res.status(400).json({ data: data, message: "update feedback detail failed" });
-    // }
+        }
+    });
+} catch (error) {
+    res.status(400).json({ data: data, message: "update feedback detail failed" });
+}}
+    })
+    
 
 }
 exports.addFeedBackDetailByCustomer = function (req, res, next) {
