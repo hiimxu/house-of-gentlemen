@@ -85,7 +85,7 @@ exports.BookingService=function(){
         body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
         body('customerId').not().isEmpty().isInt().withMessage("customerId:number"),
         body('staffId').not().isEmpty().isInt().withMessage("staffId:number"),
-        body('timeUse').not().isEmpty().isDate().withMessage("timeUse:is date"),
+        body('timeUse').not().isEmpty().withMessage("timeUse:is date"),
         body('price_original').not().isEmpty().isInt().withMessage("price_original:is number"),
         body('service_time').not().isEmpty().isInt().withMessage("service_time:is number"),
     ];

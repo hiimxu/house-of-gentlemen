@@ -95,12 +95,12 @@ exports.login_account = function async(req, res, next) {
             try {
                 var data = Account.getAccountToLogin(acc, md5_pass, function (data) {
                     if (data == null) {
-                        res.json({ data: data, message: "login failed" });
+                       return res.json({ data: data, message: "login failed" });
                     } else {
                         if (data.length == 0) {
-                            res.status(400).json({ data: data, message: "please check password" });
+                          return res.status(400).json({ data: data, message: "please check password" });
                         } else {
-                            console.log(process.env.TOKEN_KEY);
+
         
                             // Create token
                             const token = jwt.sign(
@@ -113,14 +113,82 @@ exports.login_account = function async(req, res, next) {
                             Account.updateToken(acc, token, function (response) {
                                 var redata = data;
                                 redata[0].token = token;
-                               
+                                // res.setHeader("x-access-token", token).json({ accountData: redata, message: "login successed", token: token });
+                                if (redata[0].role == 'customer') {
+                                    let id=redata[0].account_id;
+                                    Customer.getCustomerSalon(id, function (data) {
+                                       return res.setHeader("x-access-token",token).json({ accountData: redata,customerData:data, message: "login successed", token: token });  
+                                    });
+                                }
+                                 else  if(redata[0].role=='salon'){
+                                    let id=redata[0].account_id;
+                                    SalonOwner.getProfileSalon(id, function (data) {
+                                       return res.json({ accountData: redata,salonData:data, message: "login successed", token: token });  
+                                    });
+                                }else{
+                                   return res.json({ data: redata, message: "login successed", token: token });
+                                }
+                            })
+                            
+                        }
+        
+                    }
+        
+                });
+            } catch (error) {
+               return res.status(400).json({ data: error, message: "login failed" });
+            }
+
+        }
+
+    }) ;
+    
+}
+exports.login_account1 = function async(req, res, next) {
+    var acc = req.body.account;
+    var pass = req.body.password;
+    var md5_pass = pass;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    Account.checkAccount(acc, function(data){
+        if (data.length==0) {
+           return res.status(400).json({message:"please check account_name"});
+            
+        }
+        else{
+            try {
+                var data = Account.getAccountToLogin(acc, md5_pass, function (data) {
+                    if (data == null) {
+                        res.json({ data: data, message: "login failed" });
+                    } else {
+                        if (data.length == 0) {
+                            res.status(400).json({ data: data, message: "please check password" });
+                        } else {
+                            res.json({ data: data, message: "hello"})
+
+        
+                            // Create token
+                            const token = jwt.sign(
+                                { id: 1, acc },
+                                process.env.TOKEN_KEY,
+                                {
+                                    expiresIn: "2h",
+                                }
+                            );
+                            Account.updateToken(acc, token, function (response) {
+                                var redata = data;
+                                redata[0].token = token;
+                                res.setHeader("x-access-token", token).json({ accountData: redata, message: "login successed", token: token });
                                 if (redata[0].role == 'customer') {
                                     let id=redata[0].account_id;
                                     console.log(id)
                                     Customer.getCustomerSalon(id, function (data) {
                                         res.json({ accountData: redata,customerData:data, message: "login successed", token: token });  
                                     });
-                                } else  if(redata[0].role=='salon'){
+                                }
+                                 else  if(redata[0].role=='salon'){
                                     let id=redata[0].account_id;
                                     SalonOwner.getProfileSalon(id, function (data) {
                                         res.json({ accountData: redata,salonData:data, message: "login successed", token: token });  
@@ -129,7 +197,7 @@ exports.login_account = function async(req, res, next) {
                                     res.json({ data: redata, message: "login successed", token: token });
                                 }
                             })
-                            // res.json({ data: data, message: "login successed" });
+                            
                         }
         
                     }
@@ -169,7 +237,7 @@ exports.add_account_customer = function (req, res, next) {
                         var accountId = data_account.accountId;
                         var phone = req.body.phone;
                         var address = req.body.address;
-                        var birthday = req.body.birthday;//1993/03/30  yyyy/mm/dd
+                        var birthday = req.body.birthday;//1993/03/30  yyyy/mm/dd 
                         var nameCustomer = req.body.nameCustomer;
                         var save_customer = { accountId: accountId, nameCustomer: nameCustomer, phone: phone, address: address, birthday: birthday }
                         Customer.createCustomer(save_customer, function (data) {
