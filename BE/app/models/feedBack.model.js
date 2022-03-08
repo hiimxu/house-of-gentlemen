@@ -98,7 +98,7 @@ Feedback.checkPermission= function (id,idSalon,wsend,result) {
 }
 Feedback.checkPermissionCustomer= function (id,customerId,result) {
    
-    db.query(`SELECT * FROM swp490_g11.feedback where feedBackId='${id}' and customer='${customerId}'`, (err, rows, fields) => {
+    db.query(`SELECT * FROM swp490_g11.feedback where feedBackId='${id}' and customerId='${customerId}'`, (err, rows, fields) => {
         if (err) {
            
             result(err);

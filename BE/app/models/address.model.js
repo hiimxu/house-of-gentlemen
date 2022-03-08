@@ -8,4 +8,28 @@ const Address = function (address) {
     this.salonId=add.salonId;
 }
 
+Address.getAddressOfSalon= function (id,result){
+    
+    db.query(`SELECT * FROM swp490_g11.address where salonId=?`,id, (err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+            data = rows;
+            result(data)
+        }
+    });
+}
+Address.getDataByDistrict=function(district,result){
+    db.query(`SELECT swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.taxCode,swp490_g11.address.detailAddress
+    FROM swp490_g11.address,swp490_g11.salonowner
+    where swp490_g11.address.salonId=swp490_g11.salonowner.salonId and swp490_g11.address.district like ?`,district, (err, rows, fields) => {
+        if (err) {
+            result(err);
+        } else {
+            data = rows;
+            result(data)
+        }
+    });
+}
+
 module.exports =Address;

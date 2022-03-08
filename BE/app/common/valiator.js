@@ -114,13 +114,11 @@ exports.updateFeedbackByCustomer=function(){
         param('id').not().isEmpty().isInt().withMessage("id:number"),
         body('content').not().isEmpty().withMessage("in put content"),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),
-        body('accountId').not().isEmpty().withMessage("not empty").isInt().withMessage("accountId:number"),
-        body('customerId').not().isEmpty().withMessage("not empty").isInt().withMessage("accountId:number")
+       
     ];
 }
 exports.addFeedBackDetailByCustomer=function(){
     return[
-        body('customerId').not().isEmpty().isInt().withMessage("customerId:number"),
         body('content').not().isEmpty().withMessage("in put content"),
         body('feedbackId').not().isEmpty().isInt().withMessage("feedbackId:number"),
     ];

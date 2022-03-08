@@ -104,8 +104,7 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
 }
 exports.deleteFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
-    var customerId= req.body.customerId;
-    var accountId= req.body.accountId;
+    var customerId= req.user.customerId;
 
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
@@ -199,8 +198,7 @@ exports.updateFeedbackBySalon = function (req, res, next) {
 }
 exports.updateFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
-    var customerId=req.body.customerId;
-    var accountId= req.body.accountId;
+    var customerId=req.user.customerId;
     var dataUpdate = {
         content: req.body.content,
         rate: req.body.rate,
@@ -250,13 +248,13 @@ exports.updateFeedbackByCustomer = function (req, res, next) {
 }
 exports.addFeedBackByCustomer = function (req, res, next) {
     var dataFeedBack = {
-        customerId: req.body.customerId,
+        customerId: req.body.req.user.customerId,
         salonId: req.body.salonId,
         content: req.body.content,
         rate: req.body.rate
     };
-    
-    var wsend = "customer";
+    if (req.user.customerId==dataFeedBack.customerId) {
+        var wsend = "customer";
     var dateCreate = new Date();
     dataFeedBack = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
     const errors = validationResult(req);
@@ -282,4 +280,8 @@ exports.addFeedBackByCustomer = function (req, res, next) {
     } catch (error) {
         res.status(400).json({ result: error, message: "add feedback failed" });
     }
+    } else {
+        res.status(400).json({message:"you not have access"});
+    }
+    
 }

@@ -100,35 +100,62 @@ exports.login_account = function async(req, res, next) {
                         if (data.length == 0) {
                           return res.status(400).json({ data: data, message: "please check password" });
                         } else {
-
-        
-                            // Create token
+                            
+                            var redata = data;
+                            if (redata[0].role == 'customer') {
+                                Customer.getCustomerSalon(redata[0].account_id, function (data) {
+                                    // Create token
+                             
                             const token = jwt.sign(
-                                { id: 1, acc },
+                                { account_id: data[0].accountId,account_name: acc,customerId:data[0].customerId },
                                 process.env.TOKEN_KEY,
                                 {
                                     expiresIn: "2h",
                                 }
                             );
                             Account.updateToken(acc, token, function (response) {
-                                var redata = data;
                                 redata[0].token = token;
-                                // res.setHeader("x-access-token", token).json({ accountData: redata, message: "login successed", token: token });
-                                if (redata[0].role == 'customer') {
-                                    let id=redata[0].account_id;
-                                    Customer.getCustomerSalon(id, function (data) {
-                                       return res.setHeader("x-access-token",token).json({ accountData: redata,customerData:data, message: "login successed", token: token });  
-                                    });
-                                }
-                                 else  if(redata[0].role=='salon'){
-                                    let id=redata[0].account_id;
-                                    SalonOwner.getProfileSalon(id, function (data) {
-                                       return res.setHeader("x-access-token",token).json({ accountData: redata,salonData:data, message: "login successed", token: token });  
-                                    });
-                                }else{
-                                   return res.setHeader("x-access-token",token).json({ data: redata, message: "login successed", token: token });
-                                }
+                                return res.setHeader("x-access-token",token).json({ accountData: redata,customerData:data, message: "login successed", token: token });
+                            
+                                
                             })
+                                });
+                            }
+                             else  if(redata[0].role=='salon'){
+                                let id=redata[0].account_id;
+                                SalonOwner.getProfileSalon(id, function (data) {
+                                    console.log(data[0].accountId+" "+data[0].salonId)
+                                    const token = jwt.sign(
+                                        { account_id: data[0].accountId,account_name: acc,customerId:data[0].salonId },
+                                        process.env.TOKEN_KEY,
+                                        {
+                                            expiresIn: "2h",
+                                        }
+                                    );
+                                    Account.updateToken(acc, token, function (response) {
+                                        redata[0].token = token;
+                                        return res.setHeader("x-access-token",token).json({ accountData: redata,salonData:data, message: "login successed", token: token });
+                                    
+                                        
+                                    })  
+                                });
+                            }else{console.log(redata[0].account_id)
+                                const token = jwt.sign(
+                                    
+                                    { account_id: redata[0].account_id,account_name: acc },
+                                    process.env.TOKEN_KEY,
+                                    {
+                                        expiresIn: "2h",
+                                    }
+                                );
+                                Account.updateToken(acc, token, function (response) {
+                                    redata[0].token = token;
+                                    return res.setHeader("x-access-token",token).json({ accountData: redata, message: "login successed", token: token });
+                                
+                                    
+                                })  
+                            }
+                            
                             
                         }
         

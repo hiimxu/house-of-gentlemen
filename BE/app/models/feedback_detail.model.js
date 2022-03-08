@@ -93,6 +93,17 @@ Feedback_detail.checkPermission= function (id,idSalon,wsend,result) {
         }
     });
 }
+Feedback_detail.checkPermissionCustomer= function (id,idCustomer,result) {
+    db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackDetailId='${id}' and customerId='${idCustomer}' `, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 Feedback_detail.checkEmpty= function (id,result) {
    
     db.query(`SELECT * FROM swp490_g11.feedback_detail where feedBackDetailId='${id}'`, (err, rows, fields) => {

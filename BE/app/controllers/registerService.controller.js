@@ -8,6 +8,7 @@ exports.getRegisterServiceById = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
+    console.log(req.user)
     try {
         RegisterService.getRegisterServiceById(id, function (data) {
             if (data == null) {
@@ -27,11 +28,28 @@ exports.getRegisterServiceById = function (req, res, next) {
 }
 exports.getRegisterServiceByCustomer = function (req, res, next) {
     var id = req.params.id;
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    try {
+    if (req.user.customerId==id) {
+        try {
+            RegisterService.getRegisterServiceByCustomer(id, function (data) {
+    
+                if (data == null) {
+                    res.status(400).json({ data: data, message: "get booking service failed" });
+                } else {
+                    if (data.length == 0) {
+                        res.status(400).json({ data: data, message: "not have booking service" });
+                    } else {
+                        res.json({ data: data, message: "get booking service success" });
+                    }
+                }
+            });
+        } catch (error) {
+            res.status(400).json({ data: error, message: "get booking service failed" });
+        }try {
         RegisterService.getRegisterServiceByCustomer(id, function (data) {
 
             if (data == null) {
@@ -47,6 +65,10 @@ exports.getRegisterServiceByCustomer = function (req, res, next) {
     } catch (error) {
         res.status(400).json({ data: error, message: "get booking service failed" });
     }
+    } else {
+        res.status(400).json({message:"you not have access"})
+    }
+    
 
 }
 exports.addRegisterService = function (req, res, next) {
@@ -72,7 +94,8 @@ exports.addRegisterService = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
+    if (req.user.customerId=dataRegisterService.customerId) {
+        dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
     var today = new Date();
     var check1 = new Date(date);
     var check2 = new Date(date);
@@ -86,15 +109,14 @@ exports.addRegisterService = function (req, res, next) {
     } else {
         StaffCanleder.checkCanleder(check1, check2, staffId, function (data) {
             for (let index = 0; index < data.length; index++) {
-                var check = new Date(data[index].date);
-                check.setMinutes(check.getMinutes() + 30);
-                console.log(check)
-                if ((check > date) && (date >= new Date(data[index].date))) {
-                    console.log(check)
+                var checktime1 = new Date(data[index].date);
+                var checktime2 = new Date(data[index].date);
+                checktime1.setMinutes(checktime1.getMinutes() + data[index].timeBusy);
+                checktime2.setMinutes(checktime2.getMinutes() - timeBusy);
+                if (((checktime1 > date) && (date >= new Date(data[index].date)))||((checktime2<date)&&(date<new Date(data[index].date)))) {
                     Times = Times + 1;
                 }
             }
-            console.log(Times)
             if (Times > 0) {
                 res.status(400).json({ message: "Staff busy" })
             } else {
@@ -125,34 +147,28 @@ exports.addRegisterService = function (req, res, next) {
             }
         })
     }
-
-
-
-
-
-
-
+    } else {
+        return res.status(400).json({message:"you not have access"})
+    }
 }
 exports.cancelBooking = function (req, res, next) {
     var id = req.params.id;
-    var customerId= req.body.customerId;
-    var accountId= req.body.accountId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
+    console.log(req.user)
+    
     RegisterService.getRegisterServiceById(id, function (data){
         if (data.length == 0) {
             res.status(400).json({ data: data, message: "booking khong ton tai"})
         } else {
-            RegisterService.checkCustomer(id,customerId, function (data){
+            RegisterService.checkCustomer(id,req.user.customerId, function (data){
                 if (data.length == 0) {
-                    res.status(400).json({ data: data, message: "ban khong co quyen"})
+                    res.status(400).json({ data: data, message: "you  not have access"})
                 }
                 else{
                     StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
-                        console.log(data)
-
                         if (data == null) {
                             res.json({ data: data, message: "cancel booking failed" });
                         } else {

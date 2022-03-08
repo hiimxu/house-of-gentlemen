@@ -18,14 +18,15 @@ const categoryServiceController= require('../controllers/categoryService.control
 const categoryController=require('../controllers/category.controller');
 const auth = require('../middleware/auth');
 const statusStaffController= require('../controllers/statusStaff.controller')
+const addressController=require('../controllers/address.controller');
 
 router.get('/',cors(),customerController.getAllCustomer);
 router.get('/profile/:id',validate.checkId(),cors(),auth,customerController.getCustomerProfile);
 router.put('/update/profile/:id',validate.updateCustomerProfile(),cors(),auth,customerController.updateCustomerProfile);
 router.get('/statusRegisterService',cors(),statusRegisterServiceController.getStatusRegisterService);
-router.get('/statusRegisterServiceById/:id',validate.checkId(),cors(),auth,statusRegisterServiceController.getStatusRegisterServiceById);
+router.get('/statusRegisterServiceById/:id',validate.checkId(),cors(),statusRegisterServiceController.getStatusRegisterServiceById);
 router.put('/cancel/registerservice/:id',validate.cancelBooking(),cors(),auth,registerServiceController.cancelBooking);
-router.get('/registerService/:id',validate.checkId(),cors(),auth,registerServiceController.getRegisterServiceById);
+router.get('/registerService/:id',validate.checkId(),cors(),registerServiceController.getRegisterServiceById);
 router.get('/registerServiceByCustomer/:id',validate.checkId(),auth,cors(),registerServiceController.getRegisterServiceByCustomer);
 router.post('/create/registerService',cors(),validate.BookingService(),auth,registerServiceController.addRegisterService);
 router.post('/create/feedbackByCustomer',validate.addFeedBackByCustomer(),cors(),auth,feedbackController.addFeedBackByCustomer);
@@ -49,4 +50,6 @@ router.get('/get/allCategory',cors(),categoryController.getAllCategory);
 router.get('/get/categoryByCategoryId/:id',validate.checkId(),cors(),categoryController.getCategoryByIdCategory);
 router.get('/get/allStaffStatus',cors(),statusStaffController.getAllStaffStatus);
 router.get('/get/staffStatusById/:id',cors(),statusStaffController.getStaffStatusByIdstatusStaff);
+router.get('/get/addressSalon/:id',cors(),validate.checkId(),addressController.getAddressOfSalon);
+router.post('/searchSalonByDistrict',cors(),validate.checkId(),addressController.searchSalonByDistrict);
 module.exports = router;
