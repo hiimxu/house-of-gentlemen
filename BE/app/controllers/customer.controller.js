@@ -11,16 +11,11 @@ exports.getAllCustomer = function (req, res, next) {
     res.json("wellcome to customer");
 }
 exports.getCustomerProfile = function (req, res, next) {
-    var id = req.params.id;
-    console.log(req.user)
     // console.log(checkId)
-    if (parseInt(req.user.account_id)==parseInt(id)) {
-        const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array(),message:"error validate" });
-    }
+   
+  
     try {
-        Customer.getCustomerSalon(id, function (data) {
+        Customer.getCustomerSalon(req.user.account_id, function (data) {
             if (data== null) {
                 res.status(400).json({data:data,message:"get data customer 's profile failed"});
             } else {
@@ -34,16 +29,10 @@ exports.getCustomerProfile = function (req, res, next) {
     } catch (error) {
         res.status(400).json({data:error,message:"get data customer 's profile failed"});
     }
-    }else{
-        res.status(400).json({message:"you not have access"})
-    }
     
 }
 exports.updateCustomerProfile = function (req, res, next) {
-    var id = req.params.id;
-    var accountId=req.body.accountId;
     const errors = validationResult(req);
-    console.log(req.user)
     // console.log(parseInt(req.user.customerId)==parseInt(id)&&parseInt(req.user.account_id)==parseInt(accountId))
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
@@ -56,8 +45,8 @@ exports.updateCustomerProfile = function (req, res, next) {
 
     };
     // Account.checkToken
-if (req.user.account_id==accountId&&req.user.customerId==id) {
-    Customer.updateProfileCustomer(id,dataUpdate, function (data){
+
+    Customer.updateProfileCustomer(req.user.customerId,dataUpdate, function (data){
         if (data==null) {
             res.status(400).json({data:data,message:"update data customer 's profile failed"})
         } else {
@@ -68,9 +57,7 @@ if (req.user.account_id==accountId&&req.user.customerId==id) {
             }
         }
     })
-} else {
-    res.status(400).json({message:"you not have access"})
-}
+
    
 
     

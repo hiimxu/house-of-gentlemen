@@ -21,13 +21,13 @@ const statusStaffController= require('../controllers/statusStaff.controller')
 const addressController=require('../controllers/address.controller');
 
 router.get('/',cors(),customerController.getAllCustomer);
-router.get('/profile/:id',validate.checkId(),cors(),auth,customerController.getCustomerProfile);
-router.put('/update/profile/:id',validate.updateCustomerProfile(),cors(),auth,customerController.updateCustomerProfile);
+router.get('/profile/',validate.checkId(),cors(),auth,customerController.getCustomerProfile);
+router.put('/update/profile/',validate.updateCustomerProfile(),cors(),auth,customerController.updateCustomerProfile);
 router.get('/statusRegisterService',cors(),statusRegisterServiceController.getStatusRegisterService);
 router.get('/statusRegisterServiceById/:id',validate.checkId(),cors(),statusRegisterServiceController.getStatusRegisterServiceById);
 router.put('/cancel/registerservice/:id',validate.cancelBooking(),cors(),auth,registerServiceController.cancelBooking);
 router.get('/registerService/:id',validate.checkId(),cors(),registerServiceController.getRegisterServiceById);
-router.get('/registerServiceByCustomer/:id',validate.checkId(),auth,cors(),registerServiceController.getRegisterServiceByCustomer);
+router.get('/registerServiceByCustomer/',auth,cors(),registerServiceController.getRegisterServiceByCustomer);
 router.post('/create/registerService',cors(),validate.BookingService(),auth,registerServiceController.addRegisterService);
 router.post('/create/feedbackByCustomer',validate.addFeedBackByCustomer(),cors(),auth,feedbackController.addFeedBackByCustomer);
 router.delete('/delete/feedback/:id',validate.checkId(),cors(),auth,feedbackController.deleteFeedbackByCustomer);

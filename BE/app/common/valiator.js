@@ -57,7 +57,6 @@ exports.checkId=function(){
 exports.updateCustomerProfile=function(){
     
     return[
-        param('id').not().isEmpty().isInt().withMessage('param is number'),
         body('phone').isMobilePhone("vi-VN"),
         body('birthday')
             .exists()
@@ -83,7 +82,6 @@ exports.BookingService=function(){
     return[
         body('serviceId').not().isEmpty().isInt().withMessage("serviceId:number"),
         body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
-        body('customerId').not().isEmpty().isInt().withMessage("customerId:number"),
         body('staffId').not().isEmpty().isInt().withMessage("staffId:number"),
         body('timeUse').not().isEmpty().withMessage("timeUse:is date"),
         body('price_original').not().isEmpty().isInt().withMessage("price_original:is number"),
@@ -92,7 +90,6 @@ exports.BookingService=function(){
 }
 exports.addFeedBackByCustomer=function(){
     return[
-        body('customerId').not().isEmpty().isInt().withMessage("serviceId:customerId"),
         body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
         body('content').not().isEmpty().withMessage("in put content"),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),

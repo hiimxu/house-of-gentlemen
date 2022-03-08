@@ -6,7 +6,7 @@ exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     console.log(req.user)
     try {
@@ -27,48 +27,25 @@ exports.getRegisterServiceById = function (req, res, next) {
 
 }
 exports.getRegisterServiceByCustomer = function (req, res, next) {
-    var id = req.params.id;
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array(),message:"error validate" });
-    }
-    if (req.user.customerId==id) {
-        try {
-            RegisterService.getRegisterServiceByCustomer(id, function (data) {
-    
-                if (data == null) {
-                    res.status(400).json({ data: data, message: "get booking service failed" });
-                } else {
-                    if (data.length == 0) {
-                        res.status(400).json({ data: data, message: "not have booking service" });
-                    } else {
-                        res.json({ data: data, message: "get booking service success" });
-                    }
-                }
-            });
-        } catch (error) {
-            res.status(400).json({ data: error, message: "get booking service failed" });
-        }try {
-        RegisterService.getRegisterServiceByCustomer(id, function (data) {
+    try {
+        RegisterService.getRegisterServiceByCustomer(req.user.customerId, function (data) {
 
             if (data == null) {
-                res.status(400).json({ data: data, message: "get booking service failed" });
+                return res.status(400).json({ data: data, message: "get booking service failed" });
             } else {
                 if (data.length == 0) {
-                    res.status(400).json({ data: data, message: "not have booking service" });
+                    return res.status(400).json({ data: data, message: "not have booking service" });
                 } else {
-                    res.json({ data: data, message: "get booking service success" });
+                    return res.json({ data: data, message: "get booking service success" });
                 }
             }
         });
     } catch (error) {
         res.status(400).json({ data: error, message: "get booking service failed" });
     }
-    } else {
-        res.status(400).json({message:"you not have access"})
-    }
-    
+
+
 
 }
 exports.addRegisterService = function (req, res, next) {
@@ -84,7 +61,7 @@ exports.addRegisterService = function (req, res, next) {
     var dataRegisterService = {
         serviceId: req.body.serviceId,
         salonId: req.body.salonId,
-        customerId: req.body.customerId,
+        customerId: req.user.customerId,
         staffId: req.body.staffId,
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
@@ -92,10 +69,10 @@ exports.addRegisterService = function (req, res, next) {
     };
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    if (req.user.customerId=dataRegisterService.customerId) {
-        dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
+
+    dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
     var today = new Date();
     var check1 = new Date(date);
     var check2 = new Date(date);
@@ -113,7 +90,7 @@ exports.addRegisterService = function (req, res, next) {
                 var checktime2 = new Date(data[index].date);
                 checktime1.setMinutes(checktime1.getMinutes() + data[index].timeBusy);
                 checktime2.setMinutes(checktime2.getMinutes() - timeBusy);
-                if (((checktime1 > date) && (date >= new Date(data[index].date)))||((checktime2<date)&&(date<new Date(data[index].date)))) {
+                if (((checktime1 > date) && (date >= new Date(data[index].date))) || ((checktime2 < date) && (date < new Date(data[index].date)))) {
                     Times = Times + 1;
                 }
             }
@@ -147,27 +124,25 @@ exports.addRegisterService = function (req, res, next) {
             }
         })
     }
-    } else {
-        return res.status(400).json({message:"you not have access"})
-    }
+
 }
 exports.cancelBooking = function (req, res, next) {
     var id = req.params.id;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     console.log(req.user)
-    
-    RegisterService.getRegisterServiceById(id, function (data){
+
+    RegisterService.getRegisterServiceById(id, function (data) {
         if (data.length == 0) {
-            res.status(400).json({ data: data, message: "booking khong ton tai"})
+            res.status(400).json({ data: data, message: "booking khong ton tai" })
         } else {
-            RegisterService.checkCustomer(id,req.user.customerId, function (data){
+            RegisterService.checkCustomer(id, req.user.customerId, function (data) {
                 if (data.length == 0) {
-                    res.status(400).json({ data: data, message: "you  not have access"})
+                    res.status(400).json({ data: data, message: "you  not have access" })
                 }
-                else{
+                else {
                     StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
                         if (data == null) {
                             res.json({ data: data, message: "cancel booking failed" });
@@ -188,7 +163,7 @@ exports.cancelBooking = function (req, res, next) {
         }
 
     })
- 
+
 
 
 
