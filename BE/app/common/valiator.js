@@ -102,7 +102,6 @@ exports.updateFeedback =function(){
         param('id').not().isEmpty().isInt().withMessage("id:number"),
         body('content').not().isEmpty().withMessage("in put content"),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),
-        body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:number")
     ];
 }
 exports.updateFeedbackByCustomer=function(){
@@ -124,7 +123,7 @@ exports.updateFeedbackDetailBySalon=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
         body('content').not().isEmpty().withMessage("in put content"),
-        body('salonId').not().isEmpty().withMessage("in put content").isInt("salonId:number"),
+       
     ];
 }
 exports.updateFeedbackDetail=function(){
@@ -136,14 +135,12 @@ exports.updateFeedbackDetail=function(){
 }
 exports.addImageToImageSalon=function(){
     return[
-        body('salonId').not().isEmpty().isInt().withMessage("salonId:number and not empty"),
         body('image').not().isEmpty().withMessage("not empty"),
     ];
 }
 exports.addServiceSalon=function(){
 
     return[
-        body('salonId').not().isEmpty().isInt().withMessage("salonId:number and not empty"),
         body('price').not().isEmpty().withMessage("not empty"),
         body('service_time').not().isEmpty().withMessage("not empty"),
         body('promotion').not().isEmpty().withMessage("not empty"),
@@ -173,23 +170,30 @@ exports.addImageService=function(){
 exports.addFeedBackBySalon=function(){
     return[
         body('rate').not().isEmpty().withMessage("not empty").isInt("rate : number"),
-        body('salonId').not().isEmpty().isInt().withMessage("salonId:number and not empty"),
+       
         body('content').not().isEmpty().withMessage("content: not empty"),
     ];
 }
 exports.addFeedBackDetailBySalon=function(){
     return[
-        body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
+       
         body('content').not().isEmpty().withMessage("in put content"),
         body('feedbackId').not().isEmpty().isInt().withMessage("feedbackId:number"),
     ];
 }
 exports.addStaff=function(){
      return[
-        body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
-        body('name').not().isEmpty().withMessage("in put content"),
+         body('name').not().isEmpty().withMessage("in put content"),
         body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
+        body('address').not().isEmpty().withMessage("in put address"),
     ];
+}
+exports.validateStaff=function(){
+    return[
+        body('name').not().isEmpty().withMessage("in put content"),
+       body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
+       body('address').not().isEmpty().withMessage("in put address"),
+   ];
 }
 exports.updateStaff=function(){
     return[
@@ -200,7 +204,6 @@ exports.updateStaff=function(){
 }
 exports.updateSalonOwnerProfile=function(){
     return[
-       param('id').not().isEmpty().isInt().withMessage("id:number"),
        body('nameSalon').not().isEmpty().withMessage("not empty"),
        body('phone').not().isEmpty().withMessage("not empty").isMobilePhone('vi-VN').withMessage("validate phone vi-VN"),
        body('taxCode').not().isEmpty().withMessage("not empty"),
@@ -209,14 +212,13 @@ exports.updateSalonOwnerProfile=function(){
 exports.deleteFeedbackDetailByFeedbackDetailIdBySalon=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:int"),
+        
         
     ];
 }
 exports.deleteFeedbackBySalon=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('salonId').not().isEmpty().withMessage("not empty").isInt().withMessage("salonId:int"),
         
     ];
 }

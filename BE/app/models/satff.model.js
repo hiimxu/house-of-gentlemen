@@ -28,10 +28,10 @@ Staff.addStaff= function (data,result) {
     });
 }
 Staff.updateStaff=function (id,data, result) {
-    db.query(`UPDATE swp490_g11.staff SET ?  WHERE (saffId= '${id}');`,data,(err, rows, fields) => {
+    db.query(`UPDATE swp490_g11.staff SET ?  WHERE swp490_g11.staff.staffId=${id}`,data,(err, rows, fields) => {
      
         if (err) {
-            result(null,err)
+            result(err)
         } else {
             result(rows)
         }

@@ -127,7 +127,7 @@ exports.login_account = function async(req, res, next) {
                                 SalonOwner.getProfileSalon(id, function (data) {
                                     console.log(data[0].accountId+" "+data[0].salonId)
                                     const token = jwt.sign(
-                                        { account_id: data[0].accountId,account_name: acc,customerId:data[0].salonId },
+                                        { account_id: data[0].accountId,account_name: acc,salonId:data[0].salonId },
                                         process.env.TOKEN_KEY,
                                         {
                                             expiresIn: "2h",

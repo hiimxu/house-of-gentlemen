@@ -101,8 +101,8 @@ exports.getSalonOwnerProfile = function (req, res, next) {
     }
 }
 exports.updateSalonOwnerProfile = function (req, res, next) {
-    var id = req.params.id;
-    console.log(id)
+    id=req.user.account_id;
+    console.log(req.user)
     var dataUpdate = {
         nameSalon: req.body.nameSalon,
         phone: req.body.phone,

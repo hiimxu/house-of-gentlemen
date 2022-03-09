@@ -1,7 +1,7 @@
 var Staff = require('../models/satff.model');
 const { body, validationResult } = require('express-validator');
 exports.getStaff= function (req, res, next) {
-    var id = req.params.id;
+    var id = req.user.salonId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
@@ -25,11 +25,16 @@ exports.getStaff= function (req, res, next) {
     
 }
 exports.addStaff= function (req, res, next) {
-    var data={salonId: req.body.salonId,
+
+    var data={salonId: req.user.salonId,
         name: req.body.name,
         phone: req.body.phone,
         address: req.body.address
         }
+        const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         Staff.addStaff(data,function (data) {
 
@@ -51,9 +56,12 @@ exports.updateStaff= function (req, res, next) {
         phone: req.body.phone,
         address: req.body.address
         }
+        const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     try {
         Staff.updateStaff(id,data,function (data) {
-            
             if (data== null) {
                 res.status(400).json({data:data,message:'update failed'});
             } else {

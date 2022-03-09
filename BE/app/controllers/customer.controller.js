@@ -11,8 +11,6 @@ exports.getAllCustomer = function (req, res, next) {
     res.json("wellcome to customer");
 }
 exports.getCustomerProfile = function (req, res, next) {
-    // console.log(checkId)
-   
   
     try {
         Customer.getCustomerSalon(req.user.account_id, function (data) {

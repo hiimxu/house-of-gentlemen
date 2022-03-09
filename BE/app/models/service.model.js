@@ -76,5 +76,15 @@ Service.getServiceByIdService= function (id,result) {
         }
     });
 }
+Service.checkPermission= function (id,salonId,result) {
+    db.query(`select* from service where serviceId='${id}' and salonId=?`,salonId, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
+}
+
 
 module.exports =Service;

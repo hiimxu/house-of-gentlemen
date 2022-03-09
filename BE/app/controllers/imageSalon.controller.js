@@ -1,7 +1,8 @@
 var ImageSalon = require('../models/imageSalon.model');
 const { body, validationResult } = require('express-validator');
 exports.getImageSalon= function (req, res, next) {
-    var id = req.params.idSalon;
+    var id = req.user.salonId;
+    console.log(req.user)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -29,7 +30,7 @@ exports.getImageSalon= function (req, res, next) {
 exports.addImageToImageSalon = function (req, res, next) {
     // res.json("wellcome to  addImageToImageSalon");
     var image= req.body.image;
-    var salonId= req.body.salonId;
+    var salonId= req.user.salonId;
     var dataImage ={image:image,salonId:salonId}
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -54,24 +55,32 @@ exports.addImageToImageSalon = function (req, res, next) {
 }
 exports.deleteImageOfImageSalon =function (req, res, next) {
     var id= req.params.id;
+    var salonId= req.user.salonId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    try {
-        ImageSalon.deleteImageOfImageSalon(id,function (data) {
-            if (data== null) {
+    ImageSalon.checkPermission(id,salonId, function (data){
+        if (data.length==0) {
+           return res.status(400).json({data:data,message:"you not have access"})
+        } else {
+            try {
+                ImageSalon.deleteImageOfImageSalon(id,function (data) {
+                    if (data== null) {
+                        res.status(400).json({data:data,message:"delete image failed"});
+                    } else {
+                        if (data.affectedRows==0) {
+                            res.status(400).json({data:data,message:"not have image to delete"});
+                        } else {
+                            res.json({data:data,message:"delete image success"});
+                        }
+                       
+                    }
+                });
+            } catch (error) {
                 res.status(400).json({data:data,message:"delete image failed"});
-            } else {
-                if (data.affectedRows==0) {
-                    res.status(400).json({data:data,message:"not have image to delete"});
-                } else {
-                    res.json({data:data,message:"delete image success"});
-                }
-               
             }
-        });
-    } catch (error) {
-        res.status(400).json({data:data,message:"delete image failed"});
-    }
+        }
+    });
+    
 }

@@ -4,7 +4,7 @@ var ImageService = require('../models/imageService.model');
 const { body, validationResult } = require('express-validator');
 exports.addServiceSalon = function (req, res, next) {
     var dataService = {
-        salonId: req.body.salonId,
+        salonId: req.user.salonId,
         name: req.body.name,
         price: req.body.price,
         description: req.body.description,
@@ -57,7 +57,7 @@ exports.deleteServiceSalon = function (req, res, next) {
 }
 
 exports.getServiceOfSalon = function (req, res, next) {
-    var id = req.params.idSalon;
+    var id = req.user.salonId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -96,6 +96,7 @@ exports.getAllService = function (req, res, next) {
 }
 exports.updateServiceSalon = function (req, res, next) {
     var id = req.params.idService;
+    var salonId= req.user.salonId;
     var dataUpdate = {
         name:req.body.name,
         price:req.body.price,
@@ -109,19 +110,28 @@ exports.updateServiceSalon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    try {
-        ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
-
-            if (data == null|| data.affectedRows==0) {
-                res.status(400).json({ data: data, message: "update service fail" });
-            } else {
-                
-                res.json({ data: data, message: "update service success" });
+    
+    ServiceSalon.checkPermission(id,salonId,function (data){
+        if (data.length == 0) {
+            return  res.status(400).json({ data: data, message: "you not have access" });
+          } else {
+            try {
+                ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
+        
+                    if (data == null|| data.affectedRows==0) {
+                        res.status(400).json({ data: data, message: "update service fail" });
+                    } else {
+                        
+                        res.json({ data: data, message: "update service success" });
+                    }
+                });
+            } catch (error) {
+                res.status(400).json({ data: error, message: "update service fail" });
             }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "update service fail" });
-    }
+          }
+    });
+
+    
 
 }
 exports.getAllServiceSalon = function (req, res, next) {

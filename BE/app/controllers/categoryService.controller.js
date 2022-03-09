@@ -1,8 +1,9 @@
 var CategoryService = require('../models/categoryService.model');
+var ServiceSalon = require('../models/service.model');
 const { body, validationResult } = require('express-validator');
 
 exports.addCategoryService = function (req, res, next) {
-
+var salonId = req.user.salonId;
     var dataCategoryService = {
         categoryId: req.body.categoryId,
         serviceId: req.body.serviceId,
@@ -11,23 +12,31 @@ exports.addCategoryService = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    var check=CategoryService.checkCategoryService(dataCategoryService, function (data){
+    ServiceSalon.checkPermission(dataCategoryService.serviceId,salonId,function (data){
         if (data.length==0) {
-            try {
-                CategoryService.addCategoryService(dataCategoryService, function (data) {
-                    if (data == null) {
-                        res.status(400).json({ data: data, message: "add data category service failed" });
-                    } else {
-                        res.json({ data: data, message: "add data category service success" });
-                    }
-                });
-            } catch (error) {
-                res.status(400).json({ data: error, message: "add data category service failed" });
-            } 
-        } else {
-            res.status(400).json({ data: data, message: "category already exist in service" });
+            return res.status(400).json({message:"you not have access"})
+        }
+        else{
+            var check=CategoryService.checkCategoryService(dataCategoryService, function (data){
+                if (data.length==0) {
+                    try {
+                        CategoryService.addCategoryService(dataCategoryService, function (data) {
+                            if (data == null) {
+                                res.status(400).json({ data: data, message: "add data category service failed" });
+                            } else {
+                                res.json({ data: data, message: "add data category service success" });
+                            }
+                        });
+                    } catch (error) {
+                        res.status(400).json({ data: error, message: "add data category service failed" });
+                    } 
+                } else {
+                    res.status(400).json({ data: data, message: "category already exist in service" });
+                }
+            })
         }
     })
+    
    
     
 }
