@@ -267,8 +267,6 @@ exports.add_account_salon = function (req, res, next) {
                                     }
                                 })
 
-                                // res.json({ data_account: data_account, dataSalon: dataSalon, message: "create account salon success" });
-
                             }
                         });
                     });

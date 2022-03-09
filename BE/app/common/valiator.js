@@ -227,3 +227,10 @@ exports.deleteFeedbackBySalon=function(){
         
     ];
 }
+exports.updateAddressSalon=function(){
+    return[
+        body('city').not().isEmpty().withMessage("in put city"),
+        body('district').not().isEmpty().withMessage("in put district"),
+        body('detailAddress').not().isEmpty().withMessage("in put detailAddress"),
+    ]
+}

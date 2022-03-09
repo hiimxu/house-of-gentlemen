@@ -40,5 +40,15 @@ Address.addAddress=function(data,result){
         }
     });
 }
+Address.updateAddressSalon=function(id,data,result){
+    db.query(`UPDATE swp490_g11.address SET ?  WHERE salonId=${id}`,data,(err, rows, fields) => {
+     
+        if (err) {
+            result(err)
+        } else {
+            result(rows)
+        }
+    });
+}
 
 module.exports =Address;
