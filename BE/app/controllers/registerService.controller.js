@@ -102,8 +102,11 @@ exports.addRegisterService = function (req, res, next) {
                         var staffCanlederId = data.staffCanlederId;
                         dataRegisterService = { staffCanlederId, ...dataRegisterService };
                         if (data == null) {
-                            res.status(400).json({ data: data, message: "add staff cander failed" });
-                        } else {
+                           return res.status(400).json({ data: data, message: "add staff cander failed" });
+                         } else if (data.length==0) {
+                            return res.status(400).json({ data: data, message: "add staff cander failed" });
+                         }
+                         else {
                             RegisterService.addRegisterService(dataRegisterService, function (data) {
                                 if (data == null) {
                                     res.status(400).json({ data: data, message: "booking service failed" });
@@ -136,22 +139,22 @@ exports.cancelBooking = function (req, res, next) {
 
     RegisterService.getRegisterServiceById(id, function (data) {
         if (data.length == 0) {
-            res.status(400).json({ data: data, message: "booking khong ton tai" })
+           return res.status(400).json({ data: data, message: "booking khong ton tai" })
         } else {
             RegisterService.checkCustomer(id, req.user.customerId, function (data) {
                 if (data.length == 0) {
-                    res.status(400).json({ data: data, message: "you  not have access" })
+                   return res.status(400).json({ data: data, message: "you  not have access" })
                 }
                 else {
                     StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
                         if (data == null) {
-                            res.json({ data: data, message: "cancel booking failed" });
+                           return res.json({ data: data, message: "cancel booking failed" });
                         } else {
                             RegisterService.cancelBooking(id, function (data) {
                                 if (data == null) {
-                                    res.json({ data: data, message: "cancel booking failed" });
+                                   return res.json({ data: data, message: "cancel booking failed" });
                                 } else {
-                                    res.json({ data: data, message: "cancel booking success" });
+                                   return res.json({ data: data, message: "cancel booking success" });
                                 }
                             });
                         }

@@ -46,14 +46,14 @@ exports.get_accountbyid = function (req, res, next) {
 exports.change_password = function (req, res, next) {
     try {
         var new_pass = req.body.new_password;
-        var md5_new_pass = md5(new_pass);
         var old_pass = req.body.old_password;
-        var md5_old_pass = md5(old_pass);
         var acc = req.body.account_name;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        var md5_new_pass = md5(new_pass);
+        var md5_old_pass = md5(old_pass);
         Account.checkAccount(acc, function(data){
             if (data.length==0) {
                return res.status(400).json({message:"please check account_name"});
@@ -81,11 +81,12 @@ exports.change_password = function (req, res, next) {
 exports.login_account = function async(req, res, next) {
     var acc = req.body.account;
     var pass = req.body.password;
-    var md5_pass = md5(pass);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+    var md5_pass = md5(pass);
     Account.checkAccount(acc, function(data){
         if (data.length==0) {
            return res.status(400).json({message:"please check account_name"});
@@ -176,16 +177,18 @@ exports.add_account_customer = function (req, res, next) {
 
     var acc = req.body.account_name;
     var pass = req.body.password;
-    var md5_pass = md5(pass);
     var rol = req.body.role;
     var email = req.body.email;
-    var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
+    
 
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+    
+    var md5_pass = md5(pass);
+    var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
     try {
         var check = Account.checkAccount(acc, function (data) {
             if (data.length == 1) {
@@ -222,10 +225,9 @@ exports.add_account_salon = function (req, res, next) {
     var check_role = ["salon"];
     var acc = req.body.account_name;
     var pass = req.body.password;
-    var md5_pass = md5(pass);
     var rol = req.body.role;
     var email = req.body.email;
-    var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
+    
     var possibility = req.body.possibility;
     if (!possibility == 0) {
         return res.status(400).json({ message: "check possibility" });
@@ -237,6 +239,9 @@ exports.add_account_salon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+    
+    var md5_pass = md5(pass);
+    var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
     try {
         var check = Account.checkAccount(acc, function (data) {
             if (data.length == 1) {
