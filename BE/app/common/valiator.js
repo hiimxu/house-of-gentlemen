@@ -34,6 +34,11 @@ exports.validateCreateAccountSalon= function(){
         body('email').not().isEmpty().withMessage('email cannot be empty').isEmail().withMessage('validate email'),
         body('phone').isMobilePhone("vi-VN"),
         body('role').not().isEmpty(),
+        body('city').not().isEmpty(),
+        body('district').not().isEmpty(),
+        body('detailAddress').not().isEmpty(),
+        body('taxCode').not().isEmpty(),
+        body('nameSalon').not().isEmpty(),
     ];
 }
 exports.change_password=function(){

@@ -51,7 +51,9 @@ exports.addStaff= function (req, res, next) {
 }
 exports.updateStaff= function (req, res, next) {
     var id = req.params.id;
-    var data={
+    var salonId= req.user.salonId;
+    
+    var dataUpdate={
         name: req.body.name,
         phone: req.body.phone,
         address: req.body.address
@@ -60,40 +62,63 @@ exports.updateStaff= function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    try {
-        Staff.updateStaff(id,data,function (data) {
-            if (data== null) {
-                res.status(400).json({data:data,message:'update failed'});
-            } else {
-                if (data.affectedRows==0) {
-                    res.status(400).json({data:data,message:'not have to update'});
-                }else{
-                    res.json({data:data,message:'update success'});
-                }
-                
+    Staff.checkPermission(id,salonId, function (data){
+        if (data==null) {
+            return res.status(400).json({message:"error mysql"})
+        } else if (data.length == 0) {
+            return res.status(400).json({message:"you not have access"})
+        }
+        else{
+            
+            try {
+                Staff.updateStaff(id,dataUpdate,function (data) {
+                    if (data== null) {
+                        res.status(400).json({data:data,message:'update failed'});
+                    } else {
+                        if (data.affectedRows==0) {
+                            res.status(400).json({data:data,message:'not have to update'});
+                        }else{
+                            res.json({data:data,message:'update success'});
+                        }
+                        
+                    }
+                });
+            } catch (error) {
+                res.status(400).json({data:error, message:"update failed"});
             }
-        });
-    } catch (error) {
-        res.status(400).json({data:error, message:"update failed"});
-    }
+
+        }
+    })
+    
     
 }
 exports.deleteStaff= function (req, res, next) {
     var id = req.params.id;
-    try {
-        Staff.deleteStaff(id,function (data) {
-           if (data==null) {
-            res.json( {data:data,message:"delete staff failed" });
-           } else {
-             if (data.affectedRows==0) {
-                res.json( {data:data,message:"not have staff to delete" });
-             } else {
-                res.json( {data:data,message:"delete staff success" });
-             }  
-           }
-        });
-    } catch (error) {
-        res.json(error);
-    }
+    var salonId= req.user.salonId;
+    Staff.checkPermission(id,salonId, function (data){
+        if (data[0].salonId== null) {
+           return res.status(400).json({message:"error mysql"})
+        } else if (data.length== 0) {
+           return res.status(400).json({message:"you not have access"})
+        } else {
+            try {
+                Staff.deleteStaff(id,function (data) {
+                   if (data==null) {
+                    res.json( {data:data,message:"delete staff failed" });
+                   } else {
+                     if (data.affectedRows==0) {
+                        res.json( {data:data,message:"not have staff to delete" });
+                     } else {
+                        res.json( {data:data,message:"delete staff success" });
+                     }  
+                   }
+                });
+            } catch (error) {
+                res.json(error);
+            }
+        }
+         
+    })
+    
     
 }

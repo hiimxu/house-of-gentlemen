@@ -31,5 +31,14 @@ Address.getDataByDistrict=function(district,result){
         }
     });
 }
+Address.addAddress=function(data,result){
+    db.query(`INSERT INTO swp490_g11.address (city, district, detailAddress, salonId) VALUES (?,?, ?, ?);`,[data.city,data.district,data.detailAddress,data.salonId], (err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+            result({id : rows.insertId,...data});
+        }
+    });
+}
 
 module.exports =Address;
