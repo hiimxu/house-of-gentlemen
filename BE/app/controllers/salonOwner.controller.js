@@ -83,11 +83,8 @@ exports.salonOwner = function (req, res, next) {
 }
 
 exports.getSalonOwnerProfile = function (req, res, next) {
-    var id = req.params.id;
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    var id = req.user.account_id;
+    
     try {
         SalonOwner.getProfileSalon(id, function (data) {
             if (data == null) {

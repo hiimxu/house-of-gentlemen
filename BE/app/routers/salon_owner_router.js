@@ -18,7 +18,7 @@ const validate = require('../common/valiator');
 const auth = require('../middleware/auth');
 
 router.get('/',cors(),salonOwnerController.salonOwner);
-router.get('/profile/:id',validate.checkId(),cors(),auth,salonOwnerController.getSalonOwnerProfile);
+router.get('/profile/',validate.checkId(),cors(),auth,salonOwnerController.getSalonOwnerProfile);
 router.put('/update/profile/:id',validate.updateSalonOwnerProfile(),cors(),salonOwnerController.updateSalonOwnerProfile);
 router.get('/imageSalon/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),imageSalonController.getImageSalon);
 router.post('/create/imageToImageSalon',validate.addImageToImageSalon(),cors(),imageSalonController.addImageToImageSalon);

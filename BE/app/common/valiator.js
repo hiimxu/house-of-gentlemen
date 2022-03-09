@@ -4,15 +4,15 @@ const testRole = ["customer", "salon"];
 exports.validateCreateAccountCustomer = () => {
     return [
         // check('account_name', 'Invalid does not Empty').not().isEmpty()
-        body('account_name').not().isEmpty().withMessage('account_name cannot be empty'),
-        body('password').not().isEmpty().withMessage('password cannot be empty'),
+        body('account_name').not().isEmpty().withMessage('account_name cannot be empty').isLength({min:3,max:45}).withMessage('min lenght 3,max lenght 45'),
+        body('password').not().isEmpty().withMessage('password cannot be empty').isLength({min:3,max:45}).withMessage('min lenght 3,max lenght 45'),
         body('birthday')
             .exists()
             .not()
             .isEmpty()
             .withMessage('birthday cannot be empty')
             .isISO8601('yyyy-mm-dd').withMessage('type of date')
-        , body('nameCustomer').not().isEmpty(),
+        ,body('nameCustomer').not().isEmpty(),
         body('role').not().isEmpty(),
         body('phone').isMobilePhone("vi-VN"),
         body('email').not().isEmpty().withMessage('email cannot be empty').isEmail().withMessage('validate email'),
@@ -29,8 +29,8 @@ exports.validateLogin = function () {
 }
 exports.validateCreateAccountSalon= function(){
     return[
-        body('account_name').not().isEmpty().withMessage('account cannot be empty'),
-        body('password').not().isEmpty().withMessage('password cannot be empty'),
+        body('account_name').not().isEmpty().withMessage('account cannot be empty').isLength({min:3,max:45}).withMessage('min lenght 3,max lenght 45'),
+        body('password').not().isEmpty().withMessage('password cannot be empty').isLength({min:3,max:45}).withMessage('min lenght 3,max lenght 45'),
         body('email').not().isEmpty().withMessage('email cannot be empty').isEmail().withMessage('validate email'),
         body('phone').isMobilePhone("vi-VN"),
         body('role').not().isEmpty(),
@@ -39,8 +39,8 @@ exports.validateCreateAccountSalon= function(){
 exports.change_password=function(){
     return[
         body('account_name').not().isEmpty().withMessage('account cannot be empty'),
-        body('old_password').not().isEmpty().withMessage('old_password cannot be empty'),
-        body('new_password').not().isEmpty().withMessage('new_password cannot be empty'),
+        body('old_password').not().isEmpty().withMessage('old_password cannot be empty').isLength({min:3,max:45}).withMessage('min lenght 3,max lenght 45'),
+        body('new_password').not().isEmpty().withMessage('new_password cannot be empty').isLength({min:3,max:45}).withMessage('min lenght 3,max lenght 45'),
     ];
 }
 exports.forgotPassword=function(){
