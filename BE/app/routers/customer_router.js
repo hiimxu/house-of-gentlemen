@@ -26,7 +26,7 @@ router.put('/update/profile/',validate.updateCustomerProfile(),cors(),auth,custo
 router.get('/statusRegisterService',cors(),statusRegisterServiceController.getStatusRegisterService);
 router.get('/statusRegisterServiceById/:id',validate.checkId(),cors(),statusRegisterServiceController.getStatusRegisterServiceById);
 router.put('/cancel/registerservice/:id',validate.cancelBooking(),cors(),auth,registerServiceController.cancelBooking);
-router.get('/registerService/:id',validate.checkId(),cors(),registerServiceController.getRegisterServiceById);
+router.get('/registerService/:id',validate.checkId(),auth,cors(),registerServiceController.getRegisterServiceById);
 router.get('/registerServiceByCustomer/',auth,cors(),registerServiceController.getRegisterServiceByCustomer);
 router.post('/create/registerService',cors(),validate.BookingService(),auth,registerServiceController.addRegisterService);
 router.post('/create/feedbackByCustomer',validate.addFeedBackByCustomer(),cors(),auth,feedbackController.addFeedBackByCustomer);

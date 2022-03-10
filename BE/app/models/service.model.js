@@ -80,7 +80,7 @@ Service.getServiceByIdService= function (id,result) {
 Service.checkPermission= function (id,salonId,result) {
     db.query(`select* from service where serviceId='${id}' and salonId=?`,salonId, (err, rows, fields) => {
         if (err) {
-            result(null, err)
+            result( null,err)
         } else {
             result(rows);
         }
@@ -94,6 +94,17 @@ Service.getAllServicePossible= function (result) {
             result(rows);
         }
     });
+}
+Service.impossibleService=function (id, result) {
+    db.query(`UPDATE swp490_g11.service SET possible=1  WHERE (serviceId = '${id}');`, (err, rows, fields) => {
+     
+        if (err) {
+            result(null,err);
+        } else {
+            result(rows)
+        }
+    });
+    
 }
 
 

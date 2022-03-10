@@ -105,6 +105,9 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
 exports.deleteFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
     var customerId= req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
 
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
@@ -200,6 +203,9 @@ exports.updateFeedbackBySalon = function (req, res, next) {
 exports.updateFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
     var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataUpdate = {
         content: req.body.content,
         rate: req.body.rate,
@@ -248,6 +254,10 @@ exports.updateFeedbackByCustomer = function (req, res, next) {
 
 }
 exports.addFeedBackByCustomer = function (req, res, next) {
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataFeedBack = {
         customerId: req.body.req.user.customerId,
         salonId: req.body.salonId,

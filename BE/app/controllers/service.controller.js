@@ -180,3 +180,23 @@ exports.getServiceByIdService= function (req, res, next) {
         res.status(400).json({ data: error, message: "get service fail" });
     }
 }
+exports.impossibleService=function (req, res, next) {
+    var serviceId= req.body.serviceId;
+    var salonId= req.user.salonId;
+    ServiceSalon.checkPermission(serviceId,salonId, function (data){
+        if (data== null) {
+            res.status(400).json({ data: data, message: "err mysql"})
+        } else if (data.length == 0) {
+            return res.status(400).json({message:"you not have access"})
+        }else{
+            ServiceSalon.impossibleService(serviceId,function (data){
+                if (data== null) {
+                    return res.status(400).json({message:"error sql"})
+                } else {
+                    return res.status(200).json({data,message:"impossible service"})
+                }
+            })
+        }
+    })
+    
+}

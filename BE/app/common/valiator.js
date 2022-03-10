@@ -240,3 +240,9 @@ exports.cancelBookingBySalon=function(){
         body('content').not().isEmpty().withMessage("in put content to send customer").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
     ]
 }
+exports.impossibleService=function(){
+    return[
+        body('serviceId').not().isEmpty().withMessage("serviceId not empty"),
+        
+    ]
+}

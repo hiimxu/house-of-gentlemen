@@ -110,7 +110,10 @@ exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function (req, res, next
 }
 exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
     var id = req.params.id;
-    var customerId = req.user.customerId;
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -194,7 +197,10 @@ exports.updateFeedbackDetailBySalon = function (req, res, next) {
 }
 exports.updateFeedbackDetailByCustomer = function (req, res, next) {
     var id = req.params.id;
-    var customerId = req.user.customerId;
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataUpdate = { content: req.body.content };
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
@@ -239,6 +245,10 @@ exports.addFeedBackDetailByCustomer = function (req, res, next) {
         feedbackId: req.body.feedbackId,
         content: req.body.content
     };
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var wsend = "customer";
     var dateCreate = new Date();
     dataFeedBackDetail = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }

@@ -10,11 +10,14 @@ var client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
 exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+      return  res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    console.log(req.user)
     try {
         RegisterService.getRegisterServiceById(id, function (data) {
             if (data == null) {
@@ -33,7 +36,10 @@ exports.getRegisterServiceById = function (req, res, next) {
 
 }
 exports.getRegisterServiceByCustomer = function (req, res, next) {
-
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     try {
         RegisterService.getRegisterServiceByCustomer(req.user.customerId, function (data) {
 
@@ -62,6 +68,10 @@ exports.addRegisterService = function (req, res, next) {
     var status_register_id = 1;
     var timeBusy = req.body.service_time;
     console.log("busy" + timeBusy)
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
 
     var dataStaffCanleder = { staffId: staffId, date: date, statusId: statusId, timeBusy: timeBusy };
     var dataRegisterService = {
@@ -137,6 +147,11 @@ exports.addRegisterService = function (req, res, next) {
 }
 exports.cancelBooking = function (req, res, next) {
     var id = req.params.id;
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });

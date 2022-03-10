@@ -56,4 +56,5 @@ router.get('/get/staffStatusById/:id',cors(),statusStaffController.getStaffStatu
 router.put('/update/address/',validate.updateAddressSalon(),cors(),auth,addressSalonController.updateAddressSalon);
 router.get('/get/bookingServiceOfSalon',cors(),auth,registerServiceController.getRegisterServiceOfSalon);
 router.put('/cancelBookingServiceBySalon',validate.cancelBookingBySalon(),cors(),auth,registerServiceController.cancelBookingBySalon);
+router.put('/update/impossibleService',validate.impossibleService(),cors(),auth,serviceController.impossibleService);
 module.exports = router;
