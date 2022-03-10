@@ -3,7 +3,7 @@ const app = express();
 require('dotenv').config();
 console.log(process.env.TOKEN_KEY);
 console.log(process.env.API_KEY);
-const port = 3000;
+const port = 8080;
 
 const route = require('../BE/app/routers');
 var account_router= require('./app/routers/account_router');

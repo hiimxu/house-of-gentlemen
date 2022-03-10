@@ -320,32 +320,30 @@ exports.forgotPassword = async function (req, res, next) {
         if (data.length == 1) {
             var id = data[0].account_id;
             var email = data[0].email;
-            console.log(email)
-            console.log(emailcheck)
-            console.log(email==emailcheck)
-            
-            if (!(email==emailcheck)) {
+            if (!(email == emailcheck)) {
                return res.status(400).json({ message: "check your email" });
+
             }
             var new_password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
             var md5_new_pass = md5(new_password);
             // var md5_new_pass = md5(new_password);
             Account.updatePasswordAccount(id, md5_new_pass, function (data) {
                 if (data == null) {
-                   return res.status(400).json({ message: "send email failed", data: data })
+                    res.status(400).json({ message: "send email failed", data: data })
                 } else {
                     var nodemailer = require('nodemailer');
 
                     var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                            user: 'mduyxa@gmail.com',
-                            pass: 'Ad12345678'
+                            user: 'duymche130521@gmail.com',
+                            pass: 'Adx12311',
+                            
                         }
                     });
 
                     var mailOptions = {
-                        from: 'mduyxa@gmail.com',
+                        from: 'forgot password',
                         to: email,
                         subject: 'New Password',
                         text: 'your new password:' + new_password
@@ -354,10 +352,10 @@ exports.forgotPassword = async function (req, res, next) {
 
                         if (error) {
                             console.log(error);
-                          return  res.status(400).json({ error: error, message: "failed to email" })
+                            res.status(400).json({ error: error, message: "failed to email" })
                         } else {
                             console.log('Email sent: ' + info.response);
-                          return  res.json({ info ,message:"send password to your email"})
+                            res.json({ info ,message:"send password to your email"})
                         }
                     });
                 }
@@ -366,7 +364,7 @@ exports.forgotPassword = async function (req, res, next) {
         }
         else {
 
-           return res.status(400).json({ data: "Account not exists", message: "Account not exists" });
+            res.status(400).json({ data: "Account not exists", message: "Account not exists" });
         }
     })
 
