@@ -85,4 +85,15 @@ Register_service.checkSalon=function(id,salonId,result){
         }
     });
 }
+Register_service.getPhone=function(id,result){
+    db.query(`SELECT swp490_g11.register_service.customerId,swp490_g11.register_service.registerServiceId,swp490_g11.customer.phone FROM swp490_g11.register_service, swp490_g11.customer
+   where swp490_g11.register_service.customerId=swp490_g11.customer.customerId and swp490_g11.register_service.registerServiceId=?`,id,(err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data);
+        }
+    });
+}
 module.exports =Register_service;

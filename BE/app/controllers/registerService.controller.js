@@ -1,6 +1,12 @@
 var RegisterService = require('../models/register_service.model');
 var StaffCanleder = require('../models/staffCanleder.model');
+var twilio = require('twilio');
 const { body, validationResult } = require('express-validator');
+var TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER;
+var client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
 
 exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
@@ -102,11 +108,11 @@ exports.addRegisterService = function (req, res, next) {
                         var staffCanlederId = data.staffCanlederId;
                         dataRegisterService = { staffCanlederId, ...dataRegisterService };
                         if (data == null) {
-                           return res.status(400).json({ data: data, message: "add staff cander failed" });
-                         } else if (data.length==0) {
                             return res.status(400).json({ data: data, message: "add staff cander failed" });
-                         }
-                         else {
+                        } else if (data.length == 0) {
+                            return res.status(400).json({ data: data, message: "add staff cander failed" });
+                        }
+                        else {
                             RegisterService.addRegisterService(dataRegisterService, function (data) {
                                 if (data == null) {
                                     res.status(400).json({ data: data, message: "booking service failed" });
@@ -139,22 +145,22 @@ exports.cancelBooking = function (req, res, next) {
 
     RegisterService.getRegisterServiceById(id, function (data) {
         if (data.length == 0) {
-           return res.status(400).json({ data: data, message: "booking khong ton tai" })
+            return res.status(400).json({ data: data, message: "booking khong ton tai" })
         } else {
             RegisterService.checkCustomer(id, req.user.customerId, function (data) {
                 if (data.length == 0) {
-                   return res.status(400).json({ data: data, message: "you  not have access" })
+                    return res.status(400).json({ data: data, message: "you  not have access" })
                 }
                 else {
                     StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
                         if (data == null) {
-                           return res.json({ data: data, message: "cancel booking failed" });
+                            return res.json({ data: data, message: "cancel booking failed" });
                         } else {
                             RegisterService.cancelBooking(id, function (data) {
                                 if (data == null) {
-                                   return res.json({ data: data, message: "cancel booking failed" });
+                                    return res.json({ data: data, message: "cancel booking failed" });
                                 } else {
-                                   return res.json({ data: data, message: "cancel booking success" });
+                                    return res.json({ data: data, message: "cancel booking success" });
                                 }
                             });
                         }
@@ -169,35 +175,53 @@ exports.cancelBooking = function (req, res, next) {
 }
 exports.getRegisterServiceOfSalon = function (req, res, next) {
     var salonId = req.user.salonId;
-   RegisterService.getRegisterServiceOfSalon(salonId, function (data){
-    if (data == null) {
-        return res.json({ data: data, message: "err mysqld" });
-     } else {
-        return res.json({ data: data, message: "get booking success" });
-     }
-   })
-
-}  
-exports.cancelBookingBySalon=function (req, res, next) {
-    var salonId = req.user.salonId;
-    var registerServiceId=req.body.registerServiceId;
-    RegisterService.getRegisterServiceById(registerServiceId, function (data){
-        if (data.length == 0) {
-            return res.status(400).json({message:"booking service not exist"});
+    RegisterService.getRegisterServiceOfSalon(salonId, function (data) {
+        if (data == null) {
+            return res.json({ data: data, message: "err mysqld" });
         } else {
-            RegisterService.checkSalon(registerServiceId,salonId,function (data){
+            return res.json({ data: data, message: "get booking success" });
+        }
+    })
+
+}
+exports.cancelBookingBySalon = function (req, res, next) {
+    var salonId = req.user.salonId;
+    var registerServiceId = req.body.registerServiceId;
+    var content=req.body.content;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
+    RegisterService.getRegisterServiceById(registerServiceId, function (data) {
+        if (data.length == 0) {
+            return res.status(400).json({ message: "booking service not exist" });
+        } else {
+            RegisterService.checkSalon(registerServiceId, salonId, function (data) {
                 if (data.length == 0) {
-                    return res.status(400).json({message:"you not have access"});
+                    return res.status(400).json({ message: "you not have access" });
                 } else {
                     StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
                         if (data == null) {
-                           return res.json({ data: data, message: "cancel booking failed" });
+                            return res.json({ data: data, message: "cancel booking failed" });
                         } else {
                             RegisterService.cancelBooking(registerServiceId, function (data) {
                                 if (data == null) {
-                                   return res.json({ data: data, message: "cancel booking failed" });
+                                    return res.json({ data: data, message: "cancel booking failed" });
                                 } else {
-                                   return res.json({ data: data, message: "cancel booking success" });
+                                    RegisterService.getPhone(registerServiceId, function (data) {
+                                        var phone = data[0].phone;
+                                        phone='+84'+phone.substr(1,9);
+                                        client.messages
+                                            .create({
+                                                body: 'message from salon:'+content,
+                                                from: TWILIO_PHONE_NUMBER,
+                                                to: phone
+                                            })
+                                            .then(message => console.log(message.sid));
+                                           return res.json({ message: "cancel booking success,you sent a SMS to customer " });
+                                    })
+
+                                    
                                 }
                             });
                         }

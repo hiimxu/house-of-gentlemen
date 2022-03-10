@@ -234,3 +234,9 @@ exports.updateAddressSalon=function(){
         body('detailAddress').not().isEmpty().withMessage("in put detailAddress"),
     ]
 }
+exports.cancelBookingBySalon=function(){
+    return[
+        body('registerServiceId').not().isEmpty().withMessage("in put registerServiceId"),
+        body('content').not().isEmpty().withMessage("in put content to send customer"),
+    ]
+}
