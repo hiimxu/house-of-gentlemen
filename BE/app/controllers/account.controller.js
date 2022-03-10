@@ -341,7 +341,6 @@ exports.forgotPassword = async function (req, res, next) {
                             
                         }
                     });
-
                     var mailOptions = {
                         from: 'forgot password',
                         to: email,

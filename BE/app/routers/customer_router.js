@@ -21,7 +21,7 @@ const statusStaffController= require('../controllers/statusStaff.controller')
 const addressController=require('../controllers/address.controller');
 
 router.get('/',cors(),customerController.getAllCustomer);
-router.get('/profile/',validate.checkId(),cors(),auth,customerController.getCustomerProfile);
+router.get('/profile/',cors(),auth,customerController.getCustomerProfile);
 router.put('/update/profile/',validate.updateCustomerProfile(),cors(),auth,customerController.updateCustomerProfile);
 router.get('/statusRegisterService',cors(),statusRegisterServiceController.getStatusRegisterService);
 router.get('/statusRegisterServiceById/:id',validate.checkId(),cors(),statusRegisterServiceController.getStatusRegisterServiceById);
