@@ -74,7 +74,7 @@ exports.updateCustomerProfile=function(){
 exports.setPossitiveSalonOwner=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('possibility').not().isEmpty().withMessage("not empty")
+        body('possibility').not().isEmpty().withMessage("not empty").isInt().withMessage("possibility is number")
     ];
 }
 exports.cancelBooking=function(){
@@ -96,7 +96,7 @@ exports.BookingService=function(){
 exports.addFeedBackByCustomer=function(){
     return[
         body('salonId').not().isEmpty().isInt().withMessage("salonId:number"),
-        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),
        
     ];
@@ -105,7 +105,7 @@ exports.updateFeedback =function(){
 
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),
     ];
 }
@@ -113,42 +113,45 @@ exports.updateFeedbackByCustomer=function(){
 
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
         body('rate').not().isEmpty().isInt().withMessage("rate:number"),
        
     ];
 }
 exports.addFeedBackDetailByCustomer=function(){
     return[
-        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
         body('feedbackId').not().isEmpty().isInt().withMessage("feedbackId:number"),
     ];
 }
 exports.updateFeedbackDetailBySalon=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
        
     ];
 }
 exports.updateFeedbackDetail=function(){
     return[
         param('id').not().isEmpty().isInt().withMessage("id:number"),
-        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
-        // body('salonId').not().isEmpty().withMessage("in put content").isInt("salonId:number"),
+        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
+       
     ];
 }
 exports.addImageToImageSalon=function(){
     return[
-        body('image').not().isEmpty().withMessage("not empty").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
+        body('image').not().isEmpty().withMessage("not empty").isLength({min:1,max:450}).withMessage('min lenght 1,max lenght 450'),
     ];
 }
 exports.addServiceSalon=function(){
 
     return[
+        body('name').not().isEmpty().withMessage("not empty").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
         body('price').not().isEmpty().withMessage("not empty"),
         body('service_time').not().isEmpty().withMessage("not empty"),
         body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("input number"),
+        body('content').not().isEmpty().withMessage("content not empty").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
+        body('description').not().isEmpty().withMessage("description not empty"),
     ];
 }
 exports.updateServiceSalon=function(){   
@@ -158,6 +161,8 @@ exports.updateServiceSalon=function(){
         body('price').not().isEmpty().withMessage("not empty"),
         body('service_time').not().isEmpty().withMessage("not empty"),
         body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("input number"),
+        body('content').not().isEmpty().withMessage("content not empty").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
+        body('description').not().isEmpty().withMessage("description not empty"),
     ];
 }
 exports.addCategoryService=function(){ 
@@ -168,7 +173,7 @@ exports.addCategoryService=function(){
 }
 exports.addImageService=function(){
     return[
-        body('image').not().isEmpty().withMessage("not empty").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
+        body('image').not().isEmpty().withMessage("not empty").isLength({min:1,max:450}).withMessage('min lenght 1,max lenght 450'),
         body('serviceId').not().isEmpty().isInt().withMessage("serviceId:number and not empty"),
     ];
 }
@@ -176,26 +181,26 @@ exports.addFeedBackBySalon=function(){
     return[
         body('rate').not().isEmpty().withMessage("not empty").isInt("rate : number"),
        
-        body('content').not().isEmpty().withMessage("content: not empty").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("content: not empty").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
     ];
 }
 exports.addFeedBackDetailBySalon=function(){
     return[
        
-        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("in put content").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
         body('feedbackId').not().isEmpty().isInt().withMessage("feedbackId:number"),
     ];
 }
 exports.addStaff=function(){
      return[
-         body('name').not().isEmpty().withMessage("in put content").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
+         body('name').not().isEmpty().withMessage("in put name").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
         body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
         body('address').not().isEmpty().withMessage("in put address").isLength({min:1,max:450}).withMessage('min lenght 1,max lenght 450'),
     ];
 }
 exports.validateStaff=function(){
     return[
-        body('name').not().isEmpty().withMessage("in put content").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
+        body('name').not().isEmpty().withMessage("in put name").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
        body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
        body('address').not().isEmpty().withMessage("in put address").isLength({min:1,max:450}).withMessage('min lenght 1,max lenght 450'),
    ];
@@ -203,7 +208,7 @@ exports.validateStaff=function(){
 exports.updateStaff=function(){
     return[
        param('id').not().isEmpty().isInt().withMessage("id:number"),
-       body('name').not().isEmpty().withMessage("in put content").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
+       body('name').not().isEmpty().withMessage("in put name").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
        body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
    ];
 }
@@ -237,7 +242,7 @@ exports.updateAddressSalon=function(){
 exports.cancelBookingBySalon=function(){
     return[
         body('registerServiceId').not().isEmpty().withMessage("in put registerServiceId"),
-        body('content').not().isEmpty().withMessage("in put content to send customer").isLength({min:1,max:200}).withMessage('min lenght 1,max lenght 200'),
+        body('content').not().isEmpty().withMessage("in put content to send customer").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
     ]
 }
 exports.impossibleService=function(){

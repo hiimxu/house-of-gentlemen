@@ -16,6 +16,9 @@ exports.addServiceSalon = function (req, res, next) {
         promotion: req.body.promotion,
         service_time: req.body.service_time,
     }
+    if (parseInt(dataService.promotion)>100 || parseInt(dataService.promotion)<0) {
+        return res.status(400).json({message:"0<=promotion<=100"})
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -121,6 +124,9 @@ exports.updateServiceSalon = function (req, res, next) {
         service_time: req.body.service_time,
 
     };
+    if (parseInt(dataUpdate.promotion)>100 || parseInt(dataUpdate.promotion)<0) {
+        return res.status(400).json({message:"0<=promotion<=100"})
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
