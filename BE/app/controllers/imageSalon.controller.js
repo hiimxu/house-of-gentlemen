@@ -4,7 +4,7 @@ exports.getImageSalon= function (req, res, next) {
     var id = req.user.salonId;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     console.log(req.user)
     const errors = validationResult(req);
@@ -36,7 +36,7 @@ exports.addImageToImageSalon = function (req, res, next) {
     var image= req.body.image;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     var dataImage ={image:image,salonId:salonId}
     const errors = validationResult(req);
@@ -64,7 +64,7 @@ exports.deleteImageOfImageSalon =function (req, res, next) {
     var id= req.params.id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

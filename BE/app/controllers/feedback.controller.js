@@ -11,7 +11,7 @@ exports.addFeedBackBySalon = function (req, res, next) {
     };
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     
     const errors = validationResult(req);
@@ -48,7 +48,7 @@ exports.getFeedbackOfSalon = function (req, res, next) {
     }
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     try {
         FeedBack.getFeedbackOfSalon(id, function (data) {
@@ -70,7 +70,7 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
     var id = req.params.id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     var wsend='salon';
     // chu y phai xoa feedback_detail truoc
@@ -169,7 +169,7 @@ exports.updateFeedbackBySalon = function (req, res, next) {
     };
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     console.log(dataUpdate)
     wsend='salon';

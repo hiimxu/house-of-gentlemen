@@ -96,7 +96,7 @@ Service.getAllServicePossible= function (result) {
     });
 }
 Service.impossibleService=function (id, result) {
-    db.query(`UPDATE swp490_g11.service SET possible=1  WHERE (serviceId = '${id}');`, (err, rows, fields) => {
+    db.query(`UPDATE swp490_g11.service SET possible=0  WHERE (serviceId = '${id}');`, (err, rows, fields) => {
      
         if (err) {
             result(null,err);
@@ -105,6 +105,15 @@ Service.impossibleService=function (id, result) {
         }
     });
     
+}
+Service.getImpossibleService= function (id,result) {
+    db.query(`select* from service where salonId='${id}' and possible=0`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
 }
 
 

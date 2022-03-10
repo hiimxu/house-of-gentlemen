@@ -86,7 +86,7 @@ exports.getSalonOwnerProfile = function (req, res, next) {
     var id = req.user.account_id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     
     try {
@@ -108,7 +108,7 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     id=req.user.account_id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     console.log(req.user)
     var dataUpdate = {

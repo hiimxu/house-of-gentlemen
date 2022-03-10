@@ -191,7 +191,7 @@ exports.cancelBooking = function (req, res, next) {
 exports.getRegisterServiceOfSalon = function (req, res, next) {
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     RegisterService.getRegisterServiceOfSalon(salonId, function (data) {
         if (data == null) {
@@ -205,7 +205,7 @@ exports.getRegisterServiceOfSalon = function (req, res, next) {
 exports.cancelBookingBySalon = function (req, res, next) {
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     var registerServiceId = req.body.registerServiceId;
     var content=req.body.content;

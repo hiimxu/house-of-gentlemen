@@ -4,7 +4,7 @@ exports.getStaff = function (req, res, next) {
     var id = req.user.salonId;
     var salonId = req.user.salonId;
     if (salonId == null) {
-        return res.status(400).json({ message: "please login account customer" });
+        return res.status(400).json({ message: "please login account salon" });
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,7 +38,7 @@ exports.addStaff = function (req, res, next) {
     }
     var salonId = req.user.salonId;
     if (salonId == null) {
-        return res.status(400).json({ message: "please login account customer" });
+        return res.status(400).json({ message: "please login account salon" });
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -62,7 +62,7 @@ exports.updateStaff = function (req, res, next) {
     var id = req.params.id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
 
     var dataUpdate = {
@@ -108,7 +108,7 @@ exports.deleteStaff = function (req, res, next) {
     var id = req.params.id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     Staff.checkPermission(id, salonId, function (data) {
         if (data[0].salonId == null) {

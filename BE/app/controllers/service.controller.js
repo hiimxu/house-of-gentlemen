@@ -5,7 +5,7 @@ const { body, validationResult } = require('express-validator');
 exports.addServiceSalon = function (req, res, next) {
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     var dataService = {
         salonId: req.user.salonId,
@@ -44,7 +44,7 @@ exports.deleteServiceSalon = function (req, res, next) {
     var id = req.params.idService;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -67,7 +67,7 @@ exports.deleteServiceSalon = function (req, res, next) {
 exports.getServiceOfSalon = function (req, res, next) {
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
 
     const errors = validationResult(req);
@@ -110,7 +110,7 @@ exports.updateServiceSalon = function (req, res, next) {
     var id = req.params.idService;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     var dataUpdate = {
         name:req.body.name,
@@ -199,7 +199,7 @@ exports.impossibleService=function (req, res, next) {
     var serviceId= req.body.serviceId;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     ServiceSalon.checkPermission(serviceId,salonId, function (data){
         if (data== null) {
@@ -217,4 +217,18 @@ exports.impossibleService=function (req, res, next) {
         }
     })
     
+}
+exports.getImpossibleService=function (req, res, next) {
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+        return res.status(400).json({message:"please login account salon"});
+    }
+    ServiceSalon.getImpossibleService(salonId,function (data){
+        if (data.length == 0) {
+            res.status(400).json({ data: data, message: "have not data"})
+        } else {
+            res.status(400).json({ data: data, message: "get success"})
+        }
+
+    })
 }

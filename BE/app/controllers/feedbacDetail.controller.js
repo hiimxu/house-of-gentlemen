@@ -10,7 +10,7 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
     };
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     var wsend = "salon";
     var dateCreate = new Date();
@@ -73,7 +73,7 @@ exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function (req, res, next
     var id = req.params.id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -163,7 +163,7 @@ exports.updateFeedbackDetailBySalon = function (req, res, next) {
     var id = req.params.id;
     var salonId= req.user.salonId;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account customer"});
+       return res.status(400).json({message:"please login account salon"});
     }
     var wsend = 'salon';
     var dataUpdate = { content: req.body.content, salonId: req.user.salonId };
