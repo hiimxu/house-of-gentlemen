@@ -38,7 +38,7 @@ router.put('/update/feedbackDetail/:id',validate.updateFeedbackDetail(),cors(),a
 router.get('/getFeedbackOfSalon/:id',validate.checkId(),cors(),feedbackController.getFeedbackOfSalon);
 router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),feedbackDetailController.getFeedbackDetail);
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
-router.get('/get/AllService',cors(),serviceController.getAllService);
+router.get('/get/AllServicePossible',cors(),serviceController.getAllServicePossible);
 router.get('/get/serviceOfSalon/:idSalon',param('idSalon').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),serviceController.getAllServiceSalon);
 router.get('/get/staff/:id',validate.checkId(),cors(),staffController.getStaff)
 router.get('/imageService/:id',validate.checkId(),cors(),imageServiceController.getImageService);

@@ -79,10 +79,10 @@ exports.getServiceOfSalon = function (req, res, next) {
         res.status(400).json({ data: error, message: "get service fail" });
     }
 }
-exports.getAllService = function (req, res, next) {
+exports.getAllServicePossible = function (req, res, next) {
 
     try {
-        ServiceSalon.getAllService(function (data) {
+        ServiceSalon.getAllServicePossible(function (data) {
 
             if (data == null) {
                 res.status(400).json({ data: data, message: "get service fail" });
