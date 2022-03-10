@@ -3,6 +3,10 @@ var CategoryService = require('../models/categoryService.model');
 var ImageService = require('../models/imageService.model');
 const { body, validationResult } = require('express-validator');
 exports.addServiceSalon = function (req, res, next) {
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataService = {
         salonId: req.user.salonId,
         name: req.body.name,
@@ -38,6 +42,10 @@ exports.addServiceSalon = function (req, res, next) {
 // van chua xong delete service vi thieu register service
 exports.deleteServiceSalon = function (req, res, next) {
     var id = req.params.idService;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -57,7 +65,11 @@ exports.deleteServiceSalon = function (req, res, next) {
 }
 
 exports.getServiceOfSalon = function (req, res, next) {
-    var id = req.user.salonId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -97,6 +109,9 @@ exports.getAllServicePossible = function (req, res, next) {
 exports.updateServiceSalon = function (req, res, next) {
     var id = req.params.idService;
     var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataUpdate = {
         name:req.body.name,
         price:req.body.price,
@@ -183,6 +198,9 @@ exports.getServiceByIdService= function (req, res, next) {
 exports.impossibleService=function (req, res, next) {
     var serviceId= req.body.serviceId;
     var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     ServiceSalon.checkPermission(serviceId,salonId, function (data){
         if (data== null) {
             res.status(400).json({ data: data, message: "err mysql"})

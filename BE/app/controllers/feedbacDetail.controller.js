@@ -8,6 +8,10 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
         feedbackId: req.body.feedbackId,
         content: req.body.content
     };
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var wsend = "salon";
     var dateCreate = new Date();
     dataFeedBackDetail = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
@@ -67,7 +71,10 @@ exports.getFeedbackDetail = function (req, res, next) {
 }
 exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function (req, res, next) {
     var id = req.params.id;
-    var salonId = req.user.salonId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -154,6 +161,10 @@ exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
 }
 exports.updateFeedbackDetailBySalon = function (req, res, next) {
     var id = req.params.id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var wsend = 'salon';
     var dataUpdate = { content: req.body.content, salonId: req.user.salonId };
     var dateUpdate = new Date();

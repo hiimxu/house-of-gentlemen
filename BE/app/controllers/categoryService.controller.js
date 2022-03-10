@@ -3,7 +3,13 @@ var ServiceSalon = require('../models/service.model');
 const { body, validationResult } = require('express-validator');
 
 exports.addCategoryService = function (req, res, next) {
-var salonId = req.user.salonId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataCategoryService = {
         categoryId: req.body.categoryId,
         serviceId: req.body.serviceId,
@@ -43,6 +49,10 @@ var salonId = req.user.salonId;
 
 exports.deleteCategoryService = function (req, res, next) {
     var id = req.params.id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });

@@ -30,6 +30,9 @@ exports.searchSalonByDistrict= function (req, res, next) {
 }
 exports.updateAddressSalon= function (req, res, next) {
     var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });

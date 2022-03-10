@@ -84,6 +84,10 @@ exports.salonOwner = function (req, res, next) {
 
 exports.getSalonOwnerProfile = function (req, res, next) {
     var id = req.user.account_id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     
     try {
         SalonOwner.getProfileSalon(id, function (data) {
@@ -102,6 +106,10 @@ exports.getSalonOwnerProfile = function (req, res, next) {
 }
 exports.updateSalonOwnerProfile = function (req, res, next) {
     id=req.user.account_id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     console.log(req.user)
     var dataUpdate = {
         nameSalon: req.body.nameSalon,

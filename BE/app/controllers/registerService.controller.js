@@ -189,7 +189,10 @@ exports.cancelBooking = function (req, res, next) {
     });
 }
 exports.getRegisterServiceOfSalon = function (req, res, next) {
-    var salonId = req.user.salonId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     RegisterService.getRegisterServiceOfSalon(salonId, function (data) {
         if (data == null) {
             return res.json({ data: data, message: "err mysqld" });
@@ -200,7 +203,10 @@ exports.getRegisterServiceOfSalon = function (req, res, next) {
 
 }
 exports.cancelBookingBySalon = function (req, res, next) {
-    var salonId = req.user.salonId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var registerServiceId = req.body.registerServiceId;
     var content=req.body.content;
     const errors = validationResult(req);

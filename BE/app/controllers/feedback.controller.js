@@ -9,6 +9,10 @@ exports.addFeedBackBySalon = function (req, res, next) {
         rate: req.body.rate,
         content: req.body.content
     };
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -42,6 +46,10 @@ exports.getFeedbackOfSalon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     try {
         FeedBack.getFeedbackOfSalon(id, function (data) {
             if (data == null) {
@@ -61,6 +69,9 @@ exports.getFeedbackOfSalon = function (req, res, next) {
 exports.deleteFeedbackBySalon = function (req, res, next) {
     var id = req.params.id;
     var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var wsend='salon';
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
@@ -156,6 +167,10 @@ exports.updateFeedbackBySalon = function (req, res, next) {
         rate: req.body.rate,
         salonId: req.user.salonId,
     };
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     console.log(dataUpdate)
     wsend='salon';
     var dateUpdate = new Date();
