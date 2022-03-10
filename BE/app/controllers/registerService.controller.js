@@ -165,10 +165,45 @@ exports.cancelBooking = function (req, res, next) {
 
         }
 
+    });
+}
+exports.getRegisterServiceOfSalon = function (req, res, next) {
+    var salonId = req.user.salonId;
+   RegisterService.getRegisterServiceOfSalon(salonId, function (data){
+    if (data == null) {
+        return res.json({ data: data, message: "err mysqld" });
+     } else {
+        return res.json({ data: data, message: "get booking success" });
+     }
+   })
+
+}  
+exports.cancelBookingBySalon=function (req, res, next) {
+    var salonId = req.user.salonId;
+    var registerServiceId=req.body.registerServiceId;
+    RegisterService.getRegisterServiceById(registerServiceId, function (data){
+        if (data.length == 0) {
+            return res.status(400).json({message:"booking service not exist"});
+        } else {
+            RegisterService.checkSalon(registerServiceId,salonId,function (data){
+                if (data.length == 0) {
+                    return res.status(400).json({message:"you not have access"});
+                } else {
+                    StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
+                        if (data == null) {
+                           return res.json({ data: data, message: "cancel booking failed" });
+                        } else {
+                            RegisterService.cancelBooking(registerServiceId, function (data) {
+                                if (data == null) {
+                                   return res.json({ data: data, message: "cancel booking failed" });
+                                } else {
+                                   return res.json({ data: data, message: "cancel booking success" });
+                                }
+                            });
+                        }
+                    });
+                }
+            })
+        }
     })
-
-
-
-
-
 }

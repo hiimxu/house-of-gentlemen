@@ -13,6 +13,7 @@ const statusRegisterServiceController = require('../controllers/statusRegisterSe
 const categoryController = require('../controllers/category.controller');
 const statusStaffController = require('../controllers/statusStaff.controller');
 const addressSalonController=require('../controllers/address.controller');
+const registerServiceController = require('../controllers/registerService.controller');
 const { param,body, validationResult } = require('express-validator');
 const {check} = require('express-validator');
 const validate = require('../common/valiator');
@@ -52,6 +53,7 @@ router.get('/get/allCategory',cors(),categoryController.getAllCategory);
 router.get('/get/categoryByCategoryId/:id',validate.checkId(),cors(),categoryController.getCategoryByIdCategory);
 router.get('/get/allStaffStatus',cors(),statusStaffController.getAllStaffStatus);
 router.get('/get/staffStatusById/:id',cors(),statusStaffController.getStaffStatusByIdstatusStaff);
-router.put('/update/address/',validate.updateAddressSalon(),cors(),auth,addressSalonController.updateAddressSalon)
-
+router.put('/update/address/',validate.updateAddressSalon(),cors(),auth,addressSalonController.updateAddressSalon);
+router.get('/get/bookingServiceOfSalon',cors(),auth,registerServiceController.getRegisterServiceOfSalon);
+router.put('/update/cancelBookingServiceBySalon',cors(),auth,registerServiceController.cancelBookingBySalon);
 module.exports = router;
