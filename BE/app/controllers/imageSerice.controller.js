@@ -5,6 +5,10 @@ exports.addImageService = function (req, res, next) {
         serviceId: req.body.serviceId,
         image: req.body.image
     };
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -52,6 +56,10 @@ exports.getImageService = function (req, res, next) {
 }
 exports.deleteImageService = function (req, res, next) {
     var id = req.params.id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });

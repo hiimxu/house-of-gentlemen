@@ -3,7 +3,8 @@ var Customer = require('../models/customer.model');
 var SalonOwner = require('../models/salonOwner.model');
 var Account = require('../models/account.model');
 var SalonOwner = require('../models/salonOwner.model');
-var Customer = require('../models/customer.model');
+var Address = require('../models/address.model');
+
 const nodemailer = require('nodemailer');
 var md5 = require('md5');
 const jwt = require("jsonwebtoken");
@@ -127,7 +128,7 @@ exports.login_account = function async(req, res, next) {
                                 SalonOwner.getProfileSalon(id, function (data) {
                                     console.log(data[0].accountId+" "+data[0].salonId)
                                     const token = jwt.sign(
-                                        { account_id: data[0].accountId,account_name: acc,customerId:data[0].salonId },
+                                        { account_id: data[0].accountId,account_name: acc,salonId:data[0].salonId },
                                         process.env.TOKEN_KEY,
                                         {
                                             expiresIn: "2h",
@@ -227,14 +228,11 @@ exports.add_account_salon = function (req, res, next) {
     var pass = req.body.password;
     var rol = req.body.role;
     var email = req.body.email;
-    
-    var possibility = req.body.possibility;
-    if (!possibility == 0) {
-        return res.status(400).json({ message: "check possibility" });
-        
-    }
-
-
+    var possibility = 0;
+    var dataAddress={ city:req.body.city,
+        district: req.body.district,
+        detailAddress: req.body.detailAddress
+        }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -250,16 +248,25 @@ exports.add_account_salon = function (req, res, next) {
             else {
                 if (rol == 'salon') {
                     data = Account.createAccount(save_data, function (data_account) {
-                        var accountId = data_account.id;
                         var nameSalon = req.body.nameSalon;
                         var phone = req.body.phone;
                         var taxCode = req.body.taxCode;
-                        var save_salonOwner = { accountId: accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode };
+                        var save_salonOwner = { accountId:data_account.accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode };
                         data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
+                            var dataSalon=data;
                             if (data == null) {
                                 res.status(400).json({ data: data, message: "create account salon failed" });
                             } else {
-                                res.json({ data_account: data_account, data: data, message: "create account salon success" });
+                                
+                                dataAddress={salonId:dataSalon.id,...dataAddress}
+                                Address.addAddress(dataAddress, function(data){
+                                    if (data== null) {
+                                       return res.status(400).json({message:"mysql error"})
+                                    } else {
+                                       res.json({ data_account: data_account, dataSalon: dataSalon,dataAddress:data, message: "create account salon success" });  
+                                    }
+                                })
+
                             }
                         });
                     });
@@ -313,8 +320,8 @@ exports.forgotPassword = async function (req, res, next) {
         if (data.length == 1) {
             var id = data[0].account_id;
             var email = data[0].email;
-            if (!email == emailcheck) {
-                res.status(400).json({ message: "check your email" });
+            if (!(email == emailcheck)) {
+               return res.status(400).json({ message: "check your email" });
 
             }
             var new_password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
@@ -329,13 +336,13 @@ exports.forgotPassword = async function (req, res, next) {
                     var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                            user: 'mduyxa@gmail.com',
-                            pass: 'Ad12345678'
+                            user: 'duymche130521@gmail.com',
+                            pass: 'Adx12311',
+                            
                         }
                     });
-
                     var mailOptions = {
-                        from: 'mduyxa@gmail.com',
+                        from: 'forgot password',
                         to: email,
                         subject: 'New Password',
                         text: 'your new password:' + new_password

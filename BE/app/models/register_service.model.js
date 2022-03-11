@@ -13,6 +13,7 @@ const Register_service = function (registerService) {
     this.price_original= registerServiceId.price_original;
 }
 Register_service.getRegisterServiceById=function (id, result) {
+    console.log(id)
     db.query("SELECT * FROM swp490_g11.register_service where registerServiceId =?",id,(err, rows, fields) => {
         if (err) {
             result(null,err);
@@ -64,5 +65,35 @@ Register_service.checkCustomer=function (id,customerId, result) {
         }
     });
 }
-
+Register_service.getRegisterServiceOfSalon=function (id, result) {
+    db.query("SELECT * FROM swp490_g11.register_service where salonId =? ",id,(err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data);
+        }
+    });
+}
+Register_service.checkSalon=function(id,salonId,result){
+    db.query("SELECT * FROM swp490_g11.register_service where registerServiceId =?and salonId =? ",[id,salonId],(err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data);
+        }
+    });
+}
+Register_service.getPhone=function(id,result){
+    db.query(`SELECT swp490_g11.register_service.customerId,swp490_g11.register_service.registerServiceId,swp490_g11.customer.phone FROM swp490_g11.register_service, swp490_g11.customer
+   where swp490_g11.register_service.customerId=swp490_g11.customer.customerId and swp490_g11.register_service.registerServiceId=?`,id,(err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data);
+        }
+    });
+}
 module.exports =Register_service;

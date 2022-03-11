@@ -52,7 +52,6 @@ Account.getAccountById = function (id, result) {
 }
 Account.createAccount = function( save_data, result) {
     db.query(`INSERT INTO account SET?`, save_data, (err, rows, res) => {
-        console.log(save_data)
         if (err) {
             result(err)
         } else {

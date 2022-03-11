@@ -3,8 +3,12 @@ var CategoryService = require('../models/categoryService.model');
 var ImageService = require('../models/imageService.model');
 const { body, validationResult } = require('express-validator');
 exports.addServiceSalon = function (req, res, next) {
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     var dataService = {
-        salonId: req.body.salonId,
+        salonId: req.user.salonId,
         name: req.body.name,
         price: req.body.price,
         description: req.body.description,
@@ -38,6 +42,10 @@ exports.addServiceSalon = function (req, res, next) {
 // van chua xong delete service vi thieu register service
 exports.deleteServiceSalon = function (req, res, next) {
     var id = req.params.idService;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -57,7 +65,11 @@ exports.deleteServiceSalon = function (req, res, next) {
 }
 
 exports.getServiceOfSalon = function (req, res, next) {
-    var id = req.params.idSalon;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -79,10 +91,10 @@ exports.getServiceOfSalon = function (req, res, next) {
         res.status(400).json({ data: error, message: "get service fail" });
     }
 }
-exports.getAllService = function (req, res, next) {
+exports.getAllServicePossible = function (req, res, next) {
 
     try {
-        ServiceSalon.getAllService(function (data) {
+        ServiceSalon.getAllServicePossible(function (data) {
 
             if (data == null) {
                 res.status(400).json({ data: data, message: "get service fail" });
@@ -96,6 +108,10 @@ exports.getAllService = function (req, res, next) {
 }
 exports.updateServiceSalon = function (req, res, next) {
     var id = req.params.idService;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     var dataUpdate = {
         name:req.body.name,
         price:req.body.price,
@@ -109,19 +125,28 @@ exports.updateServiceSalon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    try {
-        ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
-
-            if (data == null|| data.affectedRows==0) {
-                res.status(400).json({ data: data, message: "update service fail" });
-            } else {
-                
-                res.json({ data: data, message: "update service success" });
+    
+    ServiceSalon.checkPermission(id,salonId,function (data){
+        if (data.length == 0) {
+            return  res.status(400).json({ data: data, message: "you not have access" });
+          } else {
+            try {
+                ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
+        
+                    if (data == null|| data.affectedRows==0) {
+                        res.status(400).json({ data: data, message: "update service fail" });
+                    } else {
+                        
+                        res.json({ data: data, message: "update service success" });
+                    }
+                });
+            } catch (error) {
+                res.status(400).json({ data: error, message: "update service fail" });
             }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "update service fail" });
-    }
+          }
+    });
+
+    
 
 }
 exports.getAllServiceSalon = function (req, res, next) {
@@ -169,4 +194,41 @@ exports.getServiceByIdService= function (req, res, next) {
     } catch (error) {
         res.status(400).json({ data: error, message: "get service fail" });
     }
+}
+exports.impossibleService=function (req, res, next) {
+    var serviceId= req.body.serviceId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    ServiceSalon.checkPermission(serviceId,salonId, function (data){
+        if (data== null) {
+            res.status(400).json({ data: data, message: "err mysql"})
+        } else if (data.length == 0) {
+            return res.status(400).json({message:"you not have access"})
+        }else{
+            ServiceSalon.impossibleService(serviceId,function (data){
+                if (data== null) {
+                    return res.status(400).json({message:"error sql"})
+                } else {
+                    return res.status(200).json({data,message:"impossible service"})
+                }
+            })
+        }
+    })
+    
+}
+exports.getImpossibleService=function (req, res, next) {
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+        return res.status(400).json({message:"please login account salon"});
+    }
+    ServiceSalon.getImpossibleService(salonId,function (data){
+        if (data.length == 0) {
+            res.status(400).json({ data: data, message: "have not data"})
+        } else {
+            res.status(400).json({ data: data, message: "get success"})
+        }
+
+    })
 }

@@ -11,8 +11,10 @@ exports.getAllCustomer = function (req, res, next) {
     res.json("wellcome to customer");
 }
 exports.getCustomerProfile = function (req, res, next) {
-    // console.log(checkId)
-   
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
   
     try {
         Customer.getCustomerSalon(req.user.account_id, function (data) {
@@ -33,6 +35,10 @@ exports.getCustomerProfile = function (req, res, next) {
 }
 exports.updateCustomerProfile = function (req, res, next) {
     const errors = validationResult(req);
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     // console.log(parseInt(req.user.customerId)==parseInt(id)&&parseInt(req.user.account_id)==parseInt(accountId))
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });

@@ -37,6 +37,18 @@ ImageSalon.deleteImageOfImageSalon = function(id,result){
     });
 
 }
+ImageSalon.checkPermission= function (id,salonId,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.image_salon where salonId='${salonId}' and imageId=?`,id, (err, rows, fields) => {
+        if (err) {
+            
+            result(null,err);
+        } else {
+            data = rows;
+            result(data)
+        }
+    });
+}
 
 
 module.exports = ImageSalon;

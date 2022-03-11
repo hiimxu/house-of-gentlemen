@@ -1,6 +1,7 @@
 var StatusRegisterService = require('../models/statusRegisterService.model');
 const { body, validationResult } = require('express-validator');
 exports.getStatusRegisterService = function (req, res, next) {
+    
     try {
         StatusRegisterService.getAllSatusRegisterService(function (data) {
             if (data== null) {

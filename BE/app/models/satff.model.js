@@ -17,6 +17,18 @@ Staff.getStaff = function (id,result) {
         }
     });
 }
+Staff.checkPermission= function (id,salonId,result) {
+    
+    db.query(`SELECT * FROM swp490_g11.staff
+    where salonId=${salonId} and staffId=${id}`, (err, rows, fields) => {
+        if (err) {
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 Staff.addStaff= function (data,result) {
    
     db.query(`INSERT INTO staff SET?`,data, (err, rows, fields) => {
@@ -28,7 +40,7 @@ Staff.addStaff= function (data,result) {
     });
 }
 Staff.updateStaff=function (id,data, result) {
-    db.query(`UPDATE swp490_g11.staff SET ?  WHERE (saffId= '${id}');`,data,(err, rows, fields) => {
+    db.query(`UPDATE swp490_g11.staff SET ?  WHERE swp490_g11.staff.staffId=${id}`,data,(err, rows, fields) => {
      
         if (err) {
             result(null,err)
@@ -38,10 +50,9 @@ Staff.updateStaff=function (id,data, result) {
     });
 }
 Staff.deleteStaff= function (id,result) {
-   
-    db.query(`delete from staff where saffId = ${id}`, (err, rows, fields) => {
+    db.query(`delete from swp490_g11.staff where staffId=?`,id, (err, rows, fields) => {
         if (err) {
-            result(null, err);
+            result( err);
         } else {
             result(rows);
         }

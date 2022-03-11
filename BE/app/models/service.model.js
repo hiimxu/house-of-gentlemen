@@ -8,6 +8,7 @@ const Service = function (service) {
     this.content =service.content;
     this.promotion = service.promotion;
     this.service_time = service.service_time;   
+    this.possible=thanh.possible;
 }
 Service.addServiceSalon = function(dataService,result){
     db.query(`INSERT INTO service SET?`, dataService, (err, rows, res) => {
@@ -30,7 +31,7 @@ Service.deleteServiceSalon = function(id,result){
 
 }
 Service.getServiceOfSalon = function (id,result) {
-    db.query(`select* from service where salonId like '${id}'`, (err, rows, fields) => {
+    db.query(`select* from service where salonId like '${id}' and possible=1`, (err, rows, fields) => {
         if (err) {
             result(null, err)
         } else {
@@ -59,7 +60,7 @@ Service.getAllService= function (result) {
     });
 }
 Service.getAllServiceSalon= function (id,result) {
-    db.query(`select* from service where salonId='${id}'`, (err, rows, fields) => {
+    db.query(`select* from service where salonId='${id}' and possible=1`, (err, rows, fields) => {
         if (err) {
             result(null, err)
         } else {
@@ -68,7 +69,7 @@ Service.getAllServiceSalon= function (id,result) {
     });
 }
 Service.getServiceByIdService= function (id,result) {
-    db.query(`select* from service where serviceId='${id}'`, (err, rows, fields) => {
+    db.query(`select* from service where serviceId='${id}' and possible=1`, (err, rows, fields) => {
         if (err) {
             result(null, err)
         } else {
@@ -76,5 +77,44 @@ Service.getServiceByIdService= function (id,result) {
         }
     });
 }
+Service.checkPermission= function (id,salonId,result) {
+    db.query(`select* from service where serviceId='${id}' and salonId=?`,salonId, (err, rows, fields) => {
+        if (err) {
+            result( null,err)
+        } else {
+            result(rows);
+        }
+    });
+}
+Service.getAllServicePossible= function (result) {
+    db.query(`select* from service where possible =1 `, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
+}
+Service.impossibleService=function (id, result) {
+    db.query(`UPDATE swp490_g11.service SET possible=0  WHERE (serviceId = '${id}');`, (err, rows, fields) => {
+     
+        if (err) {
+            result(null,err);
+        } else {
+            result(rows)
+        }
+    });
+    
+}
+Service.getImpossibleService= function (id,result) {
+    db.query(`select* from service where salonId='${id}' and possible=0`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
+}
+
 
 module.exports =Service;

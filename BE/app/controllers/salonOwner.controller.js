@@ -83,11 +83,12 @@ exports.salonOwner = function (req, res, next) {
 }
 
 exports.getSalonOwnerProfile = function (req, res, next) {
-    var id = req.params.id;
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+    var id = req.user.account_id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
     }
+    
     try {
         SalonOwner.getProfileSalon(id, function (data) {
             if (data == null) {
@@ -104,8 +105,12 @@ exports.getSalonOwnerProfile = function (req, res, next) {
     }
 }
 exports.updateSalonOwnerProfile = function (req, res, next) {
-    var id = req.params.id;
-    console.log(id)
+    id=req.user.account_id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    console.log(req.user)
     var dataUpdate = {
         nameSalon: req.body.nameSalon,
         phone: req.body.phone,

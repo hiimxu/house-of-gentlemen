@@ -5,10 +5,14 @@ const { body, validationResult } = require('express-validator');
 exports.addFeedBackBySalon = function (req, res, next) {
     var rate= req.body.rate;
     var dataFeedBack = {
-        salonId: req.body.salonId,
+        salonId: req.user.salonId,
         rate: req.body.rate,
         content: req.body.content
     };
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -37,10 +41,14 @@ exports.addFeedBackBySalon = function (req, res, next) {
     
 }
 exports.getFeedbackOfSalon = function (req, res, next) {
-    var id = req.params.id;
+    var id = req.user.salonId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
     }
     try {
         FeedBack.getFeedbackOfSalon(id, function (data) {
@@ -60,7 +68,10 @@ exports.getFeedbackOfSalon = function (req, res, next) {
 }
 exports.deleteFeedbackBySalon = function (req, res, next) {
     var id = req.params.id;
-    var salonId= req.body.salonId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     var wsend='salon';
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
@@ -105,6 +116,9 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
 exports.deleteFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
     var customerId= req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
 
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
@@ -151,8 +165,13 @@ exports.updateFeedbackBySalon = function (req, res, next) {
     var dataUpdate = {
         content: req.body.content,
         rate: req.body.rate,
-        salonId: req.body.salonId,
+        salonId: req.user.salonId,
     };
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    console.log(dataUpdate)
     wsend='salon';
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
@@ -199,6 +218,9 @@ exports.updateFeedbackBySalon = function (req, res, next) {
 exports.updateFeedbackByCustomer = function (req, res, next) {
     var id = req.params.id;
     var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataUpdate = {
         content: req.body.content,
         rate: req.body.rate,
@@ -247,6 +269,10 @@ exports.updateFeedbackByCustomer = function (req, res, next) {
 
 }
 exports.addFeedBackByCustomer = function (req, res, next) {
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataFeedBack = {
         customerId: req.body.req.user.customerId,
         salonId: req.body.salonId,

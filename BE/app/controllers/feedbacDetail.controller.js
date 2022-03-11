@@ -4,10 +4,14 @@ var SalonOwner = require('../models/salonOwner.model');
 const { body, validationResult } = require('express-validator');
 exports.addFeedBackDetailBySalon = function (req, res, next) {
     var dataFeedBack = {
-        salonId: req.body.salonId,
+        salonId: req.user.salonId,
         feedbackId: req.body.feedbackId,
         content: req.body.content
     };
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     var wsend = "salon";
     var dateCreate = new Date();
     dataFeedBackDetail = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
@@ -16,10 +20,7 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     // res.json(dataFeedBack);
-    SalonOwner.checkSalon(dataFeedBack.salonId, function (data) {
-        if (data.length == 0) {
-            return res.status(400).json({ message: "salon khong ton tai" })
-        } else {
+   
             FeedBack.checkFeedBackofSalon(dataFeedBack.salonId, dataFeedBack.feedbackId, function (data) {
                 if (data.length == 0) {
                     res.status(400).json({ data: data, message: "feedback khong nam trong salon" })
@@ -42,9 +43,6 @@ exports.addFeedBackDetailBySalon = function (req, res, next) {
                     }
                 }
             })
-
-        }
-    })
 
 
 }
@@ -73,7 +71,10 @@ exports.getFeedbackDetail = function (req, res, next) {
 }
 exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function (req, res, next) {
     var id = req.params.id;
-    var salonId = req.body.salonId;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -116,7 +117,10 @@ exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function (req, res, next
 }
 exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
     var id = req.params.id;
-    var customerId = req.user.customerId;
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -157,8 +161,12 @@ exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
 }
 exports.updateFeedbackDetailBySalon = function (req, res, next) {
     var id = req.params.id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
     var wsend = 'salon';
-    var dataUpdate = { content: req.body.content, salonId: req.body.salonId };
+    var dataUpdate = { content: req.body.content, salonId: req.user.salonId };
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
     const errors = validationResult(req);
@@ -200,7 +208,10 @@ exports.updateFeedbackDetailBySalon = function (req, res, next) {
 }
 exports.updateFeedbackDetailByCustomer = function (req, res, next) {
     var id = req.params.id;
-    var customerId = req.user.customerId;
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var dataUpdate = { content: req.body.content };
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
@@ -245,6 +256,10 @@ exports.addFeedBackDetailByCustomer = function (req, res, next) {
         feedbackId: req.body.feedbackId,
         content: req.body.content
     };
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     var wsend = "customer";
     var dateCreate = new Date();
     dataFeedBackDetail = { wsend: wsend, dateCreate: dateCreate, ...dataFeedBack }
