@@ -56,7 +56,7 @@ exports.forgotPassword=function(){
 }
 exports.checkId=function(){
     return[
-        param('id').not().isEmpty().isInt()
+        param('id').not().isEmpty().isInt().withMessage('id:number')
     ];
 }
 exports.updateCustomerProfile=function(){
@@ -147,9 +147,9 @@ exports.addServiceSalon=function(){
 
     return[
         body('name').not().isEmpty().withMessage("not empty").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
-        body('price').not().isEmpty().withMessage("not empty"),
-        body('service_time').not().isEmpty().withMessage("not empty"),
-        body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("input number"),
+        body('price').not().isEmpty().withMessage("not empty").isInt().withMessage("price : number"),
+        body('service_time').not().isEmpty().withMessage("not empty").isInt().withMessage("service_time: number"),
+        body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("promotion: number"),
         body('content').not().isEmpty().withMessage("content not empty").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
         body('description').not().isEmpty().withMessage("description not empty"),
     ];
@@ -157,10 +157,10 @@ exports.addServiceSalon=function(){
 exports.updateServiceSalon=function(){   
     return[
         body('name').not().isEmpty().withMessage("not empty").isLength({min:1,max:45}).withMessage('min lenght 1,max lenght 45'),
-        param('idService').not().isEmpty().isInt().withMessage("idService:number and not empty"),
-        body('price').not().isEmpty().withMessage("not empty"),
-        body('service_time').not().isEmpty().withMessage("not empty"),
-        body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("input number"),
+        param('idService').not().isEmpty().withMessage("idService is not empty").isInt().withMessage("idService:number"),
+        body('price').not().isEmpty().withMessage("not empty").isInt().withMessage("price : number"),
+        body('service_time').not().isEmpty().withMessage("not empty").isInt().withMessage("service_time: number"),
+        body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("promotion: number"),
         body('content').not().isEmpty().withMessage("content not empty").isLength({min:1,max:2000}).withMessage('min lenght 1,max lenght 2000'),
         body('description').not().isEmpty().withMessage("description not empty"),
     ];

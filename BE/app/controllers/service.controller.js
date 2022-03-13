@@ -207,6 +207,10 @@ exports.impossibleService=function (req, res, next) {
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
     ServiceSalon.checkPermission(serviceId,salonId, function (data){
         if (data== null) {
             res.status(400).json({ data: data, message: "err mysql"})
