@@ -66,6 +66,55 @@ exports.getFeedbackOfSalon = function (req, res, next) {
         res.status(400).json({ data: error, message: "get feedback failed" });
     }
 }
+exports.getFeedbackOfSalonByCustomer = function (req, res, next) {
+    var id = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
+    
+    try {
+        FeedBack.getFeedbackOfSalon(id, function (data) {
+            if (data == null) {
+                res.status(400).json({ data: data, message: "get feedback failed" });
+            } else {
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message: "not have feed back" });
+                } else {
+                    res.json({ data: data, message: "get feedback success" });
+                }
+            }
+        });
+    } catch (error) {
+        res.status(400).json({ data: error, message: "get feedback failed" });
+    }
+}
+exports.getFeedbackOfSalon = function (req, res, next) {
+    var id = req.user.salonId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    try {
+        FeedBack.getFeedbackOfSalon(id, function (data) {
+            if (data == null) {
+                res.status(400).json({ data: data, message: "get feedback failed" });
+            } else {
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message: "not have feed back" });
+                } else {
+                    res.json({ data: data, message: "get feedback success" });
+                }
+            }
+        });
+    } catch (error) {
+        res.status(400).json({ data: error, message: "get feedback failed" });
+    }
+}
 exports.deleteFeedbackBySalon = function (req, res, next) {
     var id = req.params.id;
     var salonId= req.user.salonId;

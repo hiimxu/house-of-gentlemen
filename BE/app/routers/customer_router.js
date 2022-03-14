@@ -35,7 +35,7 @@ router.put('/update/feedback/:id',validate.updateFeedbackByCustomer(),cors(),aut
 router.post('/create/feedbackdetailbycustomer',validate.addFeedBackDetailByCustomer(),cors(),auth,feedbackDetailController.addFeedBackDetailByCustomer);
 router.delete('/delete/feedbackdetail/:id',validate.checkId(),cors(),auth,feedbackDetailController.deleteFeedbackDetailByFeedbackDetailId);
 router.put('/update/feedbackDetail/:id',validate.updateFeedbackDetail(),cors(),auth,feedbackDetailController.updateFeedbackDetailByCustomer);
-router.get('/getFeedbackOfSalon/:id',validate.checkId(),cors(),feedbackController.getFeedbackOfSalon);
+router.get('/getFeedbackOfSalon/:id',validate.checkId(),cors(),feedbackController.getFeedbackOfSalonByCustomer);
 router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),feedbackDetailController.getFeedbackDetail);
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
 router.get('/get/AllServicePossible',cors(),serviceController.getAllServicePossible);
