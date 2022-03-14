@@ -94,6 +94,30 @@ exports.getServiceOfSalon = function (req, res, next) {
         res.status(400).json({ data: error, message: "get service fail" });
     }
 }
+exports.getServiceOfSalonByCustomer = function (req, res, next) {
+    var id= req.params.id;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+        ServiceSalon.getServiceOfSalon(id, function (data) {
+
+            if (data == null) {
+                res.status(400).json({ data: data, message: "get service fail" });
+            } else {
+            if (data.length == 0) {
+                res.status(400).json({ data: data, message: "not have service " });
+            } else {
+                res.json({ data: data, message: "get service success" });
+            }
+            }
+        });
+    } catch (error) {
+        res.status(400).json({ data: error, message: "get service fail" });
+    }
+}
 exports.getAllServicePossible = function (req, res, next) {
 
     try {

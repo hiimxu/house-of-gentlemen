@@ -42,8 +42,8 @@ router.get('/get/AllServicePossible',cors(),serviceController.getAllServicePossi
 router.get('/get/serviceOfSalon/:idSalon',param('idSalon').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),serviceController.getAllServiceSalon);
 router.get('/get/staff/:id',validate.checkId(),cors(),staffController.getStaffByCustomer)
 router.get('/imageService/:id',validate.checkId(),cors(),imageServiceController.getImageService);
-router.get('/imageSalon/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),imageSalonController.getImageSalon);
-router.get('/Service/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),serviceController.getServiceOfSalon);
+router.get('/imageSalon/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),imageSalonController.getImageSalonByCustomer);
+router.get('/Service/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),serviceController.getServiceOfSalonByCustomer);
 router.get('/get/categoryService/:idService',param('idService').isInt().withMessage("idService : number"),cors(),categoryServiceController.getCategoryServiceOfService);
 router.get('/get/service/:id',validate.checkId(),cors(),serviceController.getServiceByIdService);
 router.get('/get/allCategory',cors(),categoryController.getAllCategory);
