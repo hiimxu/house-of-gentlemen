@@ -28,6 +28,30 @@ exports.getStaff = function (req, res, next) {
     }
 
 }
+exports.getStaffByCustomer = function (req, res, next) {
+    var id = req.params.id;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
+    try {
+        Staff.getStaff(id, function (data) {
+
+            if (data == null) {
+                res.status(400).json({ data: data, success: "get staff fail" });
+            } else {
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, success: "not have staff" });
+                } else {
+                    res.json({ data: data, success: "get staff success" });
+                }
+            }
+        });
+    } catch (error) {
+        res.status(400).json({ data: error, success: "get staff fail" });
+    }
+
+}
 exports.addStaff = function (req, res, next) {
 
     var data = {

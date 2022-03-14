@@ -40,7 +40,7 @@ router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
 router.get('/get/AllServicePossible',cors(),serviceController.getAllServicePossible);
 router.get('/get/serviceOfSalon/:idSalon',param('idSalon').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),serviceController.getAllServiceSalon);
-router.get('/get/staff/:id',validate.checkId(),cors(),staffController.getStaff)
+router.get('/get/staff/:id',validate.checkId(),cors(),staffController.getStaffByCustomer)
 router.get('/imageService/:id',validate.checkId(),cors(),imageServiceController.getImageService);
 router.get('/imageSalon/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),imageSalonController.getImageSalon);
 router.get('/Service/:idSalon',param('idSalon').isInt().withMessage("idSalon : number"),cors(),serviceController.getServiceOfSalon);
