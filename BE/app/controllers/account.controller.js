@@ -97,10 +97,11 @@ exports.login_account = function async(req, res, next) {
             try {
                 var data = Account.getAccountToLogin(acc, md5_pass, function (data) {
                     if (data == null) {
-                       return res.json({ data: data, message: "login failed" });
+                        
+                       return res.json({ data: data,datauser:message, message: "login failed" });
                     } else {
                         if (data.length == 0) {
-                          return res.status(400).json({ data: data, message: "please check password" });
+                          return res.status(400).json({ data: data ,userData:{message:"empty"}, message: "please check password" });
                         } else {
                             
                             var redata = data;
@@ -117,7 +118,7 @@ exports.login_account = function async(req, res, next) {
                             );
                             Account.updateToken(acc, token, function (response) {
                                 redata[0].token = token;
-                                return res.setHeader("x-access-token",token).json({ accountData: redata,customerData:data, message: "login successed", token: token });
+                                return res.setHeader("x-access-token",token).json({ accountData: redata,userData:data, message: "login successed", token: token });
                             
                                 
                             })
@@ -136,15 +137,17 @@ exports.login_account = function async(req, res, next) {
                                     );
                                     Account.updateToken(acc, token, function (response) {
                                         redata[0].token = token;
-                                        return res.setHeader("x-access-token",token).json({ accountData: redata,salonData:data, message: "login successed", token: token });
+                                        return res.setHeader("x-access-token",token).json({ accountData: redata,userData:data, message: "login successed", token: token });
                                     
                                         
                                     })  
                                 });
-                            }else{console.log(redata[0].account_id)
+                            }else if (redata[0].role=='admin')
+                            {console.log(redata[0].account_id)
+                                var adminData={name:'admin'}
                                 const token = jwt.sign(
                                     
-                                    { account_id: redata[0].account_id,account_name: acc },
+                                    { account_id: redata[0].account_id,role: acc,role:redata[0].role },
                                     process.env.TOKEN_KEY,
                                     {
                                         expiresIn: "2h",
@@ -152,10 +155,13 @@ exports.login_account = function async(req, res, next) {
                                 );
                                 Account.updateToken(acc, token, function (response) {
                                     redata[0].token = token;
-                                    return res.setHeader("x-access-token",token).json({ accountData: redata, message: "login successed", token: token });
+                                    return res.setHeader("x-access-token",token).json({ accountData: redata,userData:adminData ,message: "login successed", token: token });
                                 
                                     
                                 })  
+                            }
+                            else{
+                                return res.status(400).json({message:"err systems"})
                             }
                             
                             
