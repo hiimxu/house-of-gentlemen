@@ -95,7 +95,7 @@ exports.getServiceOfSalon = function (req, res, next) {
     }
 }
 exports.getServiceOfSalonByCustomer = function (req, res, next) {
-    var id= req.params.id;
+    var id= req.params.idSalon;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

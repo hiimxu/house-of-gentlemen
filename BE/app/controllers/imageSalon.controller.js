@@ -31,7 +31,7 @@ exports.getImageSalon= function (req, res, next) {
     
 }
 exports.getImageSalonByCustomer= function (req, res, next) {
-    var id = req.params.id;
+    var id = req.params.idSalon;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });

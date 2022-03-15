@@ -31,7 +31,8 @@ Service.deleteServiceSalon = function(id,result){
 
 }
 Service.getServiceOfSalon = function (id,result) {
-    db.query(`select* from service where salonId like '${id}' and possible=1`, (err, rows, fields) => {
+    console.log(id)
+    db.query(`select* from service where salonId = '${id}' and possible=1`, (err, rows, fields) => {
         if (err) {
             result(null, err)
         } else {
@@ -69,6 +70,7 @@ Service.getAllServiceSalon= function (id,result) {
     });
 }
 Service.getServiceByIdService= function (id,result) {
+    console.log(id)
     db.query(`select* from service where serviceId='${id}' and possible=1`, (err, rows, fields) => {
         if (err) {
             result(null, err)
