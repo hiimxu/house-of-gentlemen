@@ -199,7 +199,7 @@ exports.add_account_customer = function (req, res, next) {
     try {
         var check = Account.checkAccount(acc, function (data) {
             if (data.length == 1) {
-                res.status(400).json({ data: "Account already exists", message: "Account already exists" });
+                res.status(400).json({  message: "Account already exists" });
             }
             else {
                 if (rol == 'customer') {
