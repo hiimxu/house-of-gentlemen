@@ -114,7 +114,9 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     var dataUpdate = {
         nameSalon: req.body.nameSalon,
         phone: req.body.phone,
-        taxCode: req.body.taxCode
+        taxCode: req.body.taxCode,
+        timeOpen: req.body.timeOpen,
+        timeClose: req.body.timeClose,
     };
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -99,7 +99,7 @@ exports.BookingService = function () {
             .exists()
             .not()
             .isEmpty()
-            .withMessage('start cannot be empty').matches(regexDateTime).withMessage("time use:yyyy-mm-dd hh-mm-ss"),
+            .withMessage('start cannot be empty').matches(regexDateTime).withMessage("time use:yyyy-mm-dd hh:mm:ss"),
         body('price_original').not().isEmpty().isInt().withMessage("price_original:is number"),
         body('service_time').not().isEmpty().isInt().withMessage("service_time:is number"),
     ];
@@ -228,6 +228,12 @@ exports.updateSalonOwnerProfile = function () {
         body('nameSalon').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('name salon:min lenght 1,max lenght 45'),
         body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone vi-VN"),
         body('taxCode').not().isEmpty().withMessage("not empty").isLength({ min: 1, max: 45 }).withMessage('tax code:min lenght 1,max lenght 45'),
+        body('timeOpen').exists()
+        .not()
+        .isEmpty().matches(regexHour).withMessage("timeOpen hour hh:mm"),
+        body('timeClose').exists()
+            .not()
+            .isEmpty().matches(regexHour).withMessage("timeEnd: hour hh:mm"),
     ];
 }
 exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function () {
