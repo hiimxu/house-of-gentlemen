@@ -19,6 +19,7 @@ const categoryController=require('../controllers/category.controller');
 const auth = require('../middleware/auth');
 const statusStaffController= require('../controllers/statusStaff.controller')
 const addressController=require('../controllers/address.controller');
+const StaffCanlederController=require('../controllers/staffCanledar.controller');
 
 router.get('/',cors(),customerController.getAllCustomer);
 router.get('/profile/',cors(),auth,customerController.getCustomerProfile);
@@ -49,7 +50,8 @@ router.get('/get/service/:id',validate.checkId(),cors(),serviceController.getSer
 router.get('/get/allCategory',cors(),categoryController.getAllCategory);
 router.get('/get/categoryByCategoryId/:id',validate.checkId(),cors(),categoryController.getCategoryByIdCategory);
 router.get('/get/allStaffStatus',cors(),statusStaffController.getAllStaffStatus);
-router.get('/get/staffStatusById/:id',cors(),statusStaffController.getStaffStatusByIdstatusStaff);
+router.get('/get/staffStatusById/:id',validate.checkId(),cors(),statusStaffController.getStaffStatusByIdstatusStaff);
 router.get('/get/addressSalon/:id',cors(),validate.checkId(),addressController.getAddressOfSalon);
-router.post('/searchSalonByDistrict',cors(),validate.checkId(),addressController.searchSalonByDistrict);
+router.post('/searchSalonByDistrict',cors(),validate.searchSalonByDistrict(),addressController.searchSalonByDistrict);
+router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),auth,StaffCanlederController.staffCanlederOrderandBusy);
 module.exports = router;

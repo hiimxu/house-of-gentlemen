@@ -50,7 +50,7 @@ exports.change_password=function(){
 exports.forgotPassword=function(){
     return[
         body('account_name').not().isEmpty().isLength({min:1,max:45}).withMessage('account:min lenght 1,max lenght 45'),
-        body('email').not().isEmpty().withMessage('validate email').isLength({min:1,max:45}).withMessage('email:min lenght 1,max lenght 45'),
+        body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({min:1,max:45}).withMessage('email:min lenght 1,max lenght 45'),
     ];
 }
 exports.checkId=function(){
@@ -247,6 +247,18 @@ exports.cancelBookingBySalon=function(){
 exports.impossibleService=function(){
     return[
         body('serviceId').not().isEmpty().withMessage("serviceId not empty"),
+        
+    ]
+}
+exports.staffCanlederOrderandBusy=function(){
+    return[
+        body('day').not().isEmpty().isDate().withMessage("input day"),
+        
+    ]
+}
+exports.searchSalonByDistrict=function(){
+    return[
+        body('district').not().isEmpty().isLength({min:1,max:45}).withMessage('district:min lenght 1,max lenght 45'),
         
     ]
 }

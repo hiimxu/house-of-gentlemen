@@ -45,5 +45,17 @@ StaffCanleder.checkCanleder = function (date,date1,staffId,result) {
     });
    
 }
+StaffCanleder.staffCanlederOrderandBusy=function(staffId,day,result){
+    db.query(`SELECT hour(swp490_g11.staff_canleder.date) as hourStart,minute(swp490_g11.staff_canleder.date) as minuteStart, hour(date_add(swp490_g11.staff_canleder.date,INTERVAL 30 minute)) as hourEnd,minute(date_add(swp490_g11.staff_canleder.date,INTERVAL 30 minute)) as minuteEnd,staffId
+    from swp490_g11.staff_canleder
+    where staffId=? and (swp490_g11.staff_canleder.statusId=1 or swp490_g11.staff_canleder.statusId=3 )and date(swp490_g11.staff_canleder.date)=? ;`,[staffId,day],(err, rows, res)=>{
+        
+        if (err) {
+            result(err)
+        } else {
+            result(rows);
+        }
+    });
+}
 
 module.exports =StaffCanleder;

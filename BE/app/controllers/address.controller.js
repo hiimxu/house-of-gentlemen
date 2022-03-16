@@ -6,6 +6,10 @@ var Address= require('../models/address.model');
 
 
 exports.getAddressOfSalon = function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
    var id = req.params.id;
     Address.getAddressOfSalon(id, function (data){
         if (data==null) {
@@ -20,6 +24,10 @@ exports.getAddressOfSalon = function (req, res, next) {
 }
 exports.searchSalonByDistrict= function (req, res, next) {
     var district = req.body.district;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     Address.getDataByDistrict(district, function (data){
         if (data.length == 0) {
             res.json({ data: data, message:"not have salon"})
