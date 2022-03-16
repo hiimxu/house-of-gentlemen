@@ -257,7 +257,9 @@ exports.add_account_salon = function (req, res, next) {
                         var nameSalon = req.body.nameSalon;
                         var phone = req.body.phone;
                         var taxCode = req.body.taxCode;
-                        var save_salonOwner = { accountId:data_account.accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode };
+                        var timeOpen = req.body.timeOpen;
+                        var timeClose = req.body.timeClose;
+                        var save_salonOwner = { accountId:data_account.accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode, timeOpen:timeOpen,timeClose:timeClose };
                         data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
                             var dataSalon=data;
                             if (data == null) {
