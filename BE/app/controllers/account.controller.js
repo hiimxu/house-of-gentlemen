@@ -243,6 +243,12 @@ exports.add_account_salon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+    var checkTimeOpen=new Date("01-01-2017 " + req.body.timeOpen + ":00");
+    var checkTimeClose=new Date("01-01-2017 " + req.body.timeClose + ":00");
+    if (checkTimeOpen.getHours()>checkTimeClose()||(checkTimeOpen.getHours()==checkTimeClose.getHours()&&checkTimeOpen.getMinutes()>checkTimeClose.getMinutes())) {
+        return res.status(400).json({message: "time open <time close"});
+    }
+
     
     var md5_pass = md5(pass);
     var save_data = { account_name: acc, password: md5_pass, role: rol, email: email }
