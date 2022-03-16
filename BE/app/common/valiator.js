@@ -2,6 +2,7 @@ const { body, param, validationResult } = require('express-validator');
 const { check } = require('express-validator');
 const testRole = ["customer", "salon"];
 var regexHour = new RegExp(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
+var regexDateTime=new RegExp(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
 exports.validateCreateAccountCustomer = () => {
     return [
         // check('account_name', 'Invalid does not Empty').not().isEmpty()
@@ -98,7 +99,7 @@ exports.BookingService = function () {
             .exists()
             .not()
             .isEmpty()
-            .withMessage('start cannot be empty'),
+            .withMessage('start cannot be empty').matches(regexDateTime).withMessage("time use:yyyy-mm-dd hh-mm-ss"),
         body('price_original').not().isEmpty().isInt().withMessage("price_original:is number"),
         body('service_time').not().isEmpty().isInt().withMessage("service_time:is number"),
     ];

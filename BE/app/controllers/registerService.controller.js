@@ -73,6 +73,7 @@ exports.addRegisterService = function (req, res, next) {
        return res.status(400).json({message:"please login account customer"});
     }
 
+
     var dataStaffCanleder = { staffId: staffId, date: date, statusId: statusId, timeBusy: timeBusy };
     var dataRegisterService = {
         serviceId: req.body.serviceId,

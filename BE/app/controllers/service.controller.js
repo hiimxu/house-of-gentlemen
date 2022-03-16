@@ -252,6 +252,7 @@ exports.impossibleService=function (req, res, next) {
     })
     
 }
+
 exports.getImpossibleService=function (req, res, next) {
     var salonId= req.user.salonId;
     if (salonId==null) {
