@@ -106,6 +106,7 @@ exports.getSalonOwnerProfile = function (req, res, next) {
 }
 exports.updateSalonOwnerProfile = function (req, res, next) {
     id=req.user.account_id;
+    
     var salonId= req.user.salonId;
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
@@ -123,7 +124,7 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
         return res.status(400).json({ errors: errors.array() });
     }
     try {
-        SalonOwner.updateProfileSalon(id, dataUpdate, function (data) {
+        SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
             if (data == null) {
                 res.status(400).json({ data: data, message: "update salon 's profile failed" });
             }
