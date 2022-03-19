@@ -271,6 +271,7 @@ exports.impossibleService = function () {
 exports.staffCanlederOrderandBusy = function () {
     return [
         body('day').not().isEmpty().isDate().withMessage("input day"),
+        body('staffId').not().isEmpty().isInt().withMessage("staffId:int"),
 
     ]
 }

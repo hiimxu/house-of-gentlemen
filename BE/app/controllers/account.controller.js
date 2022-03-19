@@ -245,9 +245,12 @@ exports.add_account_salon = function (req, res, next) {
     }
     var checkTimeOpen=new Date("01-01-2017 " + req.body.timeOpen + ":00");
     var checkTimeClose=new Date("01-01-2017 " + req.body.timeClose + ":00");
-    if (checkTimeOpen.getHours()>checkTimeClose()||(checkTimeOpen.getHours()==checkTimeClose.getHours()&&checkTimeOpen.getMinutes()>checkTimeClose.getMinutes())) {
+    if (checkTimeOpen.getHours()>checkTimeClose.getHours()||(checkTimeOpen.getHours()==checkTimeClose.getHours()&&checkTimeOpen.getMinutes()>checkTimeClose.getMinutes())) {
         return res.status(400).json({message: "time open <time close"});
     }
+    var dtime=checkTimeClose-checkTimeOpen;
+    var totalSlot=dtime/(60000*15);
+
 
     
     var md5_pass = md5(pass);
@@ -265,7 +268,7 @@ exports.add_account_salon = function (req, res, next) {
                         var taxCode = req.body.taxCode;
                         var timeOpen = req.body.timeOpen;
                         var timeClose = req.body.timeClose;
-                        var save_salonOwner = { accountId:data_account.accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode, timeOpen:timeOpen,timeClose:timeClose };
+                        var save_salonOwner = { accountId:data_account.accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode, timeOpen:timeOpen,timeClose:timeClose,totalSlot:totalSlot };
                         data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
                             var dataSalon=data;
                             if (data == null) {

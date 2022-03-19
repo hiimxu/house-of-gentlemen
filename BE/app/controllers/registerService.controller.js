@@ -11,9 +11,9 @@ var client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
 exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
-    var customerId=req.user.customerId;
-    if (customerId==null) {
-      return  res.status(400).json({message:"please login account customer"});
+    var customerId = req.user.customerId;
+    if (customerId == null) {
+        return res.status(400).json({ message: "please login account customer" });
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -37,9 +37,9 @@ exports.getRegisterServiceById = function (req, res, next) {
 
 }
 exports.getRegisterServiceByCustomer = function (req, res, next) {
-    var customerId=req.user.customerId;
-    if (customerId==null) {
-       return res.status(400).json({message:"please login account customer"});
+    var customerId = req.user.customerId;
+    if (customerId == null) {
+        return res.status(400).json({ message: "please login account customer" });
     }
     try {
         RegisterService.getRegisterServiceByCustomer(req.user.customerId, function (data) {
@@ -62,20 +62,26 @@ exports.getRegisterServiceByCustomer = function (req, res, next) {
 
 }
 exports.addRegisterService = function (req, res, next) {
+    var customerId = req.user.customerId;
+    if (customerId == null) {
+        return res.status(400).json({ message: "please login account customer" });
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
     var staffId = req.body.staffId;
     var date = new Date(req.body.timeUse);
     var statusId = 3;
     var timeRegister = new Date();
     var status_register_id = 1;
     var timeBusy = req.body.service_time;
-    console.log("busy" + timeBusy)
-    var customerId=req.user.customerId;
-    if (customerId==null) {
-       return res.status(400).json({message:"please login account customer"});
+    var fiveDate=new Date();
+    fiveDate.setDate(fiveDate.getDate()+5);
+    if (date<new Date()||date>fiveDate) {
+        return res.status(400).json({message:"timeUse within 5days "})
     }
 
-
-    var dataStaffCanleder = { staffId: staffId, date: date, statusId: statusId, timeBusy: timeBusy };
     var dataRegisterService = {
         serviceId: req.body.serviceId,
         salonId: req.body.salonId,
@@ -83,93 +89,69 @@ exports.addRegisterService = function (req, res, next) {
         staffId: req.body.staffId,
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
-        timeRegister: timeRegister
+        timeRegister: timeRegister,
+        status_register_id:1
     };
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array(), message: "error validate" });
-    }
-    SalonOwner.checkTimeSalon(dataRegisterService.salonId,function (data){
-        var timeOpen=new Date("01-01-2017 " + data[0].timeOpen + ":00");
-        var timeClose=new Date("01-01-2017 " + data[0].timeClose + ":00");
-        var timeUse= new Date(req.body.timeUse);
-        console.log(timeOpen.getHours())
-        if (timeOpen.getHours()>timeUse.getHours()||
-        (timeOpen.getHours()==timeUse.getHours()&&timeOpen.getMinutes()>timeUse.getMinutes())||
-        timeUse.getHours()>timeClose.getHours||
-        (timeUse.getHours()==timeClose.getHours()&&timeUse.getMinutes()>timeClose.getMinutes())) {
-            return res.status(400).json({message:"salon closed"});
+
+    SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
+        var timeCloseDay = data[0].timeClose;
+        var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
+        var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
+        var timeUse = new Date(req.body.timeUse);
+        if (timeOpen.getHours() > timeUse.getHours() ||
+            (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes()) ||
+            timeUse.getHours() > timeClose.getHours ||
+            (timeUse.getHours() == timeClose.getHours() && timeUse.getMinutes() > timeClose.getMinutes())) {
+            return res.status(400).json({ message: "salon closed" });
         } else {
-            dataRegisterService = { timeRegister, status_register_id, ...dataRegisterService };
-            var today = new Date();
-            var check1 = new Date(date);
-            var check2 = new Date(date);
-            check1.setDate(check1.getDate() - 1);
-            check2.setDate(check2.getDate() + 1);
-            var Times = 0;
-            if (date < today) {
-                res.status(400).json({ message: "use time must after now" });
-            } else if (date > today.setDate(today.getDate() + 5)) {
-                res.status(400).json({ message: "use time must be within 5 days" });
-            } else {
-                StaffCanleder.checkCanleder(check1, check2, staffId, function (data) {
-                    for (let index = 0; index < data.length; index++) {
-                        var checktime1 = new Date(data[index].date);
-                        var checktime2 = new Date(data[index].date);
-                        checktime1.setMinutes(checktime1.getMinutes() + data[index].timeBusy);
-                        checktime2.setMinutes(checktime2.getMinutes() - timeBusy);
-                        if (((checktime1 > date) && (date >= new Date(data[index].date))) || ((checktime2 < date) && (date < new Date(data[index].date)))) {
-                            Times = Times + 1;
-                        }
-                    }
-                    if (Times > 0) {
-                        res.status(400).json({ message: "Staff busy" })
-                    } else {
-                        try {
-                            StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-                                var staffCanlederId = data.staffCanlederId;
-                                dataRegisterService = { staffCanlederId, ...dataRegisterService };
-                                if (data == null) {
-                                    return res.status(400).json({ data: data, message: "add staff cander failed" });
-                                } else if (data.length == 0) {
-                                    return res.status(400).json({ data: data, message: "add staff cander failed" });
-                                }
-                                else {
-                                    RegisterService.addRegisterService(dataRegisterService, function (data) {
-                                        if (data == null) {
-                                            res.status(400).json({ data: data, message: "booking service failed" });
-                                        } else {
-                                            if (data.length == 0) {
-                                                res.status(400).json({ data: data, message: "booking service failed" });
-                                            } else {
-                                                res.json({ data: data, message: "booking service success" });
-                                            }
-                                        }
-                                    });
-                                }
-        
-                            });
-                        } catch (error) {
-                            res.status(400).json({ data: error, message: "booking service failed" });
-                        }
-                    }
-                })
+            var slotTotal = data[0].totalSlot;
+            var totalSlotBusy = timeBusy / 15;
+            var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
+            if ((slotStart + totalSlotBusy) > slotTotal) {
+                return res.status(400).json({ message: "salon close at " + timeCloseDay })
             }
+            StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
+                var check = 0;
+                for (let m = 0; m < data.length; m++) {
+                    for (let n = 0; n < totalSlotBusy; n++) {
+                        if (data[m].slotBusy == (n + slotStart)) {
+                            check = check + 1;
+                        }
+                    }
+                }
+                if (check > 0) {
+                    return res.status(400).json({ message: "staff busy" });
+                }
+                else {
+                    for (let index = 0; index < totalSlotBusy; index++) {
+                        slotBusy = slotStart + index;
+                        var dataStaffCanleder = { staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
+                        StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) { })
+                    }
+                    RegisterService.addRegisterService(dataRegisterService, function (data){
+                        return res.status(400).json({data,message:"booking success"});
+                    })
+
+
+                }
+            })
+
+
+
         }
 
-        
     })
 
-    
+
 
 }
 exports.cancelBooking = function (req, res, next) {
     var id = req.params.id;
-    var customerId=req.user.customerId;
-    if (customerId==null) {
-       return res.status(400).json({message:"please login account customer"});
+    var customerId = req.user.customerId;
+    if (customerId == null) {
+        return res.status(400).json({ message: "please login account customer" });
     }
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -207,9 +189,9 @@ exports.cancelBooking = function (req, res, next) {
     });
 }
 exports.getRegisterServiceOfSalon = function (req, res, next) {
-    var salonId= req.user.salonId;
-    if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
     }
     RegisterService.getRegisterServiceOfSalon(salonId, function (data) {
         if (data == null) {
@@ -221,12 +203,12 @@ exports.getRegisterServiceOfSalon = function (req, res, next) {
 
 }
 exports.cancelBookingBySalon = function (req, res, next) {
-    var salonId= req.user.salonId;
-    if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
     }
     var registerServiceId = req.body.registerServiceId;
-    var content=req.body.content;
+    var content = req.body.content;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -249,18 +231,18 @@ exports.cancelBookingBySalon = function (req, res, next) {
                                 } else {
                                     RegisterService.getPhone(registerServiceId, function (data) {
                                         var phone = data[0].phone;
-                                        phone='+84'+phone.substr(1,9);
+                                        phone = '+84' + phone.substr(1, 9);
                                         client.messages
                                             .create({
-                                                body: 'message from salon:'+content,
+                                                body: 'message from salon:' + content,
                                                 from: TWILIO_PHONE_NUMBER,
                                                 to: phone
                                             })
                                             .then(message => console.log(message.sid));
-                                           return res.json({ message: "cancel booking success,you sent a SMS to customer " });
+                                        return res.json({ message: "cancel booking success,you sent a SMS to customer " });
                                     })
 
-                                    
+
                                 }
                             });
                         }
