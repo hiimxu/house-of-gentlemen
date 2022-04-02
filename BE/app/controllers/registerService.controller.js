@@ -202,6 +202,16 @@ exports.getRegisterServiceOfSalon = function (req, res, next) {
     })
 
 }
+exports.favorviteService= function (req, res, next) {
+    var customerId = req.user.customerId;
+    RegisterService.favorviteService(customerId, function (data){
+        if (data.length == 0) {
+            return res.json({ data: data, message: "not have history booking" });
+        } else {
+            return res.json({ data: data, message: "get favorite salon" });
+        }
+    })
+}
 exports.cancelBookingBySalon = function (req, res, next) {
     var salonId = req.user.salonId;
     if (salonId == null) {

@@ -1,6 +1,7 @@
 var ServiceSalon = require('../models/service.model');
 var CategoryService = require('../models/categoryService.model');
 var ImageService = require('../models/imageService.model');
+var SalonOwner = require('../models/salonOwner.model');
 const { body, validationResult } = require('express-validator');
 exports.addServiceSalon = function (req, res, next) {
     var salonId= req.user.salonId;
@@ -186,18 +187,22 @@ exports.getAllServiceSalon = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
     try {
-        ServiceSalon.getAllServiceSalon(id, function (data) {
+        SalonOwner.getProfileSalonBySalonId(id,function (dataSalon){
+            ServiceSalon.getAllServiceSalon(id, function (data) {
 
-            if (data == null) {
-                res.status(400).json({ data: data, message: "get service fail" });
-            } else {
-                if (data.length == 0) {
-                    res.status(400).json({ data: data, message: "not have service" });
+                if (data == null) {
+                    res.status(400).json({ data: data, message: "get service fail" });
                 } else {
-                    res.json({ data: data, message: "get service success" });
+                    if (data.length == 0) {
+                        res.status(400).json({ data: data, message: "not have service" });
+                    } else {
+    
+                        res.json({dataSalon:dataSalon, data: data, message: "get service success" });
+                    }
                 }
-            }
-        });
+            });
+        })
+        
     } catch (error) {
         res.status(400).json({ data: error, message: "get service fail" });
     }

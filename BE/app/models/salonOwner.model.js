@@ -39,6 +39,17 @@ SalonOwner.getProfileSalon =function (id, result) {
         }
     });
 }
+SalonOwner.getProfileSalonBySalonId =function (id, result) {
+    db.query("SELECT * FROM swp490_g11.salonowner where salonId="+id, (err, rows, fields) => {
+        if (err) {
+           
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data)
+        }
+    });
+}
 SalonOwner.getProfileAllSalon =function (result) {
     db.query(`with temp AS(SELECT swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.taxCode,swp490_g11.address.detailAddress,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose
         FROM swp490_g11.salonowner

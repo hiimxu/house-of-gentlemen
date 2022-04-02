@@ -20,7 +20,17 @@ Feedback.addFeedBackBySalon = function(data,result){
 }
 Feedback.getFeedbackOfSalon = function (id,result) {
    
-    db.query(`SELECT * FROM swp490_g11.feedback where salonId='${id}' order by dateCreate desc`, (err, rows, fields) => {
+    db.query(`with t as (
+        SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.wsend,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.dateCreate,swp490_g11.feedback.dateUpdate,swp490_g11.customer.nameCustomer FROM swp490_g11.feedback
+        left join swp490_g11.customer
+        on swp490_g11.feedback.customerId=swp490_g11.customer.customerId
+        where salonId='${id}' 
+        order by dateCreate desc
+        )
+        select t.feedbackId,t.customerId,t.wsend,t.salonId,t.content,t.rate,t.dateCreate,t.dateUpdate,t.nameCustomer,swp490_g11.salonowner.nameSalon
+        from t
+        left join swp490_g11.salonowner
+        on t.salonId= swp490_g11.salonowner.salonId`, (err, rows, fields) => {
         if (err) {
             console.log(err);
             result(null,err);

@@ -54,4 +54,5 @@ router.get('/get/staffStatusById/:id',validate.checkId(),cors(),statusStaffContr
 router.get('/get/addressSalon/:id',cors(),validate.checkId(),addressController.getAddressOfSalon);
 router.post('/searchSalonByDistrict',cors(),validate.searchSalonByDistrict(),addressController.searchSalonByDistrict);
 router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),auth,StaffCanlederController.staffCanlederOrderandBusy);
+router.get('/get/favoriteService',auth,cors(),registerServiceController.favorviteService);
 module.exports = router;
