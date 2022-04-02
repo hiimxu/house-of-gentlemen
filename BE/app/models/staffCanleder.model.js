@@ -12,7 +12,6 @@ const StaffCanleder = function (staffCanleder) {
 
 }
 StaffCanleder.addStaffCanderToRegisterService = function(dataStaffCanleder,result){
-    console.log(dataStaffCanleder)
     db.query(`INSERT INTO staffcanledar SET?`, dataStaffCanleder, (err, rows, res) => {
         if (err) {
             result(null,err)
@@ -23,8 +22,8 @@ StaffCanleder.addStaffCanderToRegisterService = function(dataStaffCanleder,resul
     
 }
 StaffCanleder.cancelBooking= function(id,result){
-    console.log(id)
-    db.query(`UPDATE staff_canleder SET statusId='2' where staffCanlederId=?`,id, (err, rows, res) => {
+    // console.log(id)
+    db.query(`delete FROM swp490_g11.staffcanledar where registerServiceId='${id}'`,id, (err, rows, res) => {
         if (err) {
             result(null,err)
         } else {
@@ -75,6 +74,20 @@ StaffCanleder.checkCanlederStaff=function(day,staffId,result){
 StaffCanleder.staffCanlederBusy=function(day,staffId,result){
     
     db.query(`SELECT * FROM swp490_g11.staffcanledar where date=date(?) and staffId=?`,[day,staffId],(err, rows, res)=>{
+        
+        if (err) {
+            result(err)
+        } else {
+            result(rows);
+        }
+    });
+}
+StaffCanleder.checkStaffCanledarId=function(result){
+    
+    db.query(`SELECT * FROM swp490_g11.staffcanledar
+    order by staffCanledarId desc
+    limit 1
+    ;`,(err, rows, res)=>{
         
         if (err) {
             result(err)

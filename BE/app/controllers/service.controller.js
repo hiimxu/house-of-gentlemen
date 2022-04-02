@@ -8,6 +8,7 @@ exports.addServiceSalon = function (req, res, next) {
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
+    var image = req.body.image;
     var dataService = {
         salonId: req.user.salonId,
         name: req.body.name,
@@ -34,6 +35,14 @@ exports.addServiceSalon = function (req, res, next) {
                 if (data.length==0) {
                     res.status(400).json({ data: data, message: "add service failed" });
                 } else {
+                    var dataImage = {
+                        serviceId: req.body.id,
+                        image: req.body.image
+                    };
+                    ImageService.addImageService(dataImage, function (data){
+
+                    })
+                    data={image: image, ...data};
                     res.json({ data: data, message: "add service success" });
                 }
             }

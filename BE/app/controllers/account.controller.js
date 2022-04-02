@@ -4,6 +4,7 @@ var SalonOwner = require('../models/salonOwner.model');
 var Account = require('../models/account.model');
 var SalonOwner = require('../models/salonOwner.model');
 var Address = require('../models/address.model');
+var ImageSalon = require('../models/imageSalon.model');
 
 const nodemailer = require('nodemailer');
 var md5 = require('md5');
@@ -235,6 +236,7 @@ exports.add_account_salon = function (req, res, next) {
     var rol = req.body.role;
     var email = req.body.email;
     var possibility = 0;
+    var image = req.body.image;
     var dataAddress={ city:req.body.city,
         district: req.body.district,
         detailAddress: req.body.detailAddress
@@ -274,6 +276,12 @@ exports.add_account_salon = function (req, res, next) {
                             if (data == null) {
                                 res.status(400).json({ data: data, message: "create account salon failed" });
                             } else {
+                                var dataImage ={image:image,salonId:dataSalon.salonId}
+                                ImageSalon.addImageToImageSalon(dataImage, function (data){
+
+                                })
+                                dataSalon={image:image,...dataSalon}
+
                                 
                                 dataAddress={salonId:dataSalon.id,...dataAddress}
                                 Address.addAddress(dataAddress, function(data){

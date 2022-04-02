@@ -26,7 +26,7 @@ router.get('/profile/',cors(),auth,customerController.getCustomerProfile);
 router.put('/update/profile/',validate.updateCustomerProfile(),cors(),auth,customerController.updateCustomerProfile);
 router.get('/statusRegisterService',cors(),statusRegisterServiceController.getStatusRegisterService);
 router.get('/statusRegisterServiceById/:id',validate.checkId(),cors(),statusRegisterServiceController.getStatusRegisterServiceById);
-router.put('/cancel/registerservice/:id',validate.cancelBooking(),cors(),auth,registerServiceController.cancelBooking);
+router.put('/cancel/registerservice',validate.cancelBooking(),cors(),auth,registerServiceController.cancelBooking);
 router.get('/registerService/:id',validate.checkId(),auth,cors(),registerServiceController.getRegisterServiceById);
 router.get('/registerServiceByCustomer/',auth,cors(),registerServiceController.getRegisterServiceByCustomer);
 router.post('/create/registerService',cors(),validate.BookingService(),auth,registerServiceController.addRegisterService);
@@ -55,4 +55,6 @@ router.get('/get/addressSalon/:id',cors(),validate.checkId(),addressController.g
 router.post('/searchSalonByDistrict',cors(),validate.searchSalonByDistrict(),addressController.searchSalonByDistrict);
 router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),auth,StaffCanlederController.staffCanlederOrderandBusy);
 router.get('/get/favoriteService',auth,cors(),registerServiceController.favorviteService);
+router.get('/get/historyBooking',auth,cors(),registerServiceController.historyBooking);
+router.get('/get/reservation',auth,cors(),registerServiceController.reservation)
 module.exports = router;

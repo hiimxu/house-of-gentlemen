@@ -46,6 +46,9 @@ exports.validateCreateAccountSalon = function () {
         body('timeClose').exists()
             .not()
             .isEmpty().matches(regexHour).withMessage("timeEnd: hour hh:mm"),
+            body('image').exists()
+            .not()
+            .isEmpty().withMessage('image not empty')
     ];
 }
 exports.change_password = function () {
@@ -86,7 +89,8 @@ exports.setPossitiveSalonOwner = function () {
 }
 exports.cancelBooking = function () {
     return [
-        param('id').not().isEmpty().isInt().withMessage("id:number"),
+        body('registerServiceId').not().isEmpty().isInt().withMessage("registerServiceId:number"),
+        body('service_time').not().isEmpty().isInt().withMessage("service_time:number"),
 
     ];
 }
@@ -163,6 +167,7 @@ exports.addServiceSalon = function () {
         body('promotion').not().isEmpty().isInt().withMessage("promotion: number"),
         body('content').not().isEmpty().isLength({ min: 1, max: 2000 }).withMessage('content:min lenght 1,max lenght 2000'),
         body('description').not().isEmpty().isLength({ min: 1, max: 200 }).withMessage('description:min lenght 1,max lenght 200'),
+        body('image').not().isEmpty().withMessage("not empty").isLength({ min: 1, max: 450 }).withMessage('image:min lenght 1,max lenght 450'),
     ];
 }
 exports.updateServiceSalon = function () {

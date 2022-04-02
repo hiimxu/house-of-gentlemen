@@ -76,10 +76,10 @@ exports.addRegisterService = function (req, res, next) {
     var timeRegister = new Date();
     var status_register_id = 1;
     var timeBusy = req.body.service_time;
-    var fiveDate=new Date();
-    fiveDate.setDate(fiveDate.getDate()+5);
-    if (date<new Date()||date>fiveDate) {
-        return res.status(400).json({message:"timeUse within 5days "})
+    var fiveDate = new Date();
+    fiveDate.setDate(fiveDate.getDate() + 5);
+    if (date < new Date() || date > fiveDate) {
+        return res.status(400).json({ message: "timeUse within 5days " })
     }
 
     var dataRegisterService = {
@@ -90,7 +90,7 @@ exports.addRegisterService = function (req, res, next) {
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
         timeRegister: timeRegister,
-        status_register_id:1
+        status_register_id: 1
     };
 
     SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
@@ -102,7 +102,7 @@ exports.addRegisterService = function (req, res, next) {
             (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes()) ||
             timeUse.getHours() > timeClose.getHours ||
             (timeUse.getHours() == timeClose.getHours() && timeUse.getMinutes() > timeClose.getMinutes())) {
-            return res.status(400).json({ message: "salon closed" });
+            return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
         } else {
             var slotTotal = data[0].totalSlot;
             var totalSlotBusy = timeBusy / 15;
@@ -123,16 +123,21 @@ exports.addRegisterService = function (req, res, next) {
                     return res.status(400).json({ message: "staff busy" });
                 }
                 else {
-                    for (let index = 0; index < totalSlotBusy; index++) {
-                        slotBusy = slotStart + index;
-                        var dataStaffCanleder = { staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
-                        StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) { })
-                    }
-                    RegisterService.addRegisterService(dataRegisterService, function (data){
-                        return res.status(400).json({data,message:"booking success"});
+                    RegisterService.addRegisterService(dataRegisterService, function (data) {
+                        var checkIndex = 0;
+                        for (let index = 0; index < totalSlotBusy; index++) {
+                            slotBusy = slotStart + index;
+                            checkIndex++;
+                            var dataStaffCanleder = {registerServiceId:data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
+                            StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
+
+                            })
+                        }
+                        return res.status(200).json({ data, message: "booking success" });
                     })
 
 
+                    
                 }
             })
 
@@ -146,47 +151,22 @@ exports.addRegisterService = function (req, res, next) {
 
 }
 exports.cancelBooking = function (req, res, next) {
-    var id = req.params.id;
     var customerId = req.user.customerId;
     if (customerId == null) {
         return res.status(400).json({ message: "please login account customer" });
     }
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    console.log(req.user)
-
-    RegisterService.getRegisterServiceById(id, function (data) {
-        if (data.length == 0) {
-            return res.status(400).json({ data: data, message: "booking khong ton tai" })
-        } else {
-            RegisterService.checkCustomer(id, req.user.customerId, function (data) {
-                if (data.length == 0) {
-                    return res.status(400).json({ data: data, message: "you  not have access" })
-                }
-                else {
-                    StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
-                        if (data == null) {
-                            return res.json({ data: data, message: "cancel booking failed" });
-                        } else {
-                            RegisterService.cancelBooking(id, function (data) {
-                                if (data == null) {
-                                    return res.json({ data: data, message: "cancel booking failed" });
-                                } else {
-                                    return res.json({ data: data, message: "cancel booking success" });
-                                }
-                            });
-                        }
-                    });
-                }
-
-            })
-
-        }
-
-    });
+    var registerServiceId = req.body.registerServiceId;
+    var service_time = req.body.service_time;
+    var slot = service_time / 15;
+    StaffCanleder.cancelBooking(registerServiceId, function (data){
+            RegisterService.cancelBooking(registerServiceId, function (data) {
+            return res.status(200).json({ message: "canceled booking service success" })
+        })
+    })
 }
 exports.getRegisterServiceOfSalon = function (req, res, next) {
     var salonId = req.user.salonId;
@@ -202,9 +182,9 @@ exports.getRegisterServiceOfSalon = function (req, res, next) {
     })
 
 }
-exports.favorviteService= function (req, res, next) {
+exports.favorviteService = function (req, res, next) {
     var customerId = req.user.customerId;
-    RegisterService.favorviteService(customerId, function (data){
+    RegisterService.favorviteService(customerId, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have history booking" });
         } else {
@@ -259,6 +239,26 @@ exports.cancelBookingBySalon = function (req, res, next) {
                     });
                 }
             })
+        }
+    })
+}
+exports.historyBooking = function (req, res, next) {
+    var customerId = req.user.customerId;
+    RegisterService.historyBooking(customerId, function (data) {
+        if (data.length == 0) {
+            return res.json({ data: data, message: "not have history booking" });
+        } else {
+            return res.json({ data: data, message: "get history booking success" });
+        }
+    })
+}
+exports.reservation = function (req, res, next) {
+    var customerId = req.user.customerId;
+    RegisterService.reservation(customerId, function (data) {
+        if (data.length == 0) {
+            return res.json({ data: data, message: "not have reservation" });
+        } else {
+            return res.json({ data: data, message: "get reservation success" });
         }
     })
 }
