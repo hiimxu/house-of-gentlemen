@@ -87,22 +87,21 @@ exports.getServiceOfSalon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    try {
-        ServiceSalon.getServiceOfSalon(id, function (data) {
+    SalonOwner.getProfileSalonBySalonId(salonId,function (dataSalon){
+        ServiceSalon.getAllServiceSalon(salonId, function (data) {
 
             if (data == null) {
                 res.status(400).json({ data: data, message: "get service fail" });
             } else {
-            if (data.length == 0) {
-                res.status(400).json({ data: data, message: "not have service " });
-            } else {
-                res.json({ data: data, message: "get service success" });
-            }
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message: "not have service" });
+                } else {
+
+                    res.json({dataSalon:dataSalon, data: data, message: "get service success" });
+                }
             }
         });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "get service fail" });
-    }
+    })
 }
 exports.getServiceOfSalonByCustomer = function (req, res, next) {
     var id= req.params.idSalon;

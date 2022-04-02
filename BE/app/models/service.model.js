@@ -66,6 +66,7 @@ Service.getAllServiceSalon= function (id,result) {
     on swp490_g11.service.serviceId=swp490_g11.image_service.serviceId
     where swp490_g11.service.possible=1
     group by swp490_g11.service.serviceId
+    order by swp490_g11.service.serviceId desc
     ;`, (err, rows, fields) => {
         if (err) {
             result(null, err)
