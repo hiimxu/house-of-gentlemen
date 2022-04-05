@@ -49,6 +49,18 @@ ImageSalon.checkPermission= function (id,salonId,result) {
         }
     });
 }
+ImageSalon.updateImage=function (id,image,result){
+   
+    db.query(`UPDATE swp490_g11.image_salon SET image=?  WHERE salonId=${id}`,image, (err, rows, fields) => {
+        if (err) {
+            
+            result(null,err);
+        } else {
+            data = rows;
+            result(data)
+        }
+    });
+}
 
 
 module.exports = ImageSalon;

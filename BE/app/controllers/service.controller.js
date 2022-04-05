@@ -17,6 +17,7 @@ exports.addServiceSalon = function (req, res, next) {
         content: req.body.content,
         promotion: req.body.promotion,
         service_time: req.body.service_time,
+        possible:1
     }
     if (parseInt(dataService.promotion)>100 || parseInt(dataService.promotion)<0) {
         return res.status(400).json({message:"0<=promotion<=100"})
@@ -36,7 +37,7 @@ exports.addServiceSalon = function (req, res, next) {
                     res.status(400).json({ data: data, message: "add service failed" });
                 } else {
                     var dataImage = {
-                        serviceId: req.body.id,
+                        serviceId: data.id,
                         image: req.body.image
                     };
                     ImageService.addImageService(dataImage, function (data){
@@ -157,6 +158,7 @@ exports.updateServiceSalon = function (req, res, next) {
         service_time: req.body.service_time,
 
     };
+    var image = req.body.image;
     if (parseInt(dataUpdate.promotion)>100 || parseInt(dataUpdate.promotion)<0) {
         return res.status(400).json({message:"0<=promotion<=100"})
     }
@@ -170,15 +172,19 @@ exports.updateServiceSalon = function (req, res, next) {
             return  res.status(400).json({ data: data, message: "you not have access" });
           } else {
             try {
-                ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
+                ImageService.updateImage(id,image, function (data){
+                    ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
         
-                    if (data == null|| data.affectedRows==0) {
-                        res.status(400).json({ data: data, message: "update service fail" });
-                    } else {
-                        
-                        res.json({ data: data, message: "update service success" });
-                    }
-                });
+                        if (data == null|| data.affectedRows==0) {
+                            res.status(400).json({ data: data, message: "update service fail" });
+                        } else {
+                            
+                            res.json({ data: data, message: "update service success" });
+                        }
+                    });
+
+                })
+                
             } catch (error) {
                 res.status(400).json({ data: error, message: "update service fail" });
             }

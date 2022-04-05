@@ -246,7 +246,7 @@ exports.updateFeedbackBySalon = function (req, res, next) {
                             if (data == null) {
                                 res.status(400).json({ result: data, message: "update feedback failed" });
                             } else {
-                                if (data.affectedRows) {
+                                if (data.affectedRows==0) {
                                     res.status(400).json({ result: data, message: "check id feedback to update" });
                                 } else {
                                     res.json({ result: data, message: "update feedback success" });

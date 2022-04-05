@@ -44,4 +44,14 @@ ImageService.deleteImageServiceByServiceId = function(id,result){
         }
     });
 }
+ImageService.updateImage=function (id,image,result) {
+    console.log(id)
+    db.query(`UPDATE swp490_g11.image_service SET image=?  WHERE serviceId=?`,[image,id], (err, rows, fields) => {
+        if (err) {
+            result(null, err);
+        } else {
+            result(rows);
+        }
+    }); 
+}
 module.exports =ImageService;

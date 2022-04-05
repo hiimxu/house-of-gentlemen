@@ -134,18 +134,22 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     }
     Account.updateEmail(account_id,email, function (data){
         Address.updateAddressSalon(salonId,addressUpdate, function (data){
-            SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
-                if (data == null) {
-                    res.status(400).json({ data: data, message: "update salon 's profile failed" });
-                }
-                else {
-                    if (data.affectedRows == 0) {
-                        res.status(400).json({ data: data, message: "not have salon 's profile to update" });
-                    } else {
-                        res.json({ data: data, message: "update salon 's profile success" });
+            ImageSalon.updateImage(salonId,image,function (data){
+                SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
+                    if (data == null) {
+                        res.status(400).json({ data: data, message: "update salon 's profile failed" });
                     }
-                }
-            });
+                    else {
+                        if (data.affectedRows == 0) {
+                            res.status(400).json({ data: data, message: "not have salon 's profile to update" });
+                        } else {
+                            res.json({ data: data, message: "update salon 's profile success" });
+                        }
+                    }
+                });
+
+            })
+            
         })
 
     })

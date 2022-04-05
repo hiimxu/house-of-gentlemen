@@ -180,6 +180,7 @@ exports.updateServiceSalon = function () {
         body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("promotion: number"),
         body('content').not().isEmpty().withMessage("content not empty").isLength({ min: 1, max: 2000 }).withMessage('content:min lenght 1,max lenght 2000'),
         body('description').not().isEmpty().withMessage("description not empty").isLength({ min: 1, max: 200 }).withMessage('description:min lenght 1,max lenght 200'),
+        body('image').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('image:min lenght 1,max lenght 450'),
     ];
 }
 exports.addCategoryService = function () {
@@ -294,4 +295,20 @@ exports.searchSalonByDistrict = function () {
         body('district').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('district:min lenght 1,max lenght 45'),
 
     ]
+}
+exports.bookingServiceForCustomer = function () {
+    return [
+        body('serviceId').not().isEmpty().isInt().withMessage("serviceId:number"),
+        body('staffId').not().isEmpty().isInt().withMessage("staffId:number"),
+        body('timeUse')
+            .exists()
+            .not()
+            .isEmpty()
+            .withMessage('start cannot be empty').matches(regexDateTime).withMessage("time use:yyyy-mm-dd hh:mm:ss"),
+        body('price_original').not().isEmpty().isInt().withMessage("price_original:is number"),
+        body('service_time').not().isEmpty().isInt().withMessage("service_time:is number"),
+    ];
+}
+exports.finshBooking = function () {
+    return[body('id').not().isEmpty().isInt().withMessage("id")];
 }
