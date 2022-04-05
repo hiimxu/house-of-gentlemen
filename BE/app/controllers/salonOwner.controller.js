@@ -1,4 +1,7 @@
 var SalonOwner = require('../models/salonOwner.model');
+var Address = require('../models/address.model');
+var ImageSalon = require('../models/imageSalon.model');
+var Account = require('../models/account.model');
 const { body, validationResult } = require('express-validator');
 exports.getSalon = function (req, res, next) {
     var id = req.params.id;
@@ -105,8 +108,7 @@ exports.getSalonOwnerProfile = function (req, res, next) {
     }
 }
 exports.updateSalonOwnerProfile = function (req, res, next) {
-    id=req.user.account_id;
-    
+    var account_id = req.body.account_id;
     var salonId= req.user.salonId;
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
@@ -119,25 +121,36 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
         timeOpen: req.body.timeOpen,
         timeClose: req.body.timeClose,
     };
+    var addressUpdate = {
+        city: req.body.city,
+        district: req.body.district,
+        detailAddress: req.body.detailAddress,
+    }
+    var image = req.body.image;
+    var email = req.body.email;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    try {
-        SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
-            if (data == null) {
-                res.status(400).json({ data: data, message: "update salon 's profile failed" });
-            }
-            else {
-                if (data.affectedRows == 0) {
-                    res.status(400).json({ data: data, message: "not have salon 's profile to update" });
-                } else {
-                    res.json({ data: data, message: "update salon 's profile success" });
+    Account.updateEmail(account_id,email, function (data){
+        Address.updateAddressSalon(salonId,addressUpdate, function (data){
+            SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
+                if (data == null) {
+                    res.status(400).json({ data: data, message: "update salon 's profile failed" });
                 }
-            }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "update salon 's profile failed" })
-    }
+                else {
+                    if (data.affectedRows == 0) {
+                        res.status(400).json({ data: data, message: "not have salon 's profile to update" });
+                    } else {
+                        res.json({ data: data, message: "update salon 's profile success" });
+                    }
+                }
+            });
+        })
+
+    })
+
+        
+    
 
 }

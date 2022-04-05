@@ -14,10 +14,12 @@ const categoryController = require('../controllers/category.controller');
 const statusStaffController = require('../controllers/statusStaff.controller');
 const addressSalonController=require('../controllers/address.controller');
 const registerServiceController = require('../controllers/registerService.controller');
+const staffCanledarController = require('../controllers/staffCanledar.controller');
 const { param,body, validationResult } = require('express-validator');
 const {check} = require('express-validator');
 const validate = require('../common/valiator');
 const auth = require('../middleware/auth');
+
 
 router.get('/',cors(),salonOwnerController.salonOwner);
 router.get('/profile/',cors(),auth,salonOwnerController.getSalonOwnerProfile);
@@ -57,5 +59,6 @@ router.put('/update/address/',validate.updateAddressSalon(),cors(),auth,addressS
 router.get('/get/bookingServiceOfSalon',cors(),auth,registerServiceController.getRegisterServiceOfSalon);
 router.put('/cancelBookingServiceBySalon',validate.cancelBookingBySalon(),cors(),auth,registerServiceController.cancelBookingBySalon);
 router.put('/update/impossibleService',validate.impossibleService(),cors(),auth,serviceController.impossibleService);
-router.get('/get/impossibleService',cors(),auth,serviceController.getImpossibleService)
+router.get('/get/impossibleService',cors(),auth,serviceController.getImpossibleService);
+router.post('/staffCanledar',cors(),staffCanledarController.staffCanlederOrderandBusy)
 module.exports = router;

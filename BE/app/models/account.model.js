@@ -111,6 +111,16 @@ Account.updateToken=function (account_name, token,result) {
         }
     });
 }
+Account.updateEmail=function(id,email, result){
+    db.query(`UPDATE swp490_g11.account SET email = '${email}' where account_id =?`,id,(err, rows, fields) => {
+        
+        if (err) {
+            result(null, err)
+        } else {
+            result("updated password")
+        }
+    });
+}
 
 
 module.exports = Account;

@@ -2,7 +2,7 @@ const { body, param, validationResult } = require('express-validator');
 const { check } = require('express-validator');
 const testRole = ["customer", "salon"];
 var regexHour = new RegExp(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
-var regexDateTime=new RegExp(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
+var regexDateTime = new RegExp(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
 exports.validateCreateAccountCustomer = () => {
     return [
         // check('account_name', 'Invalid does not Empty').not().isEmpty()
@@ -32,7 +32,7 @@ exports.validateCreateAccountSalon = function () {
     return [
         body('account_name').not().isEmpty().isLength({ min: 3, max: 45 }).withMessage('account :min lenght 3,max lenght 45'),
         body('password').not().isEmpty().isLength({ min: 3, max: 45 }).withMessage('password:min lenght 3,max lenght 45'),
-        body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
+        
         body('phone').isMobilePhone("vi-VN").withMessage('validate phone'),
         body('role').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('role:min lenght 1,max lenght 45'),
         body('city').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('city:min lenght 1,max lenght 45'),
@@ -41,14 +41,15 @@ exports.validateCreateAccountSalon = function () {
         body('taxCode').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('tax code:min lenght 1,max lenght 45'),
         body('nameSalon').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('name of salon :min lenght 1,max lenght 45'),
         body('timeOpen').exists()
-        .not()
-        .isEmpty().matches(regexHour).withMessage("timeOpen hour hh:mm"),
+            .not()
+            .isEmpty().matches(regexHour).withMessage("timeOpen hour hh:mm"),
         body('timeClose').exists()
             .not()
             .isEmpty().matches(regexHour).withMessage("timeEnd: hour hh:mm"),
-            body('image').exists()
+        body('image').exists()
             .not()
-            .isEmpty().withMessage('image not empty')
+            .isEmpty().withMessage('image not empty'),
+        body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
     ];
 }
 exports.change_password = function () {
@@ -234,11 +235,19 @@ exports.updateSalonOwnerProfile = function () {
         body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone vi-VN"),
         body('taxCode').not().isEmpty().withMessage("not empty").isLength({ min: 1, max: 45 }).withMessage('tax code:min lenght 1,max lenght 45'),
         body('timeOpen').exists()
-        .not()
-        .isEmpty().matches(regexHour).withMessage("timeOpen hour hh:mm"),
+            .not()
+            .isEmpty().matches(regexHour).withMessage("timeOpen hour hh:mm"),
         body('timeClose').exists()
             .not()
             .isEmpty().matches(regexHour).withMessage("timeEnd: hour hh:mm"),
+        body('city').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('city:min lenght 1,max lenght 45'),
+        body('district').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('district:min lenght 1,max lenght 45'),
+        body('detailAddress').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('address:min lenght 1,max lenght 450'),
+        body('image').exists()
+            .not()
+            .isEmpty().withMessage('image not empty'),
+        body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
+        body('account_id').not().isEmpty().isInt().withMessage("account_id:number")
     ];
 }
 exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function () {
