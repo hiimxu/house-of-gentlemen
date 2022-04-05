@@ -197,49 +197,18 @@ exports.cancelBookingBySalon = function (req, res, next) {
     if (salonId == null) {
         return res.status(400).json({ message: "please login account salon" });
     }
-    var registerServiceId = req.body.registerServiceId;
-    var content = req.body.content;
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    RegisterService.getRegisterServiceById(registerServiceId, function (data) {
-        if (data.length == 0) {
-            return res.status(400).json({ message: "booking service not exist" });
-        } else {
-            RegisterService.checkSalon(registerServiceId, salonId, function (data) {
-                if (data.length == 0) {
-                    return res.status(400).json({ message: "you not have access" });
-                } else {
-                    StaffCanleder.cancelBooking(data[0].staffCanlederId, function (data) {
-                        if (data == null) {
-                            return res.json({ data: data, message: "cancel booking failed" });
-                        } else {
-                            RegisterService.cancelBooking(registerServiceId, function (data) {
-                                if (data == null) {
-                                    return res.json({ data: data, message: "cancel booking failed" });
-                                } else {
-                                    RegisterService.getPhone(registerServiceId, function (data) {
-                                        var phone = data[0].phone;
-                                        phone = '+84' + phone.substr(1, 9);
-                                        client.messages
-                                            .create({
-                                                body: 'message from salon:' + content,
-                                                from: TWILIO_PHONE_NUMBER,
-                                                to: phone
-                                            })
-                                            .then(message => console.log(message.sid));
-                                        return res.json({ message: "cancel booking success,you sent a SMS to customer " });
-                                    })
-
-
-                                }
-                            });
-                        }
-                    });
-                }
-            })
-        }
+    var registerServiceId = req.body.registerServiceId;
+    var service_time = req.body.service_time;
+    var slot = service_time / 15;
+    StaffCanleder.cancelBooking(registerServiceId, function (data){
+            RegisterService.cancelBooking(registerServiceId, function (data) {
+            return res.status(200).json({ message: "canceled booking service success" })
+        })
     })
 }
 exports.historyBooking = function (req, res, next) {

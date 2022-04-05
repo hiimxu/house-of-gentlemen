@@ -264,7 +264,7 @@ exports.updateAddressSalon = function () {
 exports.cancelBookingBySalon = function () {
     return [
         body('registerServiceId').not().isEmpty().withMessage("in put registerServiceId"),
-        body('content').not().isEmpty().isLength({ min: 1, max: 2000 }).withMessage('content:min lenght 1,max lenght 2000'),
+        body('service_time').not().isEmpty().isInt().withMessage("service_time:number"),
     ]
 }
 exports.impossibleService = function () {

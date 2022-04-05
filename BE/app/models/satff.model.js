@@ -58,4 +58,16 @@ Staff.deleteStaff= function (id,result) {
         }
     });
 }
+Staff.getTotalSlotSalon=function(id,result){
+    db.query(`select swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.totalSlot from swp490_g11.staff
+    left join swp490_g11.salonowner
+    on swp490_g11.staff.salonId=swp490_g11.salonowner.salonId
+     where staffId=?`,id, (err, rows, fields) => {
+        if (err) {
+            result( err);
+        } else {
+            result(rows);
+        }
+    });
+}
 module.exports =Staff;
