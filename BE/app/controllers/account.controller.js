@@ -276,7 +276,7 @@ exports.add_account_salon = function (req, res, next) {
                             if (data == null) {
                                 res.status(400).json({ data: data, message: "create account salon failed" });
                             } else {
-                                var dataImage ={image:image,salonId:dataSalon.salonId}
+                                var dataImage ={image:image,salonId:dataSalon.id}
                                 ImageSalon.addImageToImageSalon(dataImage, function (data){
 
                                 })

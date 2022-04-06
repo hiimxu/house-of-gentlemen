@@ -93,7 +93,7 @@ exports.getSalonOwnerProfile = function (req, res, next) {
     }
     
     try {
-        SalonOwner.getProfileSalon(id, function (data) {
+        SalonOwner.getProfileSalonBySalonId(id, function (data) {
             if (data == null) {
                 res.status(400).json({ data: data, message: "get salon 's profile failed" });
             }
