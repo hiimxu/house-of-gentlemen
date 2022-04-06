@@ -235,7 +235,7 @@ exports.add_account_salon = function (req, res, next) {
     var pass = req.body.password;
     var rol = req.body.role;
     var email = req.body.email;
-    var possibility = 0;
+    var possibility = 1;
     var image = req.body.image;
     var dataAddress={ city:req.body.city,
         district: req.body.district,
