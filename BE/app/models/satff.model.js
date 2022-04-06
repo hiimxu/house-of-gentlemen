@@ -5,10 +5,11 @@ const Staff = function (saff) {
     this.name = staff.name;
     this.phone = staff.phone;
     this.address = staff.address;
+    this.possible = staff.possible;
 }
 Staff.getStaff = function (id,result) {
    
-    db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}'`, (err, rows, fields) => {
+    db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}' and possible =1`, (err, rows, fields) => {
         if (err) {
             result(null,err);
         } else {
@@ -69,5 +70,17 @@ Staff.getTotalSlotSalon=function(id,result){
             result(rows);
         }
     });
+}
+Staff.impossibleStaff = function (id,result){
+    db.query(`UPDATE swp490_g11.staff SET possible=0  WHERE swp490_g11.staff.staffId=${id}`,(err, rows, fields) => {
+     
+        if (err) {
+            result(null,err)
+        } else {
+            result(rows)
+        }
+    });
+
+
 }
 module.exports =Staff;
