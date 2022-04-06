@@ -64,7 +64,7 @@ Service.getAllServiceSalon= function (id,result) {
     db.query(`SELECT swp490_g11.service.serviceId,swp490_g11.service.salonId,swp490_g11.service.name,swp490_g11.service.price,swp490_g11.service.description,swp490_g11.service.content,swp490_g11.service.promotion,swp490_g11.service.service_time,swp490_g11.service.possible,swp490_g11.image_service.image FROM swp490_g11.service
     left join swp490_g11.image_service
     on swp490_g11.service.serviceId=swp490_g11.image_service.serviceId
-    where swp490_g11.service.possible=1
+    where swp490_g11.service.possible=1 and swp490_g11.service.salonId='${id}'
     group by swp490_g11.service.serviceId
     order by swp490_g11.service.serviceId desc
     ;`, (err, rows, fields) => {
