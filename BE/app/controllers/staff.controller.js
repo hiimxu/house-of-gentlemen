@@ -58,7 +58,10 @@ exports.addStaff = function (req, res, next) {
         salonId: req.user.salonId,
         name: req.body.name,
         phone: req.body.phone,
-        address: req.body.address
+        address: req.body.address,
+        title: req.body.title,
+        license : req.body.license,
+        possible: 1
     }
     var salonId = req.user.salonId;
     if (salonId == null) {
@@ -92,7 +95,9 @@ exports.updateStaff = function (req, res, next) {
     var dataUpdate = {
         name: req.body.name,
         phone: req.body.phone,
-        address: req.body.address
+        address: req.body.address,
+        title : req.body.title,
+        license: req.body.license,
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -127,6 +132,16 @@ exports.updateStaff = function (req, res, next) {
     })
 
 
+}
+exports.impossibleStaff = function (req, res, next) {
+    var id = req.body.id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    Staff.impossibleStaff(id, function (data){
+        res.json({message:"impossible staff success!!"});
+    })
 }
 exports.deleteStaff = function (req, res, next) {
     var id = req.params.id;

@@ -19,6 +19,7 @@ const { param,body, validationResult } = require('express-validator');
 const {check} = require('express-validator');
 const validate = require('../common/valiator');
 const auth = require('../middleware/auth');
+const { impossibleStaff } = require('../models/satff.model');
 
 
 router.get('/',cors(),salonOwnerController.salonOwner);
@@ -60,9 +61,10 @@ router.get('/get/bookingServiceOfSalon',cors(),auth,registerServiceController.ge
 router.put('/cancelBookingServiceBySalon',validate.cancelBookingBySalon(),cors(),auth,registerServiceController.cancelBookingBySalon);
 router.put('/update/impossibleService',validate.impossibleService(),cors(),auth,serviceController.impossibleService);
 router.get('/get/impossibleService',cors(),auth,serviceController.getImpossibleService);
-router.post('/staffCanledar',cors(),staffCanledarController.staffCanlederOrderandBusy);
+router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),staffCanledarController.staffCanlederOrderandBusy);
 router.post('/bookingService',validate.bookingServiceForCustomer(),cors(),auth,registerServiceController.bookingServiceForCustomer);
 router.get('/current',cors(),auth,registerServiceController.current);
 router.get('/ordersHistory',cors(),auth,registerServiceController.ordersHistory);
-router.put('/update/finshBooking',validate.impossibleService(),cors(),auth,registerServiceController.finshBooking);
+router.put('/update/finshBooking',validate.finshBooking(),validate.impossibleService(),cors(),auth,registerServiceController.finshBooking);
+router.put('/impossible/staff/',validate.impossibleStaff(),cors(),auth,staffController.impossibleStaff);
 module.exports = router;
