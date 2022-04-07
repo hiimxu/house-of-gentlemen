@@ -98,16 +98,17 @@ exports.addRegisterService = function (req, res, next) {
         var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
         var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
         var timeUse = new Date(req.body.timeUse);
+        // return res.json({ timeUse, message: "timeUse"})
         if (timeOpen.getHours() > timeUse.getHours() ||
-            (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes()) ||
-            timeUse.getHours() > timeClose.getHours ||
-            (timeUse.getHours() == timeClose.getHours() && timeUse.getMinutes() > timeClose.getMinutes())) {
+            (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
+           
+            ) {
             return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
         } else {
             var slotTotal = data[0].totalSlot;
             var totalSlotBusy = timeBusy / 15;
             var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
-            if ((slotStart + totalSlotBusy) > slotTotal) {
+            if ((slotStart + totalSlotBusy) > slotTotal+1) {
                 return res.status(400).json({ message: "salon close at " + timeCloseDay })
             }
             StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
@@ -133,7 +134,11 @@ exports.addRegisterService = function (req, res, next) {
 
                             })
                         }
-                        return res.status(200).json({ data, message: "booking success" });
+                        RegisterService.dataBooking(data.registerServiceId, function (data){
+                            return res.status(200).json({ data, message: "booking success" });
+
+                        })
+                        
                     })
 
 
