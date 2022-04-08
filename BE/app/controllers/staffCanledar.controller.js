@@ -8,8 +8,9 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
     var day = req.body.day;
     var staffId = req.body.staffId;
     var slotTime=[];
-    var getDay=new Date(day +" 00:00:00");
     var checkDay = new Date();
+    var getDay=new Date(day +" 00:00:00");
+    
     
 
     const errors = validationResult(req);
@@ -18,6 +19,13 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
     }
     if (getDay<checkDay) {
        return res.status(400).json({message:"please check day",data: []})
+    }
+    var checkFiveDay = new Date();
+    checkFiveDay.setDate(checkFiveDay.getDate()+5);
+    console.log(checkFiveDay)
+    if (getDay>checkFiveDay){
+        return res.status(400).json({message:"you should booking on 5 days",data:[]})
+
     }
         Staff.getTotalSlotSalon(staffId, function (data) {
             var slotTotal = data[0].totalSlot;
