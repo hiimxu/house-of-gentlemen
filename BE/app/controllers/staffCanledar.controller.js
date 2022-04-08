@@ -8,9 +8,16 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
     var day = req.body.day;
     var staffId = req.body.staffId;
     var slotTime=[];
+    var getDay=new Date(day +" 00:00:00");
+    var checkDay = new Date();
+    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
+    }
+    if (getDay<checkDay) {
+       return res.status(400).json({message:"please check day",data: []})
     }
         Staff.getTotalSlotSalon(staffId, function (data) {
             var slotTotal = data[0].totalSlot;
