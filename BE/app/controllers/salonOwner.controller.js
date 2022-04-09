@@ -39,6 +39,16 @@ exports.getAllSalon = function (req, res, next) {
     }
 
 }
+exports.searchSalonByName = function (req, res, next) {
+    var name = req.body.name;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    SalonOwner.searchSalonByName(name,function (data) {
+        res.json({ data: data, message: "search salon" });
+    })
+}
 exports.setPossitiveSalonOwner = function (req, res, next) {
     var id = req.params.id;
     var possibility = req.body.possibility;

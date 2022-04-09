@@ -56,5 +56,6 @@ router.post('/searchSalonByDistrict',cors(),validate.searchSalonByDistrict(),add
 router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),auth,StaffCanlederController.staffCanlederOrderandBusy);
 router.get('/get/favoriteService',auth,cors(),registerServiceController.favorviteService);
 router.get('/get/historyBooking',auth,cors(),registerServiceController.historyBooking);
-router.get('/get/reservation',auth,cors(),registerServiceController.reservation)
+router.get('/get/reservation',auth,cors(),registerServiceController.reservation);
+router.post('/searchsalon',validate.searchSalonByName(),cors(),salonOwnerController.searchSalonByName);
 module.exports = router;

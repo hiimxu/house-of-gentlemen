@@ -326,3 +326,11 @@ exports.current = function () {
    .isEmpty()
    .withMessage(' cannot be empty').isDate().withMessage("current:yyyy-mm-dd"),];
 }
+exports.searchSalonByName = function () {
+    return[
+        body('name')
+   .exists()
+   .not()
+   .isEmpty().withMessage('not empty')
+    ]
+}
