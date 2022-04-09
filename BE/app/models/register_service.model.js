@@ -209,8 +209,7 @@ Register_service.checkStaffCanledarId=function(id,result){
         }
     });
 }
-Register_service.current= function (id,result){
-    var d=new Date();
+Register_service.current= function (id,day,result){
     db.query(`with t as (
         select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
         swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone,
@@ -228,7 +227,7 @@ Register_service.current= function (id,result){
         on swp490_g11.customer.customerId=swp490_g11.register_service.customerId
         left join swp490_g11.address
         on swp490_g11.address.salonId=swp490_g11.salonowner.salonId
-        where timeUse>=?
+        where date(timeUse)=?
         )
         select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
         t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,t.phone,t.phoneSalon,t.detailAddress
@@ -237,7 +236,7 @@ Register_service.current= function (id,result){
         on t.serviceId=swp490_g11.image_service.serviceId
         where t.nameStatus like 'booked' and t.salonId='${id}'
         group by t.registerServiceId
-        order by t.timeUse desc`,[d],(err, rows, fields) => {
+        order by t.timeUse desc`,[day],(err, rows, fields) => {
         if (err) {
             result(null,err);
         } else {

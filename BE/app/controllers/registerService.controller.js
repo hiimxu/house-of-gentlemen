@@ -328,7 +328,12 @@ exports.current = function (req, res, next) {
     if (salonId == null) {
         return res.status(400).json({ message: "please login account salon" });
     }
-    RegisterService.current(salonId, function (data) {
+    var day= req.body.day;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
+    RegisterService.current(salonId,day, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have current" });
         } else {

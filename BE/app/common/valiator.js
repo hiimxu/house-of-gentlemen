@@ -319,3 +319,10 @@ exports.finshBooking = function () {
 exports.impossibleStaff= function () {
     return[body('id').not().isEmpty().isInt().withMessage("id")];
 }
+exports.current = function () {
+  return [ body('day')
+   .exists()
+   .not()
+   .isEmpty()
+   .withMessage(' cannot be empty').isDate().withMessage("current:yyyy-mm-dd"),];
+}
