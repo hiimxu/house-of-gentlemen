@@ -333,6 +333,13 @@ exports.current = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
+    var today = new Date();
+    
+    var checkDay = new Date(day+' 23:59:00')
+    console.log(checkDay)
+    if (checkDay<today) {
+        return res.status(400).json({message:"you see history", data: []});
+    }
     RegisterService.current(salonId,day, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have current" });
