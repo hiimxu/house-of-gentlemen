@@ -136,6 +136,10 @@ exports.updateStaff = function (req, res, next) {
 exports.impossibleStaff = function (req, res, next) {
     var id = req.body.id;
     var salonId= req.user.salonId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
@@ -149,6 +153,7 @@ exports.deleteStaff = function (req, res, next) {
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
+
     Staff.checkPermission(id, salonId, function (data) {
         if (data[0].salonId == null) {
             return res.status(400).json({ message: "error mysql" })
@@ -175,4 +180,18 @@ exports.deleteStaff = function (req, res, next) {
     })
 
 
+}
+exports.possibleStaff = function (req, res, next) {
+    var id = req.body.id;
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
+    Staff.possibleStaff(id, function (data){
+        res.json({message:"possible staff success!!"});
+    })
 }

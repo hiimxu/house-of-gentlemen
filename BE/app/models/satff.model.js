@@ -9,7 +9,7 @@ const Staff = function (saff) {
 }
 Staff.getStaff = function (id, result) {
 
-    db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}' and possible =1`, (err, rows, fields) => {
+    db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}' order by possible desc`, (err, rows, fields) => {
         if (err) {
             result(null, err);
         } else {
@@ -63,7 +63,7 @@ Staff.getTotalSlotSalon = function (id, result) {
     db.query(`select swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.totalSlot from swp490_g11.staff
     left join swp490_g11.salonowner
     on swp490_g11.staff.salonId=swp490_g11.salonowner.salonId
-     where staffId=?`, id, (err, rows, fields) => {
+     where possible=1 and staffId=?`, id, (err, rows, fields) => {
         if (err) {
             result(err);
         } else {
@@ -73,6 +73,18 @@ Staff.getTotalSlotSalon = function (id, result) {
 }
 Staff.impossibleStaff = function (id, result) {
     db.query(`UPDATE swp490_g11.staff SET possible=0  WHERE swp490_g11.staff.staffId=${id}`, (err, rows, fields) => {
+
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows)
+        }
+    });
+
+
+}
+Staff.possibleStaff = function (id, result) {
+    db.query(`UPDATE swp490_g11.staff SET possible=1  WHERE swp490_g11.staff.staffId=${id}`, (err, rows, fields) => {
 
         if (err) {
             result(null, err)

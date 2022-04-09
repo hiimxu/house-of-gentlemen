@@ -319,6 +319,9 @@ exports.finshBooking = function () {
 exports.impossibleStaff= function () {
     return[body('id').not().isEmpty().isInt().withMessage("id")];
 }
+exports.possibleStaff= function () {
+    return[body('id').not().isEmpty().isInt().withMessage("id")];
+}
 exports.current = function () {
   return [ body('day')
    .exists()
