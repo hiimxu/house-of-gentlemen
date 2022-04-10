@@ -58,4 +58,6 @@ router.get('/get/favoriteService',auth,cors(),registerServiceController.favorvit
 router.get('/get/historyBooking',auth,cors(),registerServiceController.historyBooking);
 router.get('/get/reservation',auth,cors(),registerServiceController.reservation);
 router.post('/searchsalon',validate.searchSalonByName(),cors(),salonOwnerController.searchSalonByName);
+router.get('/get/check/',cors(),registerServiceController.check);
+
 module.exports = router;

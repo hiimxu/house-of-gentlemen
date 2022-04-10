@@ -378,3 +378,7 @@ exports.finshBooking = function (req, res, next) {
     })
 
 }
+exports.check = function (req, res, next) {
+    console.log(req.headers['accept'])
+    res.json({ data: [], message: "ok"})
+}

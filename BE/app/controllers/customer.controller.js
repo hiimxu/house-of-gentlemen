@@ -11,10 +11,12 @@ exports.getAllCustomer = function (req, res, next) {
     res.json("wellcome to customer");
 }
 exports.getCustomerProfile = function (req, res, next) {
+   
     var customerId=req.user.customerId;
     if (customerId==null) {
        return res.status(400).json({message:"please login account customer"});
     }
+    console.log(customerId)
   
     try {
         Customer.getCustomerSalon(req.user.account_id, function (data) {
