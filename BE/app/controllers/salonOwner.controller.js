@@ -50,18 +50,20 @@ exports.searchSalonByName = function (req, res, next) {
     })
 }
 exports.setPossitiveSalonOwner = function (req, res, next) {
-    var id = req.params.id;
+    var id = req.body.id;
     var possibility = req.body.possibility;
+    
     var checkPossibility = ['1', '0'];
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     if (!checkPossibility.includes(req.body.possibility)) {
         res.status(400).json({ message: "check possibility" });
         return;
     }
     console.log(possibility)
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    
     try {
         var data = SalonOwner.setPossitiveSalonOwner(id, possibility, function (data) {
             if (data == null) {
@@ -74,7 +76,11 @@ exports.setPossitiveSalonOwner = function (req, res, next) {
                         res.status(400).json({ data: data, message: "data not change" });
                     }
                     else {
-                        res.json({ data: data, message: "set salon's possitive success" });
+                        if (possibility==1) {
+                            res.json({ data: data, message: "set salon's possitive success" });
+                        } else {
+                            res.json({ data: data, message: "set salon's impossitive success" });
+                        }
                     }
             }
         });

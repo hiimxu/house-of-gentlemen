@@ -19,7 +19,16 @@ Account.getAll = function (result) {
     });
 }
 Account.getAllAccountSalon = function (result) {
-    db.query("SELECT * FROM swp490_g11.account where role='salon'", (err, rows, fields) => {
+    db.query(`SELECT * FROM swp490_g11.account
+    left join swp490_g11.salonowner
+    on swp490_g11.account.account_id=swp490_g11.salonowner.accountId
+    left join swp490_g11.address
+    on swp490_g11.salonowner.salonId= swp490_g11.address.salonId
+    left join swp490_g11.image_salon
+    on swp490_g11.salonowner.salonId = swp490_g11.image_salon.salonId
+    where swp490_g11.account.role='salon'
+    group by account_id
+    order by possibility`, (err, rows, fields) => {
         if (err) {
             
             result(null,err);

@@ -320,6 +320,10 @@ exports.delete_accountbyid = function (req, res, next) {
     }
 }
 exports.getSalonAccount = function (req, res, next) {
+    var user = req.user
+    if (user.role== null) {
+        res.status(400).json({ message:"please login admin",data: []})
+    }
     try {
         Account.getAllAccountSalon(function (data) {
             if (data == null) {

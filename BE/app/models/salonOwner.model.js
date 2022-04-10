@@ -100,7 +100,7 @@ SalonOwner.setPossitiveSalonOwner=function (id,possibility, result) {
     db.query(`UPDATE swp490_g11.salonowner SET possibility = '${possibility}' WHERE (salonId = '${id}');`, (err, rows, fields) => {
        
         if (err) {
-            result(null, err)
+            result( err)
         } else {
             result(rows);
         }

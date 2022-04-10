@@ -84,7 +84,7 @@ exports.updateCustomerProfile = function () {
 }
 exports.setPossitiveSalonOwner = function () {
     return [
-        param('id').not().isEmpty().isInt().withMessage("id:number"),
+        body('id').not().isEmpty().isInt().withMessage("id:number"),
         body('possibility').not().isEmpty().isInt().withMessage("possibility is number")
     ];
 }

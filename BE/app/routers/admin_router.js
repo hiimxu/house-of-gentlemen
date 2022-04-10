@@ -9,8 +9,8 @@ const {check} = require('express-validator');
 const validate = require('../common/valiator');
 const auth = require('../middleware/auth');
 
-router.get('/getSalonAccount',cors(),accountController.getSalonAccount);
+router.get('/getSalonAccount',cors(),auth,accountController.getSalonAccount);
 router.get('/getSalon/:id',validate.checkId(),cors(),salonOwnerController.getSalon);
-router.put('/update/possibility/salon/:id',validate.setPossitiveSalonOwner(),cors(),salonOwnerController.setPossitiveSalonOwner);
+router.put('/update/possibility/salon/',validate.setPossitiveSalonOwner(),auth,cors(),salonOwnerController.setPossitiveSalonOwner);
 
 module.exports = router;
