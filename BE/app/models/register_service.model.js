@@ -270,6 +270,7 @@ Register_service.ordersHistory = function (id,result){
         from t
         left join swp490_g11.image_service
         on t.serviceId=swp490_g11.image_service.serviceId
+        where t.nameStatus like 'cancelled' or t.nameStatus like 'finished'
         group by t.registerServiceId
         order by t.timeUse desc;
         `,id,(err, rows, fields) => {
