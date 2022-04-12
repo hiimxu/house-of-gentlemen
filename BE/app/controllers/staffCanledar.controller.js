@@ -9,7 +9,7 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
     var staffId = req.body.staffId;
     var slotTime=[];
     var checkDay = new Date();
-    var getDay=new Date(day +" 00:00:00");
+    var getDay=new Date(day +" 23:59:59");
     
     
 

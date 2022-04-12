@@ -86,7 +86,7 @@ exports.login_account = function async(req, res, next) {
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array(),message: "error validate"});
     }
     var md5_pass = md5(pass);
     Account.checkAccount(acc, function(data){
@@ -99,7 +99,7 @@ exports.login_account = function async(req, res, next) {
                 var data = Account.getAccountToLogin(acc, md5_pass, function (data) {
                     if (data == null) {
                         
-                       return res.json({ data: data,datauser:message, message: "login failed" });
+                       return res.status(400).json({ data: data,datauser:message, message: "login failed" });
                     } else {
                         if (data.length == 0) {
                           return res.status(400).json({ data: data ,userData:{message:"empty"}, message: "please check password" });

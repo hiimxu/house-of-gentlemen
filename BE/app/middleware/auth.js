@@ -7,8 +7,6 @@ const verifyToken = (req, res, next) => {
   const abc= req.headers["abc"]
   const token =
     req.body.token || req.query.token || req.headers["x-access-token"]||req.Authorization;
-    console.log('token'+token)
-console.log(token)
   if (!token) {
       // console.log(token);
 

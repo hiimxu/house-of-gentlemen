@@ -105,8 +105,7 @@ exports.BookingService = function () {
             .not()
             .isEmpty()
             .withMessage('start cannot be empty').matches(regexDateTime).withMessage("time use:yyyy-mm-dd hh:mm:ss"),
-        body('price_original').not().isEmpty().isInt().withMessage("price_original:is number"),
-        body('service_time').not().isEmpty().isInt().withMessage("service_time:is number"),
+       
     ];
 }
 exports.addFeedBackByCustomer = function () {
