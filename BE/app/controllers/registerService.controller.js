@@ -13,7 +13,7 @@ exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
     var customerId = req.user.customerId;
     if (customerId == null) {
-        return res.status(400).json({ message: "please login account customer" });
+        return res.status(400).json({ message: "Please login account customer" });
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -22,12 +22,12 @@ exports.getRegisterServiceById = function (req, res, next) {
     try {
         RegisterService.getRegisterServiceById(id, function (data) {
             if (data == null) {
-                res.status(400).json({ data: data, message: "get booking service failed" });
+                res.status(400).json({ data: data, message: "Get booking service failed" });
             } else {
                 if (data.length == 0) {
                     res.status(400).json({ data: data, message: "not have booking service" });
                 } else {
-                    res.json({ data: data, message: "get booking service success" });
+                    res.json({ data: data, message: "Get booking service success" });
                 }
             }
         });

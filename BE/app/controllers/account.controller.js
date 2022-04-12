@@ -58,7 +58,7 @@ exports.change_password = function (req, res, next) {
         var md5_old_pass = md5(old_pass);
         Account.checkAccount(acc, function(data){
             if (data.length==0) {
-               return res.status(400).json({message:"please check account_name"});
+               return res.status(400).json({message:"account not exist,please check account"});
                 
             }else{
                 var data = Account.checkPassword(acc, md5_old_pass, function (data) {
@@ -69,7 +69,7 @@ exports.change_password = function (req, res, next) {
                            return res.json({ message: "update password success", data: response });
                         });
                     } else {
-                       return res.status(400).json({ message: "kiem tra lai old_password ", data: "update failed" });
+                       return res.status(400).json({ message: "check old_password ", data: "update failed" });
                     }
                 })
 
@@ -77,7 +77,7 @@ exports.change_password = function (req, res, next) {
         })
         
     } catch (error) {
-       return res.json({ message: "kiem tra lai old_password va account_name", data: error });
+       return res.json({ message: "check va account_name", data: error });
     }
 }
 exports.login_account = function async(req, res, next) {
@@ -91,7 +91,7 @@ exports.login_account = function async(req, res, next) {
     var md5_pass = md5(pass);
     Account.checkAccount(acc, function(data){
         if (data.length==0) {
-           return res.status(400).json({message:"please check account_name"});
+           return res.status(400).json({message:"Account not exist, please check account"});
             
         }
         else{
@@ -102,7 +102,7 @@ exports.login_account = function async(req, res, next) {
                        return res.status(400).json({ data: data,datauser:message, message: "login failed" });
                     } else {
                         if (data.length == 0) {
-                          return res.status(400).json({ data: data ,userData:{message:"empty"}, message: "please check password" });
+                          return res.status(400).json({ data: data ,userData:{message:"empty"}, message: "password wrong,please check password" });
                         } else {
                             
                             var redata = data;
@@ -276,7 +276,7 @@ exports.add_account_salon = function (req, res, next) {
                         data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
                             var dataSalon=data;
                             if (data == null) {
-                                res.status(400).json({ data: data, message: "create account salon failed" });
+                                res.status(400).json({ data: data, message: "Create account salon failed" });
                             } else {
                                 var dataImage ={image:image,salonId:dataSalon.id}
                                 ImageSalon.addImageToImageSalon(dataImage, function (data){
@@ -290,7 +290,7 @@ exports.add_account_salon = function (req, res, next) {
                                     if (data== null) {
                                        return res.status(400).json({message:"mysql error"})
                                     } else {
-                                       res.json({ data_account: data_account, dataSalon: dataSalon,dataAddress:data, message: "create account salon success" });  
+                                       res.json({ data_account: data_account, dataSalon: dataSalon,dataAddress:data, message: "Create account salon success" });  
                                     }
                                 })
 
@@ -298,12 +298,12 @@ exports.add_account_salon = function (req, res, next) {
                         });
                     });
                 } else {
-                    res.status(400).json({ message: "create account salon failed" })
+                    res.status(400).json({ message: "Create account salon failed" })
                 }
             }
         });
     } catch (error) {
-        res.status(400).json({ data: error, message: "create account success" });
+        res.status(400).json({ data: error, message: "Create account success" });
     }
 }
 exports.delete_accountbyid = function (req, res, next) {
@@ -312,26 +312,26 @@ exports.delete_accountbyid = function (req, res, next) {
         Account.removeAccount
             (id, function (response) {
                 if (response == null) {
-                    res.status(400).json({ data: response, message: "delete account failed" });
+                    res.status(400).json({ data: response, message: "Delete account failed" });
                 } else {
-                    res.json({ data: response, message: "delete account success" });
+                    res.json({ data: response, message: "Delete account success" });
                 }
             })
     } catch (error) {
-        res.status(400).json({ data: error, message: "delete account failed" });
+        res.status(400).json({ data: error, message: "Delete account failed" });
     }
 }
 exports.getSalonAccount = function (req, res, next) {
     var user = req.user
     if (user.role== null) {
-        res.status(400).json({ message:"please login admin",data: []})
+        res.status(400).json({ message:"Please login admin",data: []})
     }
     try {
         Account.getAllAccountSalon(function (data) {
             if (data == null) {
-                res.status(400).json({ data: data, message: "get account salon failed" });
+                res.status(400).json({ data: data, message: "Get account salon failed" });
             } else {
-                res.json({ data: data, message: "get account salon success" });
+                res.json({ data: data, message: "Get account salon success" });
             }
         });
     } catch (error) {
