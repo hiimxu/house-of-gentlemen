@@ -291,6 +291,7 @@ exports.staffCanlederOrderandBusy = function () {
     return [
         body('day').not().isEmpty().isDate().withMessage("input day"),
         body('staffId').not().isEmpty().isInt().withMessage("staffId:int"),
+        body('service_time').not().isEmpty().isInt().withMessage("service_time:number"),
 
     ]
 }
@@ -335,5 +336,10 @@ exports.searchSalonByName = function () {
    .exists()
    .not()
    .isEmpty().withMessage('not empty')
+    ]
+}
+exports.ordersHistory= function () {
+    return[
+        body('day').not().isEmpty().isDate().withMessage("input day"),
     ]
 }

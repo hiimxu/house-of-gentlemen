@@ -353,7 +353,16 @@ exports.ordersHistory = function (req, res, next) {
     if (salonId == null) {
         return res.status(400).json({ message: "please login account salon" });
     }
-    RegisterService.ordersHistory(salonId, function (data) {
+    var day= req.body.day;
+    var nameStaff= req.body.nameStaff;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
+    if (nameStaff == null) {
+        nameStaff='';
+    }
+    RegisterService.ordersHistory(salonId,day,nameStaff, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have history booking" });
         } else {

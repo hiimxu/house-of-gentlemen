@@ -7,6 +7,7 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
     
     var day = req.body.day;
     var staffId = req.body.staffId;
+    var service_time = req.body.service_time;
     var slotTime=[];
     var checkDay = new Date();
     var getDay=new Date(day +" 23:59:59");
@@ -36,13 +37,42 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
             StaffCanleder.staffCanlederBusy(day, staffId, function (data) {
                
                     var slot = [];
+                    var arrSlotCheck=[];
+                    var checkSlot=service_time/15;
                     for (let index = 0; index < slotTotal; index++) {
                         slot.push(index+1);
                     }
                     for (let n = 0; n < data.length; n++) {
                         var index = slot.indexOf(data[n].slotBusy);
-                        slot.splice(index, 1)
+                        slot.splice(index, 1);
                     }
+                    for (let n=0 ; n<slot.length; n++){
+                        var x=slot[n+1]-slot[n];
+                        // console.log(x+"+"+n)
+                        if (x>1) {
+                            // arrSlotCheck.push(slot[n-1]);
+                            arrSlotCheck.push(slot[n]);
+                        }
+                        if (slot[n]==slot[slot.length-1] && slot[n]>(slotTotal-checkSlot)) {
+                            arrSlotCheck.push(slot[n]);
+                        }
+                        
+                        if (isNaN(x)) {
+                            console.log(x+"+"+n)
+                            // slot.splice(index, 1);
+                        }
+                        // console.log(slot[n+1]-slot[n])
+                                          
+                    }
+                    console.log(arrSlotCheck)
+                    for (let m = 0; m< arrSlotCheck.length; m++) {
+
+                        var index = slot.indexOf(arrSlotCheck[m]-checkSlot+2);
+                        slot.splice(index, checkSlot-1);
+
+                       
+                    }
+                    console.log(arrSlotCheck)
                     for (let n = 0; n < slot.length; n++) {
                         
                         var hSlot=Math.floor((slot[n]-1)/4);
@@ -60,7 +90,6 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
                             mSlot="00"
                         }
                         var timeSlot = hSlot+":"+mSlot;
-                        console.log(slot[n])
                         slotTime.push(timeSlot)
                         
                     }
