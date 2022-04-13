@@ -237,7 +237,7 @@ Register_service.current= function (id,day,result){
         on t.serviceId=swp490_g11.image_service.serviceId
         where t.nameStatus like 'booked' and t.salonId='${id}'
         group by t.registerServiceId
-        order by t.timeUse desc`,[day],(err, rows, fields) => {
+        order by t.timeUse `,[day],(err, rows, fields) => {
         if (err) {
             result(null,err);
         } else {
