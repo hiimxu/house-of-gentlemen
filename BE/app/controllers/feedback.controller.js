@@ -193,7 +193,7 @@ exports.deleteFeedbackByCustomer = function (req, res, next) {
                                     if (data.affectedRows == 0) {
                                         res.status(400).json({ data: data, message: "not have feedback to delete" });
                                     } else {
-                                        res.json({ data: data, message: "delete feedback success" });
+                                        res.json({ data: {id:id}, message: "delete feedback success" });
                                     }
                 
                                 }
@@ -276,6 +276,7 @@ exports.updateFeedbackByCustomer = function (req, res, next) {
         content: req.body.content,
         rate: req.body.rate,
     };
+    dataOk ={id,...dataUpdate}
     wsend='customer';
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
@@ -299,18 +300,18 @@ exports.updateFeedbackByCustomer = function (req, res, next) {
                         FeedBack.updateFeedback(id, dataUpdate, function (data) {
                 
                             if (data == null) {
-                                res.status(400).json({ result: data, message: "update feedback failed" });
+                                res.status(400).json({ data: data, message: "update feedback failed" });
                             } else {
                                 if (data.affectedRows==0) {
-                                    res.status(400).json({ result: data, message: "check id feedback to update" });
+                                    res.status(400).json({ data: data, message: "check id feedback to update" });
                                 } else {
-                                    res.json({ result: data, message: "update feedback success" });
+                                    res.json({ data: dataUpdate, message: "update feedback success" });
                                 }
                 
                             }
                         });
                     } catch (error) {
-                        res.status(400).json({ result: error, message: "update feedback failed" });
+                        res.status(400).json({ data: error, message: "update feedback failed" });
                     }
                 }
             })

@@ -169,7 +169,7 @@ exports.cancelBooking = function (req, res, next) {
     var slot = service_time / 15;
     StaffCanleder.cancelBooking(registerServiceId, function (data){
             RegisterService.cancelBooking(registerServiceId, function (data) {
-            return res.status(200).json({ message: "canceled booking service success" })
+            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId}})
         })
     })
 }
