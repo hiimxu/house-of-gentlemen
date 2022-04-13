@@ -70,16 +70,16 @@ exports.setPossitiveSalonOwner = function (req, res, next) {
                     res.status(400).json({ data: data, message: "set salon's possitive failed" });
                 } else {
                     if (data.affectedRows == 0) {
-                        res.status(400).json({ data: data, message: "not have data update" });
+                        res.status(400).json({ data: {id:id}, message: "not have data update" });
                     } else
                         if (data.changedRows == 0) {
-                            res.status(400).json({ data: data, message: "data not change" });
+                            res.status(400).json({ data: {id:id}, message: "data not change" });
                         }
                         else {
                             if (possibility==1) {
-                                res.json({ data: data, message: "set salon's possitive success" });
+                                res.json({ data: {id:id}, message: "set salon's possitive success" });
                             } else {
-                                res.json({ data: data, message: "set salon's impossitive success" });
+                                res.json({ data: {id:id}, message: "set salon's impossitive success" });
                             }
                         }
                 }

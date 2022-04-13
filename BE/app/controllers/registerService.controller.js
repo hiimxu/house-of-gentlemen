@@ -382,7 +382,7 @@ exports.finshBooking = function (req, res, next) {
     }
     RegisterService.finshBooking(id, function (data){
         
-            return res.json({ data: data, message: "finish booking service" });
+            return res.json({ data: {id:id}, message: "finish booking service" });
         
     })
 

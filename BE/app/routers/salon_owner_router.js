@@ -65,7 +65,7 @@ router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),staffCa
 router.post('/bookingService',validate.bookingServiceForCustomer(),cors(),auth,registerServiceController.bookingServiceForCustomer);
 router.post('/current',validate.current(),cors(),auth,registerServiceController.current);
 router.post('/ordersHistory',validate.ordersHistory(),cors(),auth,registerServiceController.ordersHistory);
-router.put('/update/finshBooking',validate.finshBooking(),validate.impossibleService(),cors(),auth,registerServiceController.finshBooking);
+router.put('/update/finshBooking',validate.finshBooking(),cors(),auth,registerServiceController.finshBooking);
 router.put('/impossible/staff/',validate.impossibleStaff(),cors(),auth,staffController.impossibleStaff);
 router.put('/possible/staff/',validate.possibleStaff(),cors(),auth,staffController.possibleStaff);
 module.exports = router;

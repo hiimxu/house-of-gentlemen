@@ -119,7 +119,7 @@ exports.updateStaff = function (req, res, next) {
                         if (data.affectedRows == 0) {
                             res.status(400).json({ data: data, message: 'not have to update' });
                         } else {
-                            res.json({ data: data, message: 'update success' });
+                            res.json({ data: dataUpdate, message: 'update success' });
                         }
 
                     }
@@ -144,7 +144,7 @@ exports.impossibleStaff = function (req, res, next) {
        return res.status(400).json({message:"please login account salon"});
     }
     Staff.impossibleStaff(id, function (data){
-        res.json({message:"impossible staff success!!"});
+        res.json({message:"impossible staff success!!",data:{id:id}});
     })
 }
 exports.deleteStaff = function (req, res, next) {
@@ -192,6 +192,6 @@ exports.possibleStaff = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     Staff.possibleStaff(id, function (data){
-        res.json({message:"possible staff success!!"});
+        res.json({message:"possible staff success!!",data:{id:id}});
     })
 }

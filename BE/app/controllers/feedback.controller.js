@@ -121,6 +121,7 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
+
     var wsend='salon';
     // chu y phai xoa feedback_detail truoc
     const errors = validationResult(req);
@@ -145,7 +146,7 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
                                     if (data.affectedRows == 0) {
                                         res.status(400).json({ data: data, message: "not have feedback to delete" });
                                     } else {
-                                        res.json({ data: data, message: "delete feedback success" });
+                                        res.json({ data: {id:id}, message: "delete feedback success" });
                                     }
                 
                                 }
@@ -216,6 +217,7 @@ exports.updateFeedbackBySalon = function (req, res, next) {
         rate: req.body.rate,
         salonId: req.user.salonId,
     };
+    var dataOk ={id,...dataUpdate}
     var salonId= req.user.salonId;
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
@@ -244,12 +246,12 @@ exports.updateFeedbackBySalon = function (req, res, next) {
                         FeedBack.updateFeedback(id, dataUpdate, function (data) {
                 
                             if (data == null) {
-                                res.status(400).json({ result: data, message: "update feedback failed" });
+                                res.status(400).json({ data: data, message: "update feedback failed" });
                             } else {
                                 if (data.affectedRows==0) {
-                                    res.status(400).json({ result: data, message: "check id feedback to update" });
+                                    res.status(400).json({ data: data, message: "check id feedback to update" });
                                 } else {
-                                    res.json({ result: data, message: "update feedback success" });
+                                    res.json({ data: dataOk, message: "update feedback success" });
                                 }
                 
                             }
