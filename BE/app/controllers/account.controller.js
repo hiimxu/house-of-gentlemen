@@ -46,7 +46,7 @@ exports.get_accountbyid = function (req, res, next) {
     }
 }
 exports.change_password = function (req, res, next) {
-    try {
+    
         var new_pass = req.body.new_password;
         var old_pass = req.body.old_password;
         var acc = req.body.account_name;
@@ -56,6 +56,7 @@ exports.change_password = function (req, res, next) {
         }
         var md5_new_pass = md5(new_pass);
         var md5_old_pass = md5(old_pass);
+        var dataOk={account_name:acc,new_password:new_pass}
         Account.checkAccount(acc, function(data){
             if (data.length==0) {
                return res.status(400).json({message:"account not exist,please check account"});
@@ -66,7 +67,7 @@ exports.change_password = function (req, res, next) {
                         var id = data[0].account_id;
         
                         var data = Account.updatePasswordAccount(id, md5_new_pass, function (response) {
-                           return res.json({ message: "update password success", data: response });
+                           return res.json({ message: "update password success", data: dataOk });
                         });
                     } else {
                        return res.status(400).json({ message: "check old_password ", data: "update failed" });
@@ -76,9 +77,7 @@ exports.change_password = function (req, res, next) {
             }
         })
         
-    } catch (error) {
-       return res.json({ message: "check va account_name", data: error });
-    }
+    
 }
 exports.login_account = function async(req, res, next) {
     var acc = req.body.account;
