@@ -324,19 +324,22 @@ exports.delete_accountbyid = function (req, res, next) {
 exports.getSalonAccount = function (req, res, next) {
     var user = req.user
     if (user.role== null) {
-        res.status(400).json({ message:"Please login admin",data: []})
+       return res.status(400).json({ message:"Please login admin",data: []})
     }
-    try {
-        Account.getAllAccountSalon(function (data) {
-            if (data == null) {
-                res.status(400).json({ data: data, message: "Get account salon failed" });
-            } else {
-                res.json({ data: data, message: "Get account salon success" });
-            }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "get account salon failed" });
+    else{
+        try {
+            Account.getAllAccountSalon(function (data) {
+                if (data == null) {
+                    res.status(400).json({ data: data, message: "Get account salon failed" });
+                } else {
+                    res.json({ data: data, message: "Get account salon success" });
+                }
+            });
+        } catch (error) {
+            res.status(400).json({ data: error, message: "get account salon failed" });
+        }
     }
+    
 }
 exports.forgotPassword = async function (req, res, next) {
     const data = req.body;
