@@ -328,7 +328,9 @@ exports.current = function () {
    .exists()
    .not()
    .isEmpty()
-   .withMessage(' cannot be empty').isDate().withMessage("current:yyyy-mm-dd"),];
+   .withMessage(' cannot be empty').isDate().withMessage("current:yyyy-mm-dd"),
+
+];
 }
 exports.searchSalonByName = function () {
     return[
