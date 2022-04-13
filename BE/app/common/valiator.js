@@ -222,7 +222,7 @@ exports.validateStaff = function () {
         body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
         body('address').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('address:min lenght 1,max lenght 450'),
         body('title').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('title:min lenght 1,max lenght 45'),
-        body('license').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('title:min lenght 1,max lenght 450'),
+        // body('license').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('title:min lenght 1,max lenght 450'),
     ];
 }
 exports.updateStaff = function () {
@@ -231,7 +231,7 @@ exports.updateStaff = function () {
         body('name').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('name:min lenght 1,max lenght 45'),
         body('phone').not().isEmpty().isMobilePhone('vi-VN').withMessage("validate phone"),
         body('title').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('title:min lenght 1,max lenght 45'),
-        body('license').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('title:min lenght 1,max lenght 450'),
+        // body('license').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('title:min lenght 1,max lenght 450'),
     ];
 }
 exports.updateSalonOwnerProfile = function () {
