@@ -159,6 +159,7 @@ exports.updateServiceSalon = function (req, res, next) {
 
     };
     var image = req.body.image;
+    var dataOk = {id,image,...dataUpdate}
     if (parseInt(dataUpdate.promotion)>100 || parseInt(dataUpdate.promotion)<0) {
         return res.status(400).json({message:"0<=promotion<=100"})
     }
@@ -179,7 +180,7 @@ exports.updateServiceSalon = function (req, res, next) {
                             res.status(400).json({ data: data, message: "update service fail" });
                         } else {
                             
-                            res.json({ data: data, message: "update service success" });
+                            res.json({ data: dataOk, message: "update service success" });
                         }
                     });
 
@@ -250,6 +251,7 @@ exports.impossibleService=function (req, res, next) {
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
+    var dataOk={serviceId:serviceId}
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -264,7 +266,7 @@ exports.impossibleService=function (req, res, next) {
                 if (data== null) {
                     return res.status(400).json({message:"error sql"})
                 } else {
-                    return res.status(200).json({data,message:"impossible service"})
+                    return res.status(200).json({data:dataOk,message:"impossible service"})
                 }
             })
         }

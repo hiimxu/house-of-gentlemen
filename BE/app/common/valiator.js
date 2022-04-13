@@ -252,7 +252,7 @@ exports.updateSalonOwnerProfile = function () {
             .not()
             .isEmpty().withMessage('image not empty'),
         body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
-        body('account_id').not().isEmpty().isInt().withMessage("account_id:number")
+        
     ];
 }
 exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function () {

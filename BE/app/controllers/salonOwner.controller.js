@@ -149,6 +149,7 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     }
     var image = req.body.image;
     var email = req.body.email;
+    var dataOk ={...dataUpdate,...addressUpdate,image,email}
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -164,7 +165,7 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
                         if (data.affectedRows == 0) {
                             res.status(400).json({ data: data, message: "not have salon 's profile to update" });
                         } else {
-                            res.json({ data: data, message: "update salon 's profile success" });
+                            res.json({ data: dataOk, message: "update salon 's profile success" });
                         }
                     }
                 });
