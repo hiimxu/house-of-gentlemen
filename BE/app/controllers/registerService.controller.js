@@ -209,10 +209,11 @@ exports.cancelBookingBySalon = function (req, res, next) {
     }
     var registerServiceId = req.body.registerServiceId;
     var service_time = req.body.service_time;
+    var note = req.body.note;
     var slot = service_time / 15;
-    StaffCanleder.cancelBooking(registerServiceId, function (data){
+    StaffCanleder.cancelBookingBySalon(registerServiceId,note, function (data){
             RegisterService.cancelBooking(registerServiceId, function (data) {
-            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId:registerServiceId} })
+            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId:registerServiceId,note} })
         })
     })
 }
