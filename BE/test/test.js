@@ -803,6 +803,7 @@ describe('test for  post:/api/salonowner/bookingService', function () {
       .post('/api/salonowner/bookingService').send(data).end((err, res) => {
         res.should.have.status(400);
         res.body.should.have.property('message').eql("error validate");
+       
       });
 
   });
