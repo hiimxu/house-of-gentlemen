@@ -94,7 +94,12 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
                         var checkHour = checkDay.getHours();
                         var checkMinute = checkDay.getMinutes();
                         var checkTime =checkHour+":"+checkMinute;
-                        if (getDay.getFullYear()==checkDay.getFullYear()&&getDay.getMonth()==checkDay.getMonth()&&getDay.getDate()==checkDay.getDate()&&Date.parse('01/01/2011'+' '+timeSlot+':45') > Date.parse('01/01/2011'+' '+checkTime+':45')) {
+                        if (getDay.getFullYear()==checkDay.getFullYear()&&getDay.getMonth()==checkDay.getMonth()&&getDay.getDate()==checkDay.getDate()) {
+                            if (Date.parse('01/01/2011'+' '+timeSlot+':45') > Date.parse('01/01/2011'+' '+checkTime+':45')) {
+                                slotTime.push(timeSlot)
+                            }
+                            
+                        }else{
                             slotTime.push(timeSlot)
                         }
                         
