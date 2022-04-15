@@ -211,7 +211,7 @@ exports.cancelBookingBySalon = function (req, res, next) {
     var note = req.body.note;
     StaffCanleder.cancelBookingBySalon(registerServiceId, function (data){
             RegisterService.cancelBooking(registerServiceId,note, function (data) {
-            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId:registerServiceId,note} })
+            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId:registerServiceId,note:note} })
         })
     })
 }

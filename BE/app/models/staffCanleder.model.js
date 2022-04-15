@@ -32,9 +32,9 @@ StaffCanleder.cancelBooking= function(id,result){
     });
     
 }
-StaffCanleder.cancelBookingBySalon= function(id,note,result){
+StaffCanleder.cancelBookingBySalon= function(id,result){
     // console.log(id)
-    db.query(`delete FROM swp490_g11.staffcanledar where registerServiceId='${id}' and note=?`,note, (err, rows, res) => {
+    db.query(`delete FROM swp490_g11.staffcanledar where registerServiceId='${id}'`, (err, rows, res) => {
         if (err) {
             result(null,err)
         } else {
