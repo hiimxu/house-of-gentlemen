@@ -43,6 +43,15 @@ StaffCanleder.cancelBookingBySalon= function(id,note,result){
     });
     
 }
+StaffCanleder.finishBooking = function(id,result){
+    db.query(`delete FROM swp490_g11.staffcanledar where registerServiceId='${id}'`,id, (err, rows, res) => {
+        if (err) {
+            result(null,err)
+        } else {
+            result(rows);
+        }
+    });
+}
 StaffCanleder.checkCanleder = function (date,date1,staffId,result) {
     
   

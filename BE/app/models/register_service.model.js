@@ -44,10 +44,8 @@ Register_service.addRegisterService = function(dataRegisterService,result){
     });
     
 }
-Register_service.cancelBooking= function(id,result){
-    console.log('aaaaa')
-    console.log(id+"aaa");
-    db.query(`UPDATE register_service SET status_register_id='2' where registerServiceId=?`,id, (err, rows, res) => {
+Register_service.cancelBooking= function(id,note,result){
+    db.query(`UPDATE register_service SET status_register_id='2' and note=? where registerServiceId=?`,note,id, (err, rows, res) => {
         if (err) {
             result(null,err);
         } else {
@@ -283,8 +281,8 @@ Register_service.ordersHistory = function (id,day,nameStaff,result){
         }
     }); 
 }
-Register_service.finshBooking=function (id,result){
-    db.query(`UPDATE register_service SET status_register_id='3' where registerServiceId=?`,id, (err, rows, res) => {
+Register_service.finshBooking=function (id,note,result){
+    db.query(`UPDATE register_service SET status_register_id='3' and note='${note}' where registerServiceId=?`,id, (err, rows, res) => {
         if (err) {
             result(null,err);
         } else {
@@ -292,6 +290,7 @@ Register_service.finshBooking=function (id,result){
         }
     });
 }
+
 Register_service.dataBooking = function (id,result){
     db.query(`with t as (
         select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,

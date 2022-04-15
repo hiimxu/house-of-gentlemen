@@ -4,8 +4,8 @@ process.env.NODE_ENV = 'test';
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let should = chai.should();
-var tokenCustomer="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTg2MzE4NCwiZXhwIjoxNjQ5ODcwMzg0fQ.-dHD-n_gT9J3WyVxnGoo9Hh4qF1Bz4ZC7JlZcxQDNlY";
-var tokenSalon="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoyLCJhY2NvdW50X25hbWUiOiJzYWxvbiIsInNhbG9uSWQiOjEsImlhdCI6MTY0OTg2MzY1NCwiZXhwIjoxNjQ5ODcwODU0fQ.DhII023Y5zuTmdxg8_6CHz8tmG78fpZv0pM0f6yUvxg";
+var tokenCustomer="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTk0NTEyMCwiZXhwIjoxNjQ5OTUyMzIwfQ.3XG0NR2DMUa2RRBDPBUipidGVbaePd6tUG7nZqOTWV4";
+var tokenSalon="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoyLCJhY2NvdW50X25hbWUiOiJzYWxvbiIsInNhbG9uSWQiOjEsImlhdCI6MTY0OTk0NTE2MywiZXhwIjoxNjQ5OTUyMzYzfQ.6r-nxCMExaxDU28hGnwzQ8pDIPCMdVr-Fj1X0LYL7AI";
 chai.use(chaiHttp);
 //1.1 login account 
 // check password to login
@@ -804,6 +804,295 @@ describe('test for  post:/api/salonowner/bookingService', function () {
         res.should.have.status(400);
         res.body.should.have.property('message').eql("error validate");
        
+      });
+
+  });
+
+});
+//7.1 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 200", message:create service success', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'Short Hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql("add service success");
+      });
+
+  });
+
+});
+//7.2 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 401", message:Invalid Token', function () {
+    
+    let data={
+      token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTcyOTIyNywiZXhwIjoxNjQ5NzM2NDI3fQ.Sz34DTMbrV2Y1jrx5WLtktnDC0NLh5fO32ztn0hPsv4',
+      name:'Short Hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('message').eql("Invalid Token");
+      });
+
+  });
+
+});
+//7.3 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 401", message:A token is required for authentication', function () {
+    
+    let data={
+      token:'',
+      name:'Short Hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('message').eql("A token is required for authentication");
+      });
+
+  });
+
+});
+//7.4 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.5 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:'adsdsadsad',
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.6 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:'saas',
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.7 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:'aa',
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.8 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:0<=promotion<=100', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:101,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("0<=promotion<=100");
+      });
+
+  });
+
+});
+//7.9 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.10 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.11 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'asadsad',
+      image:'',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.12 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+        
       });
 
   });

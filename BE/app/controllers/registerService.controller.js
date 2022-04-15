@@ -90,7 +90,8 @@ exports.addRegisterService = function (req, res, next) {
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
         timeRegister: timeRegister,
-        status_register_id: 1
+        status_register_id: 1,
+        note:'customer booked'
     };
 
     SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
@@ -165,10 +166,9 @@ exports.cancelBooking = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var registerServiceId = req.body.registerServiceId;
-    var service_time = req.body.service_time;
-    var slot = service_time / 15;
+    var note ='customer Canceled booking';
     StaffCanleder.cancelBooking(registerServiceId, function (data){
-            RegisterService.cancelBooking(registerServiceId, function (data) {
+            RegisterService.cancelBooking(registerServiceId,note, function (data) {
             return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId}})
         })
     })
@@ -208,11 +208,9 @@ exports.cancelBookingBySalon = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var registerServiceId = req.body.registerServiceId;
-    var service_time = req.body.service_time;
     var note = req.body.note;
-    var slot = service_time / 15;
-    StaffCanleder.cancelBookingBySalon(registerServiceId,note, function (data){
-            RegisterService.cancelBooking(registerServiceId, function (data) {
+    StaffCanleder.cancelBookingBySalon(registerServiceId, function (data){
+            RegisterService.cancelBooking(registerServiceId,note, function (data) {
             return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId:registerServiceId,note} })
         })
     })
@@ -265,11 +263,12 @@ exports.bookingServiceForCustomer = function (req, res, next) {
         serviceId: req.body.serviceId,
         salonId: salonId,
         customerId: 26,
+        note:'salon booked for customer',
         staffId: req.body.staffId,
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
         timeRegister: timeRegister,
-        status_register_id: 1
+        status_register_id: 1,
     };
 
     SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
@@ -385,11 +384,16 @@ exports.finshBooking = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    RegisterService.finshBooking(id, function (data){
+    var note = 'booking finished';
+    StaffCanleder.finishBooking(id,function (data){
+        RegisterService.finshBooking(id,note, function (data){
         
-            return res.json({ data: {id:id}, message: "finish booking service" });
+            return res.json({ data: {id:id,note:note}, message: "finish booking service" });
         
     })
+
+    })
+   
 
 }
 exports.check = function (req, res, next) {

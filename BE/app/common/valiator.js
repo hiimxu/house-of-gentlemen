@@ -91,7 +91,7 @@ exports.setPossitiveSalonOwner = function () {
 exports.cancelBooking = function () {
     return [
         body('registerServiceId').not().isEmpty().isInt().withMessage("registerServiceId:number"),
-        body('service_time').not().isEmpty().isInt().withMessage("service_time:number"),
+        
 
     ];
 }
@@ -278,7 +278,7 @@ exports.updateAddressSalon = function () {
 exports.cancelBookingBySalon = function () {
     return [
         body('registerServiceId').not().isEmpty().withMessage("in put registerServiceId"),
-        body('service_time').not().isEmpty().isInt().withMessage("service_time:number"),
+        
         body('note').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('note:min lenght 1,max lenght 450'),
     ]
 }
