@@ -11,6 +11,7 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
     var slotTime=[];
     var checkDay = new Date();
     var getDay=new Date(day +" 23:59:59");
+   
     
     
 
@@ -90,7 +91,13 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
                             mSlot="00"
                         }
                         var timeSlot = hSlot+":"+mSlot;
-                        slotTime.push(timeSlot)
+                        var checkHour = checkDay.getHours();
+                        var checkMinute = checkDay.getMinutes();
+                        var checkTime =checkHour+":"+checkMinute;
+                        if (Date.parse('01/01/2011'+' '+timeSlot+':45') > Date.parse('01/01/2011'+' '+checkTime+':45')) {
+                            slotTime.push(timeSlot)
+                        }
+                        
                         
                     }
                     
