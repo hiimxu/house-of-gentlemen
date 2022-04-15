@@ -169,7 +169,7 @@ exports.cancelBooking = function (req, res, next) {
     var note ='customer Canceled booking';
     StaffCanleder.cancelBooking(registerServiceId, function (data){
             RegisterService.cancelBooking(registerServiceId,note, function (data) {
-            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId}})
+            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId,note}})
         })
     })
 }
