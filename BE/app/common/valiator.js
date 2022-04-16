@@ -313,6 +313,7 @@ exports.bookingServiceForCustomer = function () {
             .withMessage('start cannot be empty').matches(regexDateTime).withMessage("time use:yyyy-mm-dd hh:mm:ss"),
         body('price_original').not().isEmpty().isInt().withMessage("price_original:is number"),
         body('service_time').not().isEmpty().isInt().withMessage("service_time:is number"),
+        body('note').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('note:min lenght 1,max lenght 450'),
     ];
 }
 exports.finshBooking = function () {

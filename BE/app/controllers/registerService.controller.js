@@ -263,7 +263,7 @@ exports.bookingServiceForCustomer = function (req, res, next) {
         serviceId: req.body.serviceId,
         salonId: salonId,
         customerId: 26,
-        note:'salon booked for customer',
+        note:req.body.note,
         staffId: req.body.staffId,
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
