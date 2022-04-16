@@ -116,8 +116,8 @@ SalonOwner.checkTimeSalon=function(id,result){
         }
     });
 }
-SalonOwner.searchSalonByName=function(name,result){
-    db.query(`with temp AS(SELECT swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.taxCode,swp490_g11.address.detailAddress,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose
+SalonOwner.searchSalon=function(name,district,result){
+    db.query(`with temp AS(SELECT swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.taxCode,swp490_g11.address.detailAddress,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.address.district
         FROM swp490_g11.salonowner
         LEFT JOIN swp490_g11.address
         on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
@@ -127,7 +127,7 @@ SalonOwner.searchSalonByName=function(name,result){
         from temp
         left join swp490_g11.image_salon
         on temp.salonId=swp490_g11.image_salon.salonId
-        where temp.nameSalon like '%${name}%'
+        where temp.nameSalon like '%${name}%' and temp.district like '%${district}%'
         group by salonId`,name, (err, rows, fields) => {
         if (err) {
             result(err);
