@@ -52,6 +52,24 @@ exports.getStaffByCustomer = function (req, res, next) {
     }
 
 }
+exports.getAllStaff = function (req, res, next) {
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
+    }
+    Staff.getAllStaff(id, function (data) {
+
+        if (data == null) {
+            res.status(400).json({ data: data, success: "get staff fail" });
+        } else {
+            if (data.length == 0) {
+                res.status(400).json({ data: data, success: "not have staff" });
+            } else {
+                res.json({ data: data, success: "get staff success" });
+            }
+        }
+    });
+}
 exports.addStaff = function (req, res, next) {
 
     var data = {

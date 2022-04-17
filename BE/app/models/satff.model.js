@@ -9,7 +9,7 @@ const Staff = function (saff) {
 }
 Staff.getStaff = function (id, result) {
 
-    db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}' order by possible desc`, (err, rows, fields) => {
+    db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}' and possible=1 order by possible desc`, (err, rows, fields) => {
         if (err) {
             result(null, err);
         } else {
@@ -37,6 +37,16 @@ Staff.addStaff = function (data, result) {
             result(null, err);
         } else {
             result({ id: rows.insertId, ...data });
+        }
+    });
+}
+Staff.getAllStaff = function (id,result){
+    db.query(`SELECT * FROM swp490_g11.staff where salonId='${id}'  order by possible desc`, (err, rows, fields) => {
+        if (err) {
+            result(null, err);
+        } else {
+            data = rows;
+            result(data);
         }
     });
 }

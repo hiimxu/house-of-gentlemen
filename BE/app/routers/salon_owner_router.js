@@ -68,4 +68,5 @@ router.post('/ordersHistory',validate.ordersHistory(),cors(),auth,registerServic
 router.put('/update/finshBooking',validate.finshBooking(),cors(),auth,registerServiceController.finshBooking);
 router.put('/impossible/staff/',validate.impossibleStaff(),cors(),auth,staffController.impossibleStaff);
 router.put('/possible/staff/',validate.possibleStaff(),cors(),auth,staffController.possibleStaff);
+router.get('/get/allStaff',cors(),auth,staffController.getAllStaff);
 module.exports = router;
