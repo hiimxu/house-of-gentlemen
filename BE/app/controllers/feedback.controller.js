@@ -395,3 +395,32 @@ exports.getVoteOfSalon = function (req, res, next) {
         }
     })
 }
+exports.getFeedbackByStarByCustomer = function (req, res, next) {
+    var salonId=req.body.salonId;
+    var star = req.body.star;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
+    FeedBack.getFeedbackByStar(salonId,star, function (data){
+        if (data.length == 0) {
+            res.status(400).json({ result: data, message: "not have feedback" });
+        } else {
+            res.json({ result: data, message: "get feedback success" });
+        }
+    })
+}
+exports.getVoteOfSalonByCustomer = function (req, res, next) {
+    var salonId=req.body.salonId;
+    var star = req.body.star;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    FeedBack.getVoteOfSalon(salonId, function (data){
+        if (data.length == 0) {
+            res.status(400).json({ result: data, message: "not have feedback" });
+        } else {
+            res.json({ result: data, message: "get vote success" });
+        }
+    })
+}

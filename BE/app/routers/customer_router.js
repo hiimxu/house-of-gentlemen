@@ -59,5 +59,6 @@ router.get('/get/historyBooking',auth,cors(),registerServiceController.historyBo
 router.get('/get/reservation',auth,cors(),registerServiceController.reservation);
 router.post('/searchsalon',validate.searchSalonByName(),cors(),salonOwnerController.searchSalon);
 router.get('/get/check/',cors(),registerServiceController.check);
-
+router.post('/get/feedbackByStar',validate.getFeedbackByStarByCustomer(),cors(),auth,feedbackController.getFeedbackByStarByCustomer);
+router.post('/get/voteOfSalon',validate.getVoteOfSalonByCustomer(),cors(),auth,feedbackController.getVoteOfSalonByCustomer);
 module.exports = router;

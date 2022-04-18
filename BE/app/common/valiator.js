@@ -34,6 +34,18 @@ exports.getVoteByStar = function () {
         body('star').not().isEmpty().matches(regexStar).withMessage('star :1-5')
     ];
 }
+exports.getVoteOfSalonByCustomer = function () {
+    return[
+        body('salonId').not().isEmpty().matches(regexStar).withMessage('salonId:int'),
+       
+    ];
+}
+exports.getFeedbackByStarByCustomer = function () {
+    return[
+        body('salonId').not().isEmpty().matches(regexStar).withMessage('salonId:int'),
+        body('star').not().isEmpty().matches(regexStar).withMessage('star :1-5')
+    ];
+}
 exports.validateCreateAccountSalon = function () {
     return [
         body('account_name').not().isEmpty().isLength({ min: 3, max: 45 }).withMessage('account :min lenght 3,max lenght 45'),
@@ -57,6 +69,7 @@ exports.validateCreateAccountSalon = function () {
             .isEmpty().withMessage('image not empty'),
         body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
         body('description').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('description of salon :min lenght 1,max lenght 450'),
+        body('nameOwner').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('description of salon :min lenght 1,max lenght 45'),
     ];
 }
 exports.change_password = function () {
