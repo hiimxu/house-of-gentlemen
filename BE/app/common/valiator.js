@@ -50,6 +50,7 @@ exports.validateCreateAccountSalon = function () {
             .not()
             .isEmpty().withMessage('image not empty'),
         body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
+        body('description').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('description of salon :min lenght 1,max lenght 450'),
     ];
 }
 exports.change_password = function () {
@@ -252,6 +253,7 @@ exports.updateSalonOwnerProfile = function () {
             .not()
             .isEmpty().withMessage('image not empty'),
         body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
+        body('description').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('description of salon :min lenght 1,max lenght 450'),
         
     ];
 }
