@@ -332,7 +332,7 @@ exports.current = function (req, res, next) {
         return res.status(400).json({ message: "please login account salon" });
     }
     var day= req.body.day;
-    var nameStaff = req.body.nameStaff;
+    var staffId = req.body.staffId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -344,7 +344,7 @@ exports.current = function (req, res, next) {
     if (checkDay<today) {
         return res.status(400).json({message:"you see history", data: []});
     }
-    RegisterService.current(salonId,day,nameStaff, function (data) {
+    RegisterService.current(salonId,day,staffId, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have current" });
         } else {
@@ -358,15 +358,12 @@ exports.ordersHistory = function (req, res, next) {
         return res.status(400).json({ message: "please login account salon" });
     }
     var day= req.body.day;
-    var nameStaff= req.body.nameStaff;
+    var staffId= req.body.staffId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    if (nameStaff == null) {
-        nameStaff='';
-    }
-    RegisterService.ordersHistory(salonId,day,nameStaff, function (data) {
+    RegisterService.ordersHistory(salonId,day,staffId, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have history booking" });
         } else {

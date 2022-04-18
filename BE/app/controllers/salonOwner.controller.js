@@ -142,6 +142,7 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
         taxCode: req.body.taxCode,
         timeOpen: req.body.timeOpen,
         timeClose: req.body.timeClose,
+        description:req.body.description,
     };
     var addressUpdate = {
         city: req.body.city,

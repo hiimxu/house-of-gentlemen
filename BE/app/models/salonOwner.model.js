@@ -44,7 +44,7 @@ SalonOwner.getProfileSalonBySalonId =function (id, result) {
     ,swp490_g11.salonowner.phone
     ,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose
     ,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress
-    ,swp490_g11.account.email,swp490_g11.account.account_id,swp490_g11.image_salon.image
+    ,swp490_g11.account.email,swp490_g11.account.account_id,swp490_g11.image_salon.image,swp490_g11.salonowner.description
      FROM swp490_g11.salonowner
     left join swp490_g11.address
     on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
@@ -66,13 +66,13 @@ SalonOwner.getProfileSalonBySalonId =function (id, result) {
     });
 }
 SalonOwner.getProfileAllSalon =function (result) {
-    db.query(`with temp AS(SELECT swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.taxCode,swp490_g11.address.detailAddress,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose
+    db.query(`with temp AS(SELECT swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.taxCode,swp490_g11.address.detailAddress,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description
         FROM swp490_g11.salonowner
         LEFT JOIN swp490_g11.address
         on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
         where swp490_g11.salonowner.possibility=1
         )
-        select temp.salonId,temp.nameSalon,temp.phone,temp.taxCode,temp.detailAddress,swp490_g11.image_salon.image,temp.timeOpen,temp.timeClose
+        select temp.salonId,temp.nameSalon,temp.phone,temp.taxCode,temp.detailAddress,swp490_g11.image_salon.image,temp.timeOpen,temp.timeClose,temp.description
         from temp
         left join swp490_g11.image_salon
         on temp.salonId=swp490_g11.image_salon.salonId
