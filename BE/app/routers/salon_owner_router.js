@@ -69,5 +69,6 @@ router.put('/update/finshBooking',validate.finshBooking(),cors(),auth,registerSe
 router.put('/impossible/staff/',validate.impossibleStaff(),cors(),auth,staffController.impossibleStaff);
 router.put('/possible/staff/',validate.possibleStaff(),cors(),auth,staffController.possibleStaff);
 router.get('/get/allStaff',cors(),auth,staffController.getAllStaff);
-router.post('/get/feedbackByStar',validate.getVoteByStar(),cors(),auth,feedbackController.getFeedbackByStar)
+router.post('/get/feedbackByStar',validate.getVoteByStar(),cors(),auth,feedbackController.getFeedbackByStar);
+router.get('/get/voteOfSalon',cors(),auth,feedbackController.getVoteOfSalon);
 module.exports = router;

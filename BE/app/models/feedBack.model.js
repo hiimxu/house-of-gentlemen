@@ -131,5 +131,18 @@ Feedback.getFeedbackByStar = function (id,star,result){
         }
     });
 }
+Feedback.getVoteOfSalon = function (id,result){
+    db.query(`SELECT avg(rate)/2 as AverangeVote,count(rate) as TotalVote FROM swp490_g11.feedback
+    where salonId ='${id}'
+    ;`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 
 module.exports =Feedback;

@@ -381,3 +381,17 @@ exports.getFeedbackByStar = function (req, res, next) {
         }
     })
 }
+exports.getVoteOfSalon = function (req, res, next) {
+    var salonId=req.user.salonId;
+    var star = req.body.star;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    FeedBack.getVoteOfSalon(salonId, function (data){
+        if (data.length == 0) {
+            res.status(400).json({ result: data, message: "not have feedback" });
+        } else {
+            res.json({ result: data, message: "get vote success" });
+        }
+    })
+}
