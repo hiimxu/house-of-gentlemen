@@ -44,7 +44,7 @@ SalonOwner.getProfileSalonBySalonId =function (id, result) {
     ,swp490_g11.salonowner.phone
     ,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose
     ,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress
-    ,swp490_g11.account.email,swp490_g11.account.account_id,swp490_g11.image_salon.image,swp490_g11.salonowner.description
+    ,swp490_g11.account.email,swp490_g11.account.account_id,swp490_g11.image_salon.image,swp490_g11.salonowner.description,avg(rate)/2 as AverangeVote
      FROM swp490_g11.salonowner
     left join swp490_g11.address
     on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
@@ -52,6 +52,8 @@ SalonOwner.getProfileSalonBySalonId =function (id, result) {
     on swp490_g11.salonowner.accountId=swp490_g11.account.account_id
     left join swp490_g11.image_salon
     on swp490_g11.salonowner.salonId=swp490_g11.image_salon.imageId
+    left join swp490_g11.feedback
+    on swp490_g11.salonowner.salonId=swp490_g11.feedback.salonId
     where swp490_g11.salonowner.salonId='${id}'
     group by swp490_g11.salonowner.salonId
     ;

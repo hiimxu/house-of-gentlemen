@@ -108,14 +108,15 @@ exports.salonOwner = function (req, res, next) {
 }
 
 exports.getSalonOwnerProfile = function (req, res, next) {
-    var id = req.user.account_id;
+   
+
     var salonId= req.user.salonId;
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
     
     try {
-        SalonOwner.getProfileSalonBySalonId(id, function (data) {
+        SalonOwner.getProfileSalonBySalonId(salonId, function (data) {
             if (data == null) {
                 res.status(400).json({ data: data, message: "get salon 's profile failed" });
             }
