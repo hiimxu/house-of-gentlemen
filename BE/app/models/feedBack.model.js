@@ -118,5 +118,18 @@ Feedback.checkPermissionCustomer= function (id,customerId,result) {
         }
     });
 }
+Feedback.getFeedbackByStar = function (id,star,result){
+    var rate=star*2;
+    var rate2=rate+1;
+    db.query(`SELECT * FROM swp490_g11.feedback where salonId='${id}' and (rate='${rate}' or rate='${rate2}')`, (err, rows, fields) => {
+        if (err) {
+           
+            result(err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+}
 
 module.exports =Feedback;

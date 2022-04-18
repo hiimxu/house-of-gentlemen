@@ -3,6 +3,7 @@ const { check } = require('express-validator');
 const testRole = ["customer", "salon"];
 var regexHour = new RegExp(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
 var regexDateTime = new RegExp(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
+var regexStar = new RegExp(/^[1-5]{1}$/)
 exports.validateCreateAccountCustomer = () => {
     return [
         // check('account_name', 'Invalid does not Empty').not().isEmpty()
@@ -26,6 +27,11 @@ exports.validateLogin = function () {
         body('account').not().isEmpty().isLength({ min: 3, max: 45 }).withMessage('account :min lenght 3,max lenght 45'),
         body('password').not().isEmpty().isLength({ min: 3, max: 45 }).withMessage('password :min lenght 3,max lenght 45'),
 
+    ];
+}
+exports.getVoteByStar = function () {
+    return[
+        body('star').not().isEmpty().matches(regexStar).withMessage('star :1-5')
     ];
 }
 exports.validateCreateAccountSalon = function () {
