@@ -254,7 +254,7 @@ SalonOwner.getSalonDeactive =function (name,result){
     on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
     left join swp490_g11.image_salon
     on swp490_g11.salonowner.salonId=swp490_g11.image_salon.salonId
-    where swp490_g11.salonowner.possibility=3 
+    where swp490_g11.salonowner.possibility=2 
     group by swp490_g11.salonowner.salonId
     ;`, (err, rows, fields) => {
         if (err) {
@@ -276,7 +276,7 @@ SalonOwner.getSalonDeactive =function (name,result){
     on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
     left join swp490_g11.image_salon
     on swp490_g11.salonowner.salonId=swp490_g11.image_salon.salonId
-    where swp490_g11.salonowner.possibility=3 and swp490_g11.salonowner.nameSalon like'%${name}%'
+    where swp490_g11.salonowner.possibility=2 and swp490_g11.salonowner.nameSalon like'%${name}%'
     group by swp490_g11.salonowner.salonId
     ;`, (err, rows, fields) => {
         if (err) {
