@@ -272,7 +272,8 @@ exports.add_account_salon = function (req, res, next) {
                         var timeOpen = req.body.timeOpen;
                         var timeClose = req.body.timeClose;
                         var description = req.body.description;
-                        var save_salonOwner = { accountId:data_account.accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode, timeOpen:timeOpen,timeClose:timeClose,totalSlot:totalSlot,description:description,nameOwner:req.body.nameOwner };
+                        var requestDate = new Date();
+                        var save_salonOwner = { accountId:data_account.accountId, nameSalon: nameSalon, phone: phone, possibility: possibility, taxCode: taxCode, timeOpen:timeOpen,timeClose:timeClose,totalSlot:totalSlot,description:description,nameOwner:req.body.nameOwner,requestDate:requestDate };
                         data = SalonOwner.createSalonOwner(save_salonOwner, function (data) {
                             var dataSalon=data;
                             if (data == null) {
