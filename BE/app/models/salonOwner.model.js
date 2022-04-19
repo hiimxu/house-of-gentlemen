@@ -142,4 +142,27 @@ SalonOwner.searchSalon=function(name,district,result){
         }
     });
 }
+SalonOwner.getSalonActive =function (result){
+    db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
+    swp490_g11.salonowner.nameOwner,swp490_g11.account.role,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress,swp490_g11.image_salon.image,avg(rate)/2 as star,swp490_g11.salonowner.requestDate,swp490_g11.salonowner.joinDate
+     FROM swp490_g11.salonowner
+    left join swp490_g11.feedback
+    on swp490_g11.feedback.salonId=swp490_g11.salonowner.salonId
+    left join swp490_g11.account
+    on swp490_g11.account.account_id=swp490_g11.salonowner.accountId
+    left join swp490_g11.address
+    on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
+    left join swp490_g11.image_salon
+    on swp490_g11.salonowner.salonId=swp490_g11.image_salon.salonId
+    where swp490_g11.salonowner.possibility=1
+    group by swp490_g11.salonowner.salonId
+    ;`, (err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data)
+        }
+    });
+}
 module.exports = SalonOwner;
