@@ -156,7 +156,7 @@ exports.login_account = function async(req, res, next) {
                                 Account.updateToken(acc, token, function (response) {
                                     redata[0].token = token;
                                   
-                                    return res.setHeader("x-access-token",token).json({ accountData: redata,userData:adminData ,message: "login successed", token: token });
+                                    return res.setHeader("x-access-token",token).json({ accountData: redata,userData:[adminData] ,message: "login successed", token: token });
                                 
                                     
                                 })  
