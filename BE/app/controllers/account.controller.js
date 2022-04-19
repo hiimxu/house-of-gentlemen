@@ -347,7 +347,8 @@ exports.getSalonActive = function (req, res, next) {
     if (user.role== null) {
        return res.status(400).json({ message:"Please login admin",data: []})
     }
-    SalonOwner.getSalonActive(function (data){
+    var nameSalon = req.body.nameSalon;
+    SalonOwner.getSalonActive(nameSalon,function (data){
         res.json({ data: data, message: "Get account salon active success" });
     }) ;
 }

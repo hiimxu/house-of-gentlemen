@@ -12,6 +12,6 @@ const auth = require('../middleware/auth');
 router.get('/getSalonAccount',cors(),auth,accountController.getSalonAccount);
 router.get('/getSalon/:id',validate.checkId(),cors(),salonOwnerController.getSalon);
 router.put('/update/possibility/salon/',validate.setPossitiveSalonOwner(),auth,cors(),salonOwnerController.setPossitiveSalonOwner);
-router.get('/getSalonActive',cors(),auth,accountController.getSalonActive);
+router.post('/getSalonActive',cors(),auth,accountController.getSalonActive);
 
 module.exports = router;
