@@ -352,6 +352,16 @@ exports.getSalonActive = function (req, res, next) {
         res.json({ data: data, message: "Get account salon active success" });
     }) ;
 }
+exports.getSalonRequest = function (req, res, next) {
+    var user = req.user
+    if (user.role== null) {
+       return res.status(400).json({ message:"Please login admin",data: []})
+    }
+    var nameSalon = req.body.nameSalon;
+    SalonOwner.getSalonRequest(nameSalon,function (data){
+        res.json({ data: data, message: "Get account salon active success" });
+    }) ;
+}
 exports.forgotPassword = async function (req, res, next) {
     const data = req.body;
     var account_name = req.body.account_name;
