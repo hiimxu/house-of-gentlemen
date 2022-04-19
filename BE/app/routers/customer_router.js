@@ -53,7 +53,7 @@ router.get('/get/allStaffStatus',cors(),statusStaffController.getAllStaffStatus)
 router.get('/get/staffStatusById/:id',validate.checkId(),cors(),statusStaffController.getStaffStatusByIdstatusStaff);
 router.get('/get/addressSalon/:id',cors(),validate.checkId(),addressController.getAddressOfSalon);
 router.post('/searchSalonByDistrict',cors(),validate.searchSalonByDistrict(),addressController.searchSalonByDistrict);
-router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),auth,StaffCanlederController.staffCanlederOrderandBusy);
+router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),StaffCanlederController.staffCanlederOrderandBusy);
 router.get('/get/favoriteService',auth,cors(),registerServiceController.favorviteService);
 router.get('/get/historyBooking',auth,cors(),registerServiceController.historyBooking);
 router.get('/get/reservation',auth,cors(),registerServiceController.reservation);
