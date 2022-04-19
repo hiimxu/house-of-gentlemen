@@ -14,5 +14,6 @@ router.get('/getSalon/:id',validate.checkId(),cors(),salonOwnerController.getSal
 router.put('/update/possibility/salon/',validate.setPossitiveSalonOwner(),auth,cors(),salonOwnerController.setPossitiveSalonOwner);
 router.post('/getSalonActive',cors(),auth,accountController.getSalonActive);
 router.post('/getSalonRequest',cors(),auth,accountController.getSalonRequest);
+router.post('/getSalonDeactive',cors(),auth,accountController.getSalonDeactive);
 
 module.exports = router;
