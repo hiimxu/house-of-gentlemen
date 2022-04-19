@@ -356,7 +356,7 @@ Register_service.ordersHistory = function (id,day,staffId,result){
     }
 }
 Register_service.finshBooking=function (id,note,result){
-    db.query(`UPDATE register_service SET status_register_id='3' and note='${note}' where registerServiceId=?`,id, (err, rows, res) => {
+    db.query(`UPDATE register_service SET status_register_id='3',note='${note}'  where registerServiceId='${id}'`,id, (err, rows, res) => {
         if (err) {
             result(null,err);
         } else {
