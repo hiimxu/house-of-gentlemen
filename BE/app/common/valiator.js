@@ -369,3 +369,8 @@ exports.ordersHistory= function () {
         body('day').not().isEmpty().isDate().withMessage("input day"),
     ]
 }
+exports.checkSalonId = function () {
+    return[
+        body('salonId').isInt().withMessage("salonId:number"),
+    ]
+}

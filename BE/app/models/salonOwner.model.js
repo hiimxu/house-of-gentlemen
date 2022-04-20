@@ -145,7 +145,7 @@ SalonOwner.searchSalon=function(name,district,result){
 SalonOwner.getSalonActive =function (name,result){
     console.log(name)
     if (name=='') {
-        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
+        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
     swp490_g11.salonowner.nameOwner,swp490_g11.account.role,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress,swp490_g11.image_salon.image,avg(rate)/2 as star,swp490_g11.salonowner.requestDate,swp490_g11.salonowner.joinDate
      FROM swp490_g11.salonowner
     left join swp490_g11.feedback
@@ -158,6 +158,7 @@ SalonOwner.getSalonActive =function (name,result){
     on swp490_g11.salonowner.salonId=swp490_g11.image_salon.salonId
     where swp490_g11.salonowner.possibility=1 
     group by swp490_g11.salonowner.salonId
+    order by swp490_g11.salonowner.joinDate desc
     ;`, (err, rows, fields) => {
         if (err) {
             result(null,err);
@@ -167,7 +168,7 @@ SalonOwner.getSalonActive =function (name,result){
         }
     });
     } else {
-        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
+        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.salonowner.salonId,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
     swp490_g11.salonowner.nameOwner,swp490_g11.account.role,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress,swp490_g11.image_salon.image,avg(rate)/2 as star,swp490_g11.salonowner.requestDate,swp490_g11.salonowner.joinDate
      FROM swp490_g11.salonowner
     left join swp490_g11.feedback
@@ -180,6 +181,7 @@ SalonOwner.getSalonActive =function (name,result){
     on swp490_g11.salonowner.salonId=swp490_g11.image_salon.salonId
     where swp490_g11.salonowner.possibility=1 and swp490_g11.salonowner.nameSalon like'%${name}%'
     group by swp490_g11.salonowner.salonId
+    order by swp490_g11.salonowner.joinDate desc
     ;`, (err, rows, fields) => {
         if (err) {
             result(null,err);
@@ -193,7 +195,7 @@ SalonOwner.getSalonActive =function (name,result){
 SalonOwner.getSalonRequest=function (name,result){
     console.log(name)
     if (name=='') {
-        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
+        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.salonowner.salonId,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
     swp490_g11.salonowner.nameOwner,swp490_g11.account.role,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress,swp490_g11.image_salon.image,avg(rate)/2 as star,swp490_g11.salonowner.requestDate,swp490_g11.salonowner.joinDate
      FROM swp490_g11.salonowner
     left join swp490_g11.feedback
@@ -216,7 +218,7 @@ SalonOwner.getSalonRequest=function (name,result){
         }
     });
     } else {
-        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
+        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.salonowner.salonId,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
     swp490_g11.salonowner.nameOwner,swp490_g11.account.role,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress,swp490_g11.image_salon.image,avg(rate)/2 as star,swp490_g11.salonowner.requestDate,swp490_g11.salonowner.joinDate
      FROM swp490_g11.salonowner
     left join swp490_g11.feedback
@@ -243,7 +245,7 @@ SalonOwner.getSalonRequest=function (name,result){
 SalonOwner.getSalonDeactive =function (name,result){
     console.log(name)
     if (name=='') {
-        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
+        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.salonowner.salonId,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
     swp490_g11.salonowner.nameOwner,swp490_g11.account.role,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress,swp490_g11.image_salon.image,avg(rate)/2 as star,swp490_g11.salonowner.requestDate,swp490_g11.salonowner.joinDate
      FROM swp490_g11.salonowner
     left join swp490_g11.feedback
@@ -265,7 +267,7 @@ SalonOwner.getSalonDeactive =function (name,result){
         }
     });
     } else {
-        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
+        db.query(`SELECT swp490_g11.account.account_id,swp490_g11.account.account_name,swp490_g11.salonowner.salonId,swp490_g11.account.email,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.possibility,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.salonowner.description,
     swp490_g11.salonowner.nameOwner,swp490_g11.account.role,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress,swp490_g11.image_salon.image,avg(rate)/2 as star,swp490_g11.salonowner.requestDate,swp490_g11.salonowner.joinDate
      FROM swp490_g11.salonowner
     left join swp490_g11.feedback
@@ -287,5 +289,40 @@ SalonOwner.getSalonDeactive =function (name,result){
         }
     });
     }
+}
+SalonOwner.setDeactiveSalon =function (salonId,result){
+    db.query(`UPDATE swp490_g11.salonowner SET possibility = '2' WHERE (salonId = '${salonId}');`, (err, rows, fields) => {
+       
+        if (err) {
+            result( err)
+        } else {
+            result(rows);
+        }
+    });
+
+}
+SalonOwner.setActiveSalon =function (salonId,joinDate,result){
+  console.log(joinDate)
+    db.query(`UPDATE swp490_g11.salonowner SET possibility = '1',joinDate=? WHERE (salonId = '${salonId}');`,joinDate, (err, rows, fields) => {
+       
+        if (err) {
+            console.log(err);
+            result( err)
+        } else {
+            result(rows);
+        }
+    });
+
+}
+SalonOwner.deleteSalon =function (salonId,result){
+    db.query(`UPDATE swp490_g11.salonowner SET possibility = '3' WHERE (salonId = '${salonId}');`, (err, rows, fields) => {
+       
+        if (err) {
+            result( err)
+        } else {
+            result(rows);
+        }
+    });
+
 }
 module.exports = SalonOwner;

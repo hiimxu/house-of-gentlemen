@@ -184,3 +184,49 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     
 
 }
+exports.setDeactiveSalon = function (req, res, next) {
+    var user = req.user
+    if (user.role== null) {
+       return res.status(400).json({ message:"Please login admin",data: []})
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    var salonId= req.body.salonId;
+    SalonOwner.setDeactiveSalon(salonId,function (data){
+        res.json({  message: "deactive success",data:{salonId:salonId} });
+
+    });
+}
+exports.setActiveSalon = function (req, res, next) {
+    var user = req.user
+    if (user.role== null) {
+       return res.status(400).json({ message:"Please login admin",data: []})
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    var salonId= req.body.salonId;
+    var joinDate = new Date()
+    SalonOwner.setActiveSalon(salonId,joinDate,function (data){
+        res.json({  message: "Active success",data:{salonId:salonId,joinDate:joinDate} });
+
+    });
+}
+exports.deleteSalon = function (req, res, next) {
+    var user = req.user
+    if (user.role== null) {
+       return res.status(400).json({ message:"Please login admin",data: []})
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    var salonId= req.body.salonId;
+    SalonOwner.deleteSalon(salonId,function (data){
+        res.json({  message: "delete success",data:{salonId:salonId} });
+
+    });
+}

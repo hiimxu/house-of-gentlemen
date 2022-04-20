@@ -359,7 +359,7 @@ exports.getSalonDeactive = function (req, res, next) {
     }
     var nameSalon = req.body.nameSalon;
     SalonOwner.getSalonDeactive(nameSalon,function (data){
-        res.json({ data: data, message: "Get account salon active success" });
+        res.json({ data: data, message: "Get account salon deactive success" });
     }) ; 
 }
 exports.getSalonRequest = function (req, res, next) {
@@ -369,7 +369,7 @@ exports.getSalonRequest = function (req, res, next) {
     }
     var nameSalon = req.body.nameSalon;
     SalonOwner.getSalonRequest(nameSalon,function (data){
-        res.json({ data: data, message: "Get account salon active success" });
+        res.json({ data: data, message: "Get account salon request success" });
     }) ;
 }
 exports.forgotPassword = async function (req, res, next) {
