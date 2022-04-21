@@ -418,7 +418,7 @@ exports.forgotPassword = async function (req, res, next) {
                             }
                         })
                         const mail_options = {
-                            from: `THE G.O.A.T <${config.user}>`,
+                            from: `THE house of gentlemen <${config.user}>`,
                             to: recipient,
                             subject: 'A message from the G.O.A.T',
                             text: get_html_message(),
