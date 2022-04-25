@@ -51,7 +51,7 @@ SalonOwner.getProfileSalonBySalonId =function (id, result) {
     left join swp490_g11.account
     on swp490_g11.salonowner.accountId=swp490_g11.account.account_id
     left join swp490_g11.image_salon
-    on swp490_g11.salonowner.salonId=swp490_g11.image_salon.imageId
+    on swp490_g11.salonowner.salonId=swp490_g11.image_salon.salonId
     left join swp490_g11.feedback
     on swp490_g11.salonowner.salonId=swp490_g11.feedback.salonId
     where swp490_g11.salonowner.salonId='${id}'
