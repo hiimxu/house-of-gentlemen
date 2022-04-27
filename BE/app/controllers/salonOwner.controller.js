@@ -39,6 +39,23 @@ exports.getAllSalon = function (req, res, next) {
     }
 
 }
+exports.getHomePage = function (req, res, next) {
+    var index= req.body.index;
+    if (index=='') {
+        index=1;
+    }
+    SalonOwner.getProfileAllSalon(function (data) {
+        var totalPage =Math.floor(data.length/5)+1;
+        if (index>totalPage) {
+            return res.status(400).json({data:[],totalPage, message: "1<=index<=totalPage"})
+        }
+        SalonOwner.getHomePage(index,function (data){
+            res.json({data:data,totalPage,message:"get home page success"})
+
+        })
+       
+    });
+}
 exports.searchSalon = function (req, res, next) {
     var name = req.body.name;
     var district = req.body.district;

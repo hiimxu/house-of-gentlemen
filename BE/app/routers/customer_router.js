@@ -61,4 +61,5 @@ router.post('/searchsalon',validate.searchSalonByName(),cors(),salonOwnerControl
 router.get('/get/check/',cors(),registerServiceController.check);
 router.post('/get/feedbackByStar',validate.getFeedbackByStarByCustomer(),cors(),auth,feedbackController.getFeedbackByStarByCustomer);
 router.post('/get/voteOfSalon',validate.getVoteOfSalonByCustomer(),cors(),auth,feedbackController.getVoteOfSalonByCustomer);
+router.post('/get/homePage',cors(),salonOwnerController.getHomePage); 
 module.exports = router;
