@@ -14,13 +14,13 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     // tạo tên file = thời gian hiện tại nối với số ngẫu nhiên => tên file chắc chắn không bị trùng
-    
-    if ((file.originalname).toLocaleLowerCase().includes('.png')) {
-      const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) ;
-      cb(null, filename + '-' + file.originalname )
-    }else{
-      cb(null,'a')
-    }
+    const filename = Date.now() + '-' + Math.round(Math.random() * 1E9) ;
+    cb(null, filename + '-' + file.originalname )
+    // if ((file.originalname).toLocaleLowerCase().includes('.png')) {
+     
+    // }else{
+    //   cb(null,'a')
+    // }
     
   }
 })

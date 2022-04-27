@@ -93,65 +93,76 @@ exports.addRegisterService = function (req, res, next) {
         status_register_id: 1,
         note:'customer booked'
     };
-
-    SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
-        var timeCloseDay = data[0].timeClose;
-        var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
-        var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
-        var timeUse = new Date(req.body.timeUse);
-        // return res.json({ timeUse, message: "timeUse"})
-        if (timeOpen.getHours() > timeUse.getHours() ||
-            (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
-           
-            ) {
-            return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
+    RegisterService.checkBooking(customerId, function (data){
+        
+        if (data.length>=5) {
+            res.json({ data: [], message: "You are only allowed to book up to 5 times in advance"})
         } else {
-            var slotTotal = data[0].totalSlot;
-            var totalSlotBusy = timeBusy / 15;
-            var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
-            if ((slotStart + totalSlotBusy) > slotTotal+1) {
-                return res.status(400).json({ message: "salon close at " + timeCloseDay })
-            }
-            StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
-                var check = 0;
-                for (let m = 0; m < data.length; m++) {
-                    for (let n = 0; n < totalSlotBusy; n++) {
-                        if (data[m].slotBusy == (n + slotStart)) {
-                            check = check + 1;
-                        }
+            SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
+                var timeCloseDay = data[0].timeClose;
+                var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
+                var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
+                var timeUse = new Date(req.body.timeUse);
+                // return res.json({ timeUse, message: "timeUse"})
+                if (timeOpen.getHours() > timeUse.getHours() ||
+                    (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
+                   
+                    ) {
+                    return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
+                } else {
+                    var slotTotal = data[0].totalSlot;
+                    var totalSlotBusy = timeBusy / 15;
+                    var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
+                    if ((slotStart + totalSlotBusy) > slotTotal+1) {
+                        return res.status(400).json({ message: "salon close at " + timeCloseDay })
                     }
-                }
-                if (check > 0) {
-                    return res.status(400).json({ message: "staff busy" });
-                }
-                else {
-                    RegisterService.addRegisterService(dataRegisterService, function (data) {
-                        var checkIndex = 0;
-                        for (let index = 0; index < totalSlotBusy; index++) {
-                            slotBusy = slotStart + index;
-                            checkIndex++;
-                            var dataStaffCanleder = {registerServiceId:data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
-                            StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-
-                            })
+                    StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
+                        var check = 0;
+                        for (let m = 0; m < data.length; m++) {
+                            for (let n = 0; n < totalSlotBusy; n++) {
+                                if (data[m].slotBusy == (n + slotStart)) {
+                                    check = check + 1;
+                                }
+                            }
                         }
-                        RegisterService.dataBooking(data.registerServiceId, function (data){
-                            return res.status(200).json({ data, message: "booking success" });
-
-                        })
-                        
+                        if (check > 0) {
+                            return res.status(400).json({ message: "staff busy" });
+                        }
+                        else {
+        
+                            RegisterService.addRegisterService(dataRegisterService, function (data) {
+                                var checkIndex = 0;
+                                for (let index = 0; index < totalSlotBusy; index++) {
+                                    slotBusy = slotStart + index;
+                                    checkIndex++;
+                                    var dataStaffCanleder = {registerServiceId:data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
+                                    StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
+        
+                                    })
+                                }
+                                RegisterService.dataBooking(data.registerServiceId, function (data){
+                                    return res.status(200).json({ data, message: "booking success" });
+        
+                                })
+                                
+                            })
+        
+        
+                            
+                        }
                     })
-
-
-                    
+        
+        
+        
                 }
+        
             })
-
-
-
         }
 
     })
+
+
+    
 
 
 
