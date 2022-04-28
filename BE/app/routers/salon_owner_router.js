@@ -71,5 +71,7 @@ router.put('/possible/staff/',validate.possibleStaff(),cors(),auth,staffControll
 router.get('/get/allStaff',cors(),auth,staffController.getAllStaff);
 router.post('/get/feedbackByStar',validate.getVoteByStar(),cors(),auth,feedbackController.getFeedbackByStar);
 router.get('/get/voteOfSalon',cors(),auth,feedbackController.getVoteOfSalon);
+router.put('/update/salonInformationForCustomer/',validate.salonInformationForCustomer(),cors(),auth,salonOwnerController.salonInformationForCustomer);
+router.put('/update/salonBusinessInformation/',validate.salonBusinessInformation(),cors(),auth,salonOwnerController.salonBusinessInformation);
 
 module.exports = router;

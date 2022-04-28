@@ -126,7 +126,7 @@ Account.updateEmail=function(id,email, result){
         if (err) {
             result(null, err)
         } else {
-            result("updated password")
+            result("updated email success")
         }
     });
 }

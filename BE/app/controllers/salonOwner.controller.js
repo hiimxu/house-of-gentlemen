@@ -147,8 +147,110 @@ exports.getSalonOwnerProfile = function (req, res, next) {
         res.status(400).json({ data: error, message: "get salon 's profile failed" });
     }
 }
+exports.salonInformationForCustomer = function (req, res, next) {
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    console.log(req.user)
+    var dataUpdate = {
+        nameSalon: req.body.nameSalon,
+        phone: req.body.phone,
+        timeOpen: req.body.timeOpen,
+        timeClose: req.body.timeClose,
+        description:req.body.description,
+        
+    };
+    var addressUpdate = {
+        city: req.body.city,
+        district: req.body.district,
+        detailAddress: req.body.detailAddress,
+    }
+    var image = req.body.image;
+    var dataOk ={...dataUpdate,...addressUpdate,image}
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+        Address.updateAddressSalon(salonId,addressUpdate, function (data){
+            ImageSalon.updateImage(salonId,image,function (data){
+                SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
+                    if (data == null) {
+                        res.status(400).json({ data: data, message: "update salon information for customer failed" });
+                    }
+                    else {
+                        
+                            res.json({ data: dataOk, message: "update salon information for customer success" });
+                        
+                    }
+                });
+
+            })
+            
+        })
+
+  
+
+        
+    
+
+}
+exports.salonBusinessInformation = function (req, res, next) {
+    var salonId= req.user.salonId;
+    if (salonId==null) {
+       return res.status(400).json({message:"please login account salon"});
+    }
+    var accountId = req.user.account_id;
+    var dataUpdate = {
+        nameSalon: req.body.nameSalon,
+        phone: req.body.phone,
+        taxCode: req.body.taxCode,
+        timeOpen: req.body.timeOpen,
+        timeClose: req.body.timeClose,
+        description:req.body.description,
+        nameOwner: req.body.nameOwner,
+    };
+    var addressUpdate = {
+        city: req.body.city,
+        district: req.body.district,
+        detailAddress: req.body.detailAddress,
+    }
+    var image = req.body.image;
+    var email = req.body.email;
+    var dataOk ={...dataUpdate,...addressUpdate,image,email}
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    Account.updateEmail(accountId,email, function (data){
+        Address.updateAddressSalon(salonId,addressUpdate, function (data){
+            ImageSalon.updateImage(salonId,image,function (data){
+                
+                SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
+                    
+                    if (data == null) {
+                        res.status(400).json({ data: data, message: "update salon 's profile failed" });
+                    }
+                    else {
+                        if (data.affectedRows == 0) {
+                            res.status(400).json({ data: data, message: "not have salon 's profile to update" });
+                        } else {
+                            res.json({ data: dataOk, message: "update salon 's profile success" });
+                        }
+                    }
+                });
+
+            })
+            
+        })
+
+    })
+
+        
+    
+
+}
 exports.updateSalonOwnerProfile = function (req, res, next) {
-    var account_id = req.body.account_id;
     var salonId= req.user.salonId;
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
