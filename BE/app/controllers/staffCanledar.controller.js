@@ -65,11 +65,15 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
                         // console.log(slot[n+1]-slot[n])
                                           
                     }
-                    console.log(arrSlotCheck)
+                    console.log("arrSlotCheck"+arrSlotCheck)
                     for (let m = 0; m< arrSlotCheck.length; m++) {
-
+console.log(arrSlotCheck[m])
                         var index = slot.indexOf(arrSlotCheck[m]-checkSlot+2);
+                        console.log(index+"index")
                         slot.splice(index, checkSlot-1);
+                        if (index<0) {
+                            slot.splice(0, checkSlot-1+index);
+                        }
 
                        
                     }
