@@ -26,31 +26,40 @@ exports.addServiceSalon = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() ,message:"error validate"});
     }
-
-    try {
-        ServiceSalon.addServiceSalon(dataService, function (data) {
-            // res.json({ data: data, message: "add service fail" });
-            if (data == null) {
-                res.status(400).json({ data: data, message: "add service fail" });
-            } else {
-                if (data.length==0) {
-                    res.status(400).json({ data: data, message: "add service failed" });
-                } else {
-                    var dataImage = {
-                        serviceId: data.id,
-                        image: req.body.image
-                    };
-                    ImageService.addImageService(dataImage, function (data){
-
-                    })
-                    data={image: image, ...data};
-                    res.json({ data: data, message: "add service success" });
-                }
+    ServiceSalon.getAllServiceSalon(salonId, function (data){
+        if (data.length >= 30) {
+            return res.status(400).json({message:"salon của bạn có thể tạo tối đa 30 services",data:[]})
+        }
+        else{
+            try {
+                ServiceSalon.addServiceSalon(dataService, function (data) {
+                    // res.json({ data: data, message: "add service fail" });
+                    if (data == null) {
+                        res.status(400).json({ data: data, message: "add service fail" });
+                    } else {
+                        if (data.length==0) {
+                            res.status(400).json({ data: data, message: "add service failed" });
+                        } else {
+                            var dataImage = {
+                                serviceId: data.id,
+                                image: req.body.image
+                            };
+                            ImageService.addImageService(dataImage, function (data){
+        
+                            })
+                            data={image: image, ...data};
+                            res.json({ data: data, message: "add service success" });
+                        }
+                    }
+                });
+            } catch (error) {
+                res.status(400).json({ data: error, message: "add service fail" });
             }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "add service fail" });
-    }
+        }
+
+    })
+
+    
 }
 
 // van chua xong delete service vi thieu register service

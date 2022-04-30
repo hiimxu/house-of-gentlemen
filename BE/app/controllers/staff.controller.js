@@ -72,7 +72,7 @@ exports.getAllStaff = function (req, res, next) {
 }
 exports.addStaff = function (req, res, next) {
 
-    var data = {
+    var dataStaff = {
         salonId: req.user.salonId,
         name: req.body.name,
         phone: req.body.phone,
@@ -89,18 +89,27 @@ exports.addStaff = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    try {
-        Staff.addStaff(data, function (data) {
-
-            if (data == null) {
-                res.status(400).json({ data: data, success: "add staff failed" });
-            } else {
-                res.json({ data: data, success: "add staff success" });
+    Staff.getStaff(dataStaff.salonId, function (data){
+        
+        if (data.length>=30) {
+            res.status(400).json({message:"salon của bạn chỉ thêm tối đa 30 nhân viên"});
+        } else {
+            try {
+                Staff.addStaff(dataStaff, function (data) {
+        
+                    if (data == null) {
+                        res.status(400).json({ data: data, success: "add staff failed" });
+                    } else {
+                        res.json({ data: data, success: "add staff success" });
+                    }
+                });
+            } catch (error) {
+                res.status(400).json({ data: error, success: "add staff fail" });
             }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, success: "add staff fail" });
-    }
+        }
+
+    })
+    
 
 }
 exports.updateStaff = function (req, res, next) {
