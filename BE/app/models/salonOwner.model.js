@@ -77,10 +77,12 @@ SalonOwner.getProfileAllSalon =function (result) {
         on swp490_g11.salonowner.salonId=swp490_g11.feedback.salonId
         where swp490_g11.salonowner.possibility=1
         )
-        select temp.salonId,temp.nameSalon,temp.phone,temp.taxCode,temp.detailAddress,swp490_g11.image_salon.image,temp.timeOpen,temp.timeClose,temp.description,temp.nameOwner
+        select temp.salonId,temp.nameSalon,temp.phone,temp.taxCode,temp.detailAddress,swp490_g11.image_salon.image,temp.timeOpen,temp.timeClose,temp.description,temp.nameOwner,avg(swp490_g11.feedback.rate/2) as star
         from temp
         left join swp490_g11.image_salon
         on temp.salonId=swp490_g11.image_salon.salonId
+        left join swp490_g11.feedback
+        on temp.salonId = swp490_g11.feedback.salonId
         group by salonId`, (err, rows, fields) => {
         if (err) {
            
