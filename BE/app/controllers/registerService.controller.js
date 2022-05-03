@@ -219,6 +219,7 @@ exports.cancelBookingBySalon = function (req, res, next) {
 exports.historyBooking = function (req, res, next) {
     var customerId = req.user.customerId;
     RegisterService.historyBooking(customerId, function (data) {
+        // return res.json({ data: data, message: "aaa"})
         if (data.length == 0) {
             return res.json({ data: data, message: "not have history booking" });
         } else {

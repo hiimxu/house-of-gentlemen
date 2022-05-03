@@ -125,7 +125,7 @@ Register_service.favorviteService=function(id,result){
 
 }
 Register_service.historyBooking=function(id,result){
-    db.query(`with t as (
+    db.query(`SELECT * FROM swp490_g11.status_register_service;with t as (
         select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
         swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,
         swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress
@@ -143,11 +143,12 @@ Register_service.historyBooking=function(id,result){
         where customerId='${id}'
         )
         select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
-        t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,
+        t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,
         t.phoneSalon,t.detailAddress
         from t
         left join swp490_g11.image_service
         on t.serviceId=swp490_g11.image_service.serviceId
+       where t.nameStatus like 'cancelled' or t.nameStatus like 'finished'
         group by t.registerServiceId
         order by t.timeUse desc;
         `,id,(err, rows, fields) => {
