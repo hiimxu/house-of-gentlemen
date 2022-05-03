@@ -13,7 +13,7 @@ exports.getRegisterServiceById = function (req, res, next) {
     var id = req.params.id;
     var customerId = req.user.customerId;
     if (customerId == null) {
-        return res.status(400).json({ message: "please login account customer" });
+        return res.status(400).json({ message: "Please login account customer" });
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -22,12 +22,12 @@ exports.getRegisterServiceById = function (req, res, next) {
     try {
         RegisterService.getRegisterServiceById(id, function (data) {
             if (data == null) {
-                res.status(400).json({ data: data, message: "get booking service failed" });
+                res.status(400).json({ data: data, message: "Get booking service failed" });
             } else {
                 if (data.length == 0) {
                     res.status(400).json({ data: data, message: "not have booking service" });
                 } else {
-                    res.json({ data: data, message: "get booking service success" });
+                    res.json({ data: data, message: "Get booking service success" });
                 }
             }
         });
@@ -90,67 +90,79 @@ exports.addRegisterService = function (req, res, next) {
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
         timeRegister: timeRegister,
-        status_register_id: 1
+        status_register_id: 1,
+        note:'customer booked'
     };
-
-    SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
-        var timeCloseDay = data[0].timeClose;
-        var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
-        var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
-        var timeUse = new Date(req.body.timeUse);
-        // return res.json({ timeUse, message: "timeUse"})
-        if (timeOpen.getHours() > timeUse.getHours() ||
-            (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
-           
-            ) {
-            return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
+    RegisterService.checkBooking(customerId, function (data){
+        
+        if (data.length>=5) {
+            res.json({ data: [], message: "You are only allowed to book up to 5 times in advance"})
         } else {
-            var slotTotal = data[0].totalSlot;
-            var totalSlotBusy = timeBusy / 15;
-            var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
-            if ((slotStart + totalSlotBusy) > slotTotal+1) {
-                return res.status(400).json({ message: "salon close at " + timeCloseDay })
-            }
-            StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
-                var check = 0;
-                for (let m = 0; m < data.length; m++) {
-                    for (let n = 0; n < totalSlotBusy; n++) {
-                        if (data[m].slotBusy == (n + slotStart)) {
-                            check = check + 1;
-                        }
+            SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
+                var timeCloseDay = data[0].timeClose;
+                var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
+                var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
+                var timeUse = new Date(req.body.timeUse);
+                // return res.json({ timeUse, message: "timeUse"})
+                if (timeOpen.getHours() > timeUse.getHours() ||
+                    (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
+                   
+                    ) {
+                    return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
+                } else {
+                    var slotTotal = data[0].totalSlot;
+                    var totalSlotBusy = timeBusy / 15;
+                    var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
+                    if ((slotStart + totalSlotBusy) > slotTotal+1) {
+                        return res.status(400).json({ message: "salon close at " + timeCloseDay })
                     }
-                }
-                if (check > 0) {
-                    return res.status(400).json({ message: "staff busy" });
-                }
-                else {
-                    RegisterService.addRegisterService(dataRegisterService, function (data) {
-                        var checkIndex = 0;
-                        for (let index = 0; index < totalSlotBusy; index++) {
-                            slotBusy = slotStart + index;
-                            checkIndex++;
-                            var dataStaffCanleder = {registerServiceId:data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
-                            StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-
-                            })
+                    StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
+                        var check = 0;
+                        for (let m = 0; m < data.length; m++) {
+                            for (let n = 0; n < totalSlotBusy; n++) {
+                                if (data[m].slotBusy == (n + slotStart)) {
+                                    check = check + 1;
+                                }
+                            }
                         }
-                        RegisterService.dataBooking(data.registerServiceId, function (data){
-                            return res.status(200).json({ data, message: "booking success" });
-
-                        })
-                        
+                        if (check > 0) {
+                            return res.status(400).json({ message: "staff busy" });
+                        }
+                        else {
+        
+                            RegisterService.addRegisterService(dataRegisterService, function (data) {
+                                var checkIndex = 0;
+                                for (let index = 0; index < totalSlotBusy; index++) {
+                                    slotBusy = slotStart + index;
+                                    checkIndex++;
+                                    var dataStaffCanleder = {registerServiceId:data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
+                                    StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
+        
+                                    })
+                                }
+                                RegisterService.dataBooking(data.registerServiceId, function (data){
+                                    return res.status(200).json({ data, message: "booking success" });
+        
+                                })
+                                
+                            })
+        
+        
+                            
+                        }
                     })
-
-
-                    
+        
+        
+        
                 }
+        
             })
-
-
-
         }
 
     })
+
+
+    
 
 
 
@@ -165,11 +177,10 @@ exports.cancelBooking = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var registerServiceId = req.body.registerServiceId;
-    var service_time = req.body.service_time;
-    var slot = service_time / 15;
+    var note ='customer Canceled booking';
     StaffCanleder.cancelBooking(registerServiceId, function (data){
-            RegisterService.cancelBooking(registerServiceId, function (data) {
-            return res.status(200).json({ message: "canceled booking service success" })
+            RegisterService.cancelBooking(registerServiceId,note, function (data) {
+            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId,note}})
         })
     })
 }
@@ -208,16 +219,18 @@ exports.cancelBookingBySalon = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var registerServiceId = req.body.registerServiceId;
-    var service_time = req.body.service_time;
-    var slot = service_time / 15;
-    StaffCanleder.cancelBooking(registerServiceId, function (data){
-            RegisterService.cancelBooking(registerServiceId, function (data) {
-            return res.status(200).json({ message: "canceled booking service success" })
+    var note = req.body.note;
+    StaffCanleder.cancelBookingBySalon(registerServiceId, function (data){
+            RegisterService.cancelBooking(registerServiceId,note, function (data) {
+            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId:registerServiceId,note:note} })
         })
     })
 }
 exports.historyBooking = function (req, res, next) {
     var customerId = req.user.customerId;
+    if (customerId==null) {
+        return res.status(400).json({message:"please login account customer"});
+    }
     RegisterService.historyBooking(customerId, function (data) {
         // return res.json({ data: data, message: "aaa"})
         if (data.length == 0) {
@@ -262,11 +275,12 @@ exports.bookingServiceForCustomer = function (req, res, next) {
         serviceId: req.body.serviceId,
         salonId: salonId,
         customerId: 26,
+        note:req.body.note,
         staffId: req.body.staffId,
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
         timeRegister: timeRegister,
-        status_register_id: 1
+        status_register_id: 1,
     };
 
     SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
@@ -330,6 +344,7 @@ exports.current = function (req, res, next) {
         return res.status(400).json({ message: "please login account salon" });
     }
     var day= req.body.day;
+    var staffId = req.body.staffId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -341,7 +356,7 @@ exports.current = function (req, res, next) {
     if (checkDay<today) {
         return res.status(400).json({message:"you see history", data: []});
     }
-    RegisterService.current(salonId,day, function (data) {
+    RegisterService.current(salonId,day,staffId, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have current" });
         } else {
@@ -354,7 +369,13 @@ exports.ordersHistory = function (req, res, next) {
     if (salonId == null) {
         return res.status(400).json({ message: "please login account salon" });
     }
-    RegisterService.ordersHistory(salonId, function (data) {
+    var day= req.body.day;
+    var staffId= req.body.staffId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
+    }
+    RegisterService.ordersHistory(salonId,day,staffId, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have history booking" });
         } else {
@@ -372,14 +393,19 @@ exports.finshBooking = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    RegisterService.finshBooking(id, function (data){
+    var note = 'booking finished';
+    StaffCanleder.finishBooking(id,function (data){
+        RegisterService.finshBooking(id,note, function (data){
         
-            return res.json({ data: data, message: "finish booking service" });
+            return res.json({ data: {id:id,note:note}, message: "finish booking service" });
         
     })
 
+    })
+   
+
 }
 exports.check = function (req, res, next) {
-    console.log(req.headers['accept'])
-    res.json({ data: [], message: "ok"})
+   
+    res.status(200).json({ data: [], message: "ok"})
 }

@@ -7,12 +7,10 @@ const verifyToken = (req, res, next) => {
   const abc= req.headers["abc"]
   const token =
     req.body.token || req.query.token || req.headers["x-access-token"]||req.Authorization;
-    console.log('token'+token)
-console.log(token)
   if (!token) {
       // console.log(token);
 
-    return res.status(403).send("A token is required for authentication");
+    return res.status(403).json({message:"A token is required for authentication"});
   }
   else{
     console.log(token)
@@ -21,7 +19,7 @@ console.log(token)
     const decoded = jwt.verify(token, config.TOKEN_KEY);
     req.user = decoded;
   } catch (err) {
-    return res.status(401).send("Invalid Token");
+    return res.status(401).json({message:'Invalid Token'});
   }
   return next();
 };

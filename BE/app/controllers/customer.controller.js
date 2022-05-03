@@ -56,12 +56,12 @@ exports.updateCustomerProfile = function (req, res, next) {
 
     Customer.updateProfileCustomer(req.user.customerId,dataUpdate, function (data){
         if (data==null) {
-            res.status(400).json({data:data,message:"update data customer 's profile failed"})
+            res.status(400).json({data:data,message:"Update data customer 's profile failed"})
         } else {
             if (data.affectedRows==0) {
                 res.status(400).json({data:data,message:"not have data customer 's profile to update"})
             } else {
-                res.json({data:data,message:"get data customer 's profile success"})
+                res.json({data:data,message:"Update data customer 's profile success"})
             }
         }
     })

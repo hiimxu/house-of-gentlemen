@@ -24,33 +24,42 @@ exports.addServiceSalon = function (req, res, next) {
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() ,message:"error validate"});
     }
-
-    try {
-        ServiceSalon.addServiceSalon(dataService, function (data) {
-            // res.json({ data: data, message: "add service fail" });
-            if (data == null) {
-                res.status(400).json({ data: data, message: "add service fail" });
-            } else {
-                if (data.length==0) {
-                    res.status(400).json({ data: data, message: "add service failed" });
-                } else {
-                    var dataImage = {
-                        serviceId: data.id,
-                        image: req.body.image
-                    };
-                    ImageService.addImageService(dataImage, function (data){
-
-                    })
-                    data={image: image, ...data};
-                    res.json({ data: data, message: "add service success" });
-                }
+    ServiceSalon.getAllServiceSalon(salonId, function (data){
+        if (data.length >= 30) {
+            return res.status(400).json({message:"salon của bạn có thể tạo tối đa 30 services",data:[]})
+        }
+        else{
+            try {
+                ServiceSalon.addServiceSalon(dataService, function (data) {
+                    // res.json({ data: data, message: "add service fail" });
+                    if (data == null) {
+                        res.status(400).json({ data: data, message: "add service fail" });
+                    } else {
+                        if (data.length==0) {
+                            res.status(400).json({ data: data, message: "add service failed" });
+                        } else {
+                            var dataImage = {
+                                serviceId: data.id,
+                                image: req.body.image
+                            };
+                            ImageService.addImageService(dataImage, function (data){
+        
+                            })
+                            data={image: image, ...data};
+                            res.json({ data: data, message: "add service success" });
+                        }
+                    }
+                });
+            } catch (error) {
+                res.status(400).json({ data: error, message: "add service fail" });
             }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, message: "add service fail" });
-    }
+        }
+
+    })
+
+    
 }
 
 // van chua xong delete service vi thieu register service
@@ -159,6 +168,7 @@ exports.updateServiceSalon = function (req, res, next) {
 
     };
     var image = req.body.image;
+    var dataOk = {id,image,...dataUpdate}
     if (parseInt(dataUpdate.promotion)>100 || parseInt(dataUpdate.promotion)<0) {
         return res.status(400).json({message:"0<=promotion<=100"})
     }
@@ -179,7 +189,7 @@ exports.updateServiceSalon = function (req, res, next) {
                             res.status(400).json({ data: data, message: "update service fail" });
                         } else {
                             
-                            res.json({ data: data, message: "update service success" });
+                            res.json({ data: dataOk, message: "update service success" });
                         }
                     });
 
@@ -250,6 +260,7 @@ exports.impossibleService=function (req, res, next) {
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
     }
+    var dataOk={serviceId:serviceId}
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
@@ -264,7 +275,7 @@ exports.impossibleService=function (req, res, next) {
                 if (data== null) {
                     return res.status(400).json({message:"error sql"})
                 } else {
-                    return res.status(200).json({data,message:"impossible service"})
+                    return res.status(200).json({data:dataOk,message:"impossible service"})
                 }
             })
         }

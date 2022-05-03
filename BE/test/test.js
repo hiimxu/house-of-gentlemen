@@ -1,254 +1,1100 @@
-var assert = require('assert');
-var chai = require('chai')
-  , chaiHttp = require('chai-http');
+//During the test the env variable is set to test
+process.env.NODE_ENV = 'test';
+//Require the dev-dependencies
+let chai = require('chai');
+let chaiHttp = require('chai-http');
+let should = chai.should();
+var tokenCustomer="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTk0NTEyMCwiZXhwIjoxNjQ5OTUyMzIwfQ.3XG0NR2DMUa2RRBDPBUipidGVbaePd6tUG7nZqOTWV4";
+var tokenSalon="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoyLCJhY2NvdW50X25hbWUiOiJzYWxvbiIsInNhbG9uSWQiOjEsImlhdCI6MTY0OTk0NTE2MywiZXhwIjoxNjQ5OTUyMzYzfQ.6r-nxCMExaxDU28hGnwzQ8pDIPCMdVr-Fj1X0LYL7AI";
 chai.use(chaiHttp);
-var should = chai.should();
-var md5 = require('md5');
-
-// let should = chai.should();
-const { describe } = require('mocha');
-// var server = require('../server');
-// var should = chai.should();
-
-
-// test post service salonowner update service
-// describe('test for update service post:/api/salonowner/create/service', function () {
-//   it('should be true if message:"add service success", status:200, to be json, be a object ', function () {
-//     let service = {
-//       salonId: 1,
-//       name: 'combo test',
-//       price: '100000',
-//       description: 'dac biet',
-//       content: 'han hanh phuc vu quy khach!!!',
-//       promotion: 0,
-//       service_time: 45
-//     };
-//     chai.request('http://localhost:3000')
-//       .post('/api/salonowner/create/service').send(service).end((err, res) => {
-//         res.should.have.status(200);
-//         res.body.should.be.a('object');
-//         res.should.to.be.json;
-//         res.body.should.have.property('message').eql('add service success');
-//       });
-//   });
-// });
-// get all service
-describe('test for get service get: /api/customer/get/AllService', () => {
-  it('should be true if message:"get service success, status:200, to be json, be a object "', function () {
-    chai.request('http://localhost:3000')
-      .get('/api/customer/get/AllService').end((err, res) => {
-        res.should.have.status(200);
-        res.should.to.be.json;
-        res.body.should.be.a('object');
-        res.body.should.have.property('message').eql('get service success');
-      });
-  });
-});
-// login account
+//1.1 login account 
+// check password to login
 describe('test for loginAccount post:/api/account/login', function () {
-  it('should be true if message:"login successed", status:200, to be json, be a object ', function () {
+  it('should be true if message:"message:password wrong,please check password", status:400, ', function () {
+    let data = {
+      account: 'customer',
+      password: '1234'
+
+    };
+    chai.request('http://localhost:8080')
+      .post('/api/account/login').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql('password wrong,please check password');
+      });
+
+  });
+
+});
+//1.2 login account 
+// check password to login
+describe('test for loginAccount post:/api/account/login', function () {
+  it('should be true if message:"message:Account not exist, please check account", status:400, ', function () {
+    let data = {
+      account: 'customer123a',
+      password: '1234'
+
+    };
+    chai.request('http://localhost:8080')
+      .post('/api/account/login').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql('Account not exist, please check account');
+      });
+
+  });
+
+});
+//1.3 login account 
+// check password to login
+describe('test for loginAccount post:/api/account/login', function () {
+  it('should be true if message:"message:error validate", status:400, ', function () {
+    let data = {
+      account: '',
+      password: '1234'
+
+    };
+    chai.request('http://localhost:8080')
+      .post('/api/account/login').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql('error validate');
+      });
+
+  });
+
+});
+//1.4 login account 
+// check password to login
+describe('test for loginAccount post:/api/account/login', function () {
+  it('should be true if message:"message:error validate", status:400, ', function () {
+    let data = {
+      account: 'customer',
+      password: ''
+
+    };
+    chai.request('http://localhost:8080')
+      .post('/api/account/login').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql('error validate');
+      });
+
+  });
+
+});
+//1.5 login account 
+// check password to login
+describe('test for loginAccount post:/api/account/login', function () {
+  it('should be true if message:"message:please check account_name", status:200, ', function () {
     let data = {
       account: 'customer',
       password: '123'
 
     };
-    chai.request('http://localhost:3000')
+    chai.request('http://localhost:8080')
       .post('/api/account/login').send(data).end((err, res) => {
         res.should.have.status(200);
-        res.should.to.be.json;
-        res.body.should.be.a('object');
         res.body.should.have.property('message').eql('login successed');
       });
 
   });
 
 });
-// get profile of salon
-describe('test for get salon profile get:/api/salonowner/profile/:id', function () {
-  it('should be true if message:"get all salon success", status:200, to be json, be a object ', function () {
-    var accountId = 2;
-    chai.request('http://localhost:3000')
-      .get(`/api/salonowner/profile/${accountId}`).end((err, res) => {
+// 2.1 get profile customer
+describe('test for  get:/api/customer/profile', function () {
+  it('should be true if status 200", message:"get data customer s profile success" ', function () {
+    
+    let data={
+      token:tokenCustomer
+    }
+    chai.request('http://localhost:8080')
+      .get('/api/customer/profile').send(data).end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql("get data customer 's profile success");
+      });
+
+  });
+
+});
+//2.2 get profile customer
+describe('test for  get:/api/customer/profile', function () {
+  it('should be true if status 403", message:A token is required for authentication ', function () {
+    
+    let data={
+      token:''
+    }
+    chai.request('http://localhost:8080')
+      .get('/api/customer/profile').send(data).end((err, res) => {
         res.should.have.status(403);
-        res.body.should.be.a('object');
-        res.body.should.have.property('message').eql("get salon 's profile success");
-
-      });
-
-  });
-});
-// put : test salonowner update profile
-
-describe('test for salonOwner update profile put:/api/salonowner/update/profile/:id', function () {
-  it("should be true if message:update salon 's profile success, status:200, to be json, be a object ", function () {
-    var salonId = 1;
-    var data = {
-      nameSalon: 'duySalon',
-      phone: '0826368193',
-      taxCode: '12345'
-    };
-    chai.request('http://localhost:3000')
-      .put(`/api/salonowner/update/profile/${salonId}`).send(data).end((err, res) => {
-        res.should.have.status(200);
-        res.should.to.be.json;
-        res.body.should.be.a('object');
-        res.body.should.have.property('message').eql("update salon 's profile success");
+        res.body.should.have.property('message').eql("A token is required for authentication");
       });
 
   });
 
 });
+//2.3 get profile customer
+describe('test for  get:/api/customer/profile', function () {
+  it('should be true if status 200", message:"get data customer s profile success" ', function () {
+    let data={
+      token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTcyOTIyNywiZXhwIjoxNjQ5NzM2NDI3fQ.Sz34DTMbrV2Y1jrx5WLtktnDC0NLh5fO32ztn0hPsv4'
+    }
+    chai.request('http://localhost:8080')
+      .get('/api/customer/profile').send(data).end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('message').eql("Invalid Token");
+      });
 
-// 2. test register account customer create account salon success
-// describe('test for register account customer post:/api/account/add/customer', function () {
-//   it('should be true if message:create account salon success, status:200, to be json, be a object ', function () {
-//     let data = {
-//       account_name: 'duytest111',
-//       password: 123,
-//       role: 'customer',
-//       nameCustomer: 'duy',
-//       phone: '0826368193',
-//       address: 'tb',
-//       birthday: '1993-03-30'
-//     };
-//     chai.request('http://localhost:3000')
-//       .post('/api/account/add/customer').send(data).end((err, res) => {
+  });
+
+});
+//3.1 booking service
+// describe('test for  post:/api/customer/create/registerService', function () {
+//   it('should be true if status 200", message:booking success', function () {
+    
+//     let data={
+//       token:tokenCustomer,
+//       serviceId:'1',
+//       salonId:'1',
+//       staffId:'1',
+//       timeUse:'2022-04-15 15:00:00',
+//       price_original:100,
+//       service_time:45
+//     }
+//     chai.request('http://localhost:8080')
+//       .post('/api/customer/create/registerService').send(data).end((err, res) => {
 //         res.should.have.status(200);
-//         res.body.should.be.a('object');
-//         res.should.to.be.json;
-//         res.body.should.have.property('message').eql('create account customer success');
+//         res.body.should.have.property('message').eql("booking success");
 //       });
-//   });
-// });
-//3. testin put account_name is empty
-// describe('test for register account customer post:/api/account/add/customer', function () {
-//   it(' test in put account_name is empty should be true if  status:400, to be json, be a object,errors ', function () {
-//     let data = {
-//       account_name: '',
-//       password: 123,
-//       role: 'customer',
-//       nameCustomer: 'duy',
-//       phone: '0826368193',
-//       address: 'tb',
-//       birthday: '1993-03-30'
-//     };
-//     chai.request('http://localhost:3000')
-//       .post('/api/account/add/customer').send(data).end((err, res) => {
-//         res.should.have.status(400);
-//         res.body.should.be.a('object');
-//         res.should.to.be.json;
-//         res.body.should.have.property('errors');
-//       });
-//   });
-// });
-//4. test input password is empty
-describe('test for register account customer post:/api/account/add/customer', function () {
-  it('test input password is empty should be true if  status:400, to be json, be a object,errors ', function () {
-    let data = {
-      account_name: 'duymc',
-      password: '',
-      role: 'customer',
-      nameCustomer: 'duy',
-      phone: '0826368193',
-      address: 'tb',
-      birthday: '1993-03-30'
-    };
-    chai.request('http://localhost:3000')
-      .post('/api/account/add/customer').send(data).end((err, res) => {
-        res.should.have.status(400);
-        res.body.should.be.a('object');
-        res.should.to.be.json;
-        res.body.should.have.property('errors');
-      });
-  });
-});
-//5. test input phone input
-describe('test for register account customer post:/api/account/add/customer', function () {
-  it('test input phone should be true if  status:400, to be json, be a object,errors ', function () {
-    let data = {
-      account_name: 'duymc',
-      password: '123',
-      role: 'customer',
-      nameCustomer: 'duy',
-      phone: 'asdasdad',
-      address: 'tb',
-      birthday: '1993-03-30'
-    };
-    chai.request('http://localhost:3000')
-      .post('/api/account/add/customer').send(data).end((err, res) => {
-        res.should.have.status(400);
-        res.body.should.be.a('object');
-        res.should.to.be.json;
-        res.body.should.have.property('errors');
-      });
-  });
-});
-//1. test register account customer tai khoan da ton tai
-describe('test for register account customer post:/api/account/add/customer', function () {
-  it('should be true if message:tai khoan da ton tai, status:200, to be json, be a object ', function () {
-    let data = {
-      account_name: 'duycustomer',
-      password: '12323213',
-      role: 'customer',
-      nameCustomer: 'duy',
-      phone: '0826368193',
-      address: 'tb',
-      birthday: '1993-03-30'
-    };
-    chai.request('http://localhost:3000')
-      .post('/api/account/add/customer').send(data).end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('object');
-        res.should.to.be.json;
-        res.body.should.have.property('message').eql('Account already exists');
-      });
-  });
-});
 
+//   });
 
-//6.  // get feedback of salon
-describe('test for get feedback get: /api/customer/getFeedbackOfSalon/:id', () => {
-  it('should be true if message:"get feedback success", status:200, to be json, be a object ', function () {
-    let id = 1;
-    chai.request('http://localhost:3000')
-      .get(`/api/customer/getFeedbackOfSalon/${id}`).end((err, res) => {
-        res.should.have.status(200);
-        res.should.to.be.json;
-        res.body.should.be.a('object');
-        res.body.should.have.property('message').eql('get feedback success');
-      });
-  });
-});
-// 7.// cancel booking by customer
-describe('test for cancel booking by customer: /api/customer/cancel/registerservice/:id', () => {
-  it('should be true if message:cancel booking success, status:200, to be json, be a object ', function () {
-    var id = 6;
-    var data={staffCanlederId : 16};
-    chai.request('http://localhost:3000')
-      .put(`/api/customer/cancel/registerservice/${id}`).send(data).end((err, res) => {
-        res.should.have.status(200);
-        res.should.to.be.json;
-        res.body.should.be.a('object');
-        res.body.should.have.property('message').eql('cancel booking success');
-      });
-  });
-});
-//8 . booking service
-describe('test for booking service post: /api/customer/create/registerService', function () {
-  it('should be true if message:booking service success, status:200, to be json, be a object ', function () {
-    let data = {
-      serviceId: 1,
-      salonId:1,
-      customerId:5,
-      staffId:1,
-      timeUse:'2022-03-26 09:30:00',
-    };
-    chai.request('http://localhost:3000')
+// });
+//3.2 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:staff busy', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'1',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
       .post('/api/customer/create/registerService').send(data).end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('object');
-        res.should.to.be.json;
-        res.body.should.have.property('message').eql('booking service success');
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("staff busy");
       });
+
   });
+
+});
+//3.3 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:please login account customer', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'1',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("please login account customer");
+      });
+
+  });
+
+});
+//3.4 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'1',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//3.5 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 401", message:Invalid Token', function () {
+    
+    let data={
+      token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTcyOTIyNywiZXhwIjoxNjQ5NzM2NDI3fQ.Sz34DTMbrV2Y1jrx5WLtktnDC0NLh5fO32ztn0hPsv4',
+      serviceId:'1',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('message').eql("Invalid Token");
+      });
+
+  });
+
+});
+//3.6 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 403", message:booking success', function () {
+    
+    let data={
+      token:'',
+      serviceId:'1',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('message').eql("A token is required for authentication");
+      });
+
+  });
+
+});
+//3.7 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//3.8 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'1',
+      salonId:'',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//3.9 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:serror validate', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'1',
+      salonId:'1',
+      staffId:'',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//3.10 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'1',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:'a',
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//3.11 booking service
+describe('test for  post:/api/customer/create/registerService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'1',
+      salonId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:'a'
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/customer/create/registerService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+// 4.1 get history booking of customer
+
+describe('test for  get:/api/customer/get/historyBooking', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:tokenCustomer
+    }
+    chai.request('http://localhost:8080')
+      .get('/api/customer/get/historyBooking').send(data).end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql("get history booking success");
+      });
+
+  });
+
+});
+// 4.2 get history booking of customer
+
+describe('test for  get:/api/customer/get/historyBooking', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:tokenSalon
+    }
+    chai.request('http://localhost:8080')
+      .get('/api/customer/get/historyBooking').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("please login account customer");
+      });
+
+  });
+
+});
+// 4.3 get history booking of customer
+
+describe('test for  get:/api/customer/get/historyBooking', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:''
+    }
+    chai.request('http://localhost:8080')
+      .get('/api/customer/get/historyBooking').send(data).end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('message').eql("A token is required for authentication");
+      });
+
+  });
+
+});
+// 4.4 get history booking of customer
+
+describe('test for  get:/api/customer/get/historyBooking', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTcyOTIyNywiZXhwIjoxNjQ5NzM2NDI3fQ.Sz34DTMbrV2Y1jrx5WLtktnDC0NLh5fO32ztn0hPsv4'
+    }
+    chai.request('http://localhost:8080')
+      .get('/api/customer/get/historyBooking').send(data).end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('message').eql("Invalid Token");
+      });
+
+  });
+
+});
+// 5.1 cancel booking service by customer
+describe('test for  get:/api/customer/cancel/registerservice', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTcyOTIyNywiZXhwIjoxNjQ5NzM2NDI3fQ.Sz34DTMbrV2Y1jrx5WLtktnDC0NLh5fO32ztn0hPsv4',
+      registerserviceId :109,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .put('/api/customer/cancel/registerservice').send(data).end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('message').eql("Invalid Token");
+      });
+
+  });
+  
+
+});
+// 5.2 cancel booking service by customer
+describe('test for  get:/api/customer/cancel/registerservice', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:'',
+      registerserviceId :109,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .put('/api/customer/cancel/registerservice').send(data).end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('message').eql("A token is required for authentication");
+      });
+
+  });
+  
+
+});
+// 5.3 cancel booking service by customer
+describe('test for  get:/api/customer/cancel/registerservice', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:tokenSalon,
+      registerserviceId :109,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .put('/api/customer/cancel/registerservice').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("please login account customer");
+      });
+
+  });
+  
+
+});
+// 5.4 cancel booking service by customer
+describe('test for  get:/api/customer/cancel/registerservice', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:tokenCustomer,
+      registerserviceId :'a',
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .put('/api/customer/cancel/registerservice').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+  
+
+});
+// 5.5 cancel booking service by customer
+describe('test for  get:/api/customer/cancel/registerservice', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:tokenCustomer,
+      registerserviceId :109,
+      service_time:'a'
+    }
+    chai.request('http://localhost:8080')
+      .put('/api/customer/cancel/registerservice').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+  
+
+});
+// 5.6 cancel booking service by customer
+describe('test for  get:/api/customer/cancel/registerservice', function () {
+  it('should be true if status 200", message:get history booking service', function () {
+    
+    let data={
+      token:tokenCustomer,
+      registerServiceId:109,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .put('/api/customer/cancel/registerservice').send(data).end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql("canceled booking service success");
+      });
+
+  });
+  
+
+});
+// 6.1 booking service by salon for customer
+// describe('test for  post:/api/salonowner/bookingService', function () {
+//   it('should be true if status 200", message:booking success', function () {
+    
+//     let data={
+//       token:tokenSalon,
+//       serviceId:'1',
+      
+//       staffId:'1',
+//       timeUse:'2022-04-15 16:00:00',
+//       price_original:100,
+//       service_time:45
+//     }
+//     chai.request('http://localhost:8080')
+//       .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+//         res.should.have.status(200);
+//         res.body.should.have.property('message').eql("booking success");
+//       });
+
+//   });
+
+// });
+// 6.2 booking service by salon for customer
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:staff busy', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'1',
+      
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("staff busy");
+      });
+
+  });
+
+});
+//6.3 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:please login account salon', function () {
+    
+    let data={
+      token:tokenCustomer,
+      serviceId:'1',
+      
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("please login account salon");
+      });
+
+  });
+
+});
+//6.4 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'1',
+      
+      staffId:'1',
+      timeUse:'',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//6.5 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 401", message:Invalid Token', function () {
+    
+    let data={
+      token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTcyOTIyNywiZXhwIjoxNjQ5NzM2NDI3fQ.Sz34DTMbrV2Y1jrx5WLtktnDC0NLh5fO32ztn0hPsv4',
+      serviceId:'1',
+     
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('message').eql("Invalid Token");
+      });
+
+  });
+
+});
+//6.6 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 403", message:A token is required for authentication', function () {
+    
+    let data={
+      token:'',
+      serviceId:'1',
+      
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('message').eql("A token is required for authentication");
+      });
+
+  });
+
+});
+//6.7 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//6.8 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:staff busy', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'1',
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("staff busy");
+      });
+
+  });
+
+});
+//6.9 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:serror validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'1',
+      
+      staffId:'',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//6.10 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'1',
+     
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:'a',
+      service_time:45
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//6.11 booking service
+describe('test for  post:/api/salonowner/bookingService', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      serviceId:'1',
+     
+      staffId:'1',
+      timeUse:'2022-04-15 15:00:00',
+      price_original:100,
+      service_time:'a'
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/bookingService').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+       
+      });
+
+  });
+
+});
+//7.1 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 200", message:create service success', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'Short Hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql("add service success");
+      });
+
+  });
+
+});
+//7.2 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 401", message:Invalid Token', function () {
+    
+    let data={
+      token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjozLCJhY2NvdW50X25hbWUiOiJjdXN0b21lciIsImN1c3RvbWVySWQiOjUsImlhdCI6MTY0OTcyOTIyNywiZXhwIjoxNjQ5NzM2NDI3fQ.Sz34DTMbrV2Y1jrx5WLtktnDC0NLh5fO32ztn0hPsv4',
+      name:'Short Hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.have.property('message').eql("Invalid Token");
+      });
+
+  });
+
+});
+//7.3 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 401", message:A token is required for authentication', function () {
+    
+    let data={
+      token:'',
+      name:'Short Hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(403);
+        res.body.should.have.property('message').eql("A token is required for authentication");
+      });
+
+  });
+
+});
+//7.4 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.5 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:'adsdsadsad',
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.6 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:'saas',
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.7 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:'aa',
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.8 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:0<=promotion<=100', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:101,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("0<=promotion<=100");
+      });
+
+  });
+
+});
+//7.9 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'',
+      description:'The shorter the hair, the less product you need.',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.10 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.11 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'asadsad',
+      image:'',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+      });
+
+  });
+
+});
+//7.12 booking service
+describe('test for  post:/api/salonowner/create/service', function () {
+  it('should be true if status 400", message:error validate', function () {
+    
+    let data={
+      token:tokenSalon,
+      name:'short hair',
+      price:100,
+      service_time:45,
+      promotion:10,
+      content:'Short haircuts for men often look like they don’t need to be styled but that is rarely the case. Unless you have a buzz cut or hair that lies just right, skip this. For everyone else, here’s how to style short hair.',
+      description:'',
+      image:'https://www.menshairstyletrends.com/wp-content/uploads/2020/06/How-To-Style-Short-Hair-Men-sq.jpg',
+      
+    }
+    chai.request('http://localhost:8080')
+      .post('/api/salonowner/create/service').send(data).end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.have.property('message').eql("error validate");
+        
+      });
+
+  });
+
 });

@@ -97,7 +97,7 @@ exports.deleteFeedbackDetailByFeedbackDetailIdBySalon = function (req, res, next
                                 if (data.affectedRows == 0) {
                                     res.status(400).json({ data: data, message: "not have feed back detail to delete" });
                                 } else {
-                                    res.json({ data: data, message: "detete feedback detail success" });
+                                    res.json({ data: {id:id}, message: "detete feedback detail success" });
                                 }
 
                             }
@@ -143,7 +143,7 @@ exports.deleteFeedbackDetailByFeedbackDetailId = function (req, res, next) {
                                 if (data.affectedRows == 0) {
                                     res.status(400).json({ data: data, message: "not have feed back detail to delete" });
                                 } else {
-                                    res.json({ data: data, message: "detete feedback detail success" });
+                                    res.json({ data: {id:id}, message: "detete feedback detail success" });
                                 }
 
                             }
@@ -167,6 +167,7 @@ exports.updateFeedbackDetailBySalon = function (req, res, next) {
     }
     var wsend = 'salon';
     var dataUpdate = { content: req.body.content, salonId: req.user.salonId };
+    dataOk={id,...dataUpdate};
     var dateUpdate = new Date();
     dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
     const errors = validationResult(req);
@@ -189,7 +190,7 @@ exports.updateFeedbackDetailBySalon = function (req, res, next) {
                                 if (data.affectedRows == 0) {
                                     res.status(400).json({ data: data, message: "not have feedback detail to update" });
                                 } else {
-                                    res.json({ data: data, message: "update feedback detail success" });
+                                    res.json({ data: dataOk, message: "update feedback detail success" });
                                 }
 
                             }
@@ -219,6 +220,7 @@ exports.updateFeedbackDetailByCustomer = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
+    var dataOk ={id,...dataUpdate}
     FeedbackDetail.checkEmpty(id, function (data) {
         if (data.length == 0) {
             return res.status(400).json({message:"feedback detail not exist"})
@@ -235,7 +237,7 @@ exports.updateFeedbackDetailByCustomer = function (req, res, next) {
                                 if (data.affectedRows == 0) {
                                     res.status(400).json({ data: data, message: "not have feedback detail to update" });
                                 } else {
-                                    res.json({ data: data, message: "update feedback detail success" });
+                                    res.json({ data: dataOk, message: "update feedback detail success" });
                                 }
         
                             }

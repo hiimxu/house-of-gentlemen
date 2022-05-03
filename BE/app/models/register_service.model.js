@@ -24,6 +24,16 @@ Register_service.getRegisterServiceById=function (id, result) {
         }
     });
 }
+Register_service.checkBooking = function (id,result){
+    db.query("SELECT * FROM swp490_g11.register_service where customerId=? and status_register_id=1 and timeUse>now()",id,(err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data);
+        }
+    });
+}
 Register_service.getRegisterServiceByCustomer=function (id, result) {
     db.query("SELECT * FROM swp490_g11.register_service where customerId =?",id,(err, rows, fields) => {
         if (err) {
@@ -44,10 +54,8 @@ Register_service.addRegisterService = function(dataRegisterService,result){
     });
     
 }
-Register_service.cancelBooking= function(id,result){
-    console.log('aaaaa')
-    console.log(id+"aaa");
-    db.query(`UPDATE register_service SET status_register_id='2' where registerServiceId=?`,id, (err, rows, res) => {
+Register_service.cancelBooking= function(id,note,result){
+    db.query(`UPDATE register_service SET status_register_id='2',note='${note}'  where registerServiceId=?`,id, (err, rows, res) => {
         if (err) {
             result(null,err);
         } else {
@@ -128,7 +136,7 @@ Register_service.historyBooking=function(id,result){
     db.query(`SELECT * FROM swp490_g11.status_register_service;with t as (
         select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
         swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,
-        swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress
+        swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress,swp490_g11.register_service.note
         from swp490_g11.register_service
         left join swp490_g11.status_register_service
         on swp490_g11.register_service.status_register_id=swp490_g11.status_register_service.status_register_id
@@ -144,7 +152,11 @@ Register_service.historyBooking=function(id,result){
         )
         select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
         t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,
+<<<<<<< HEAD
         t.phoneSalon,t.detailAddress
+=======
+        t.phoneSalon,t.detailAddress,t.note
+>>>>>>> ecd88576b943748ff03c0c5d7f64b11cab28719d
         from t
         left join swp490_g11.image_service
         on t.serviceId=swp490_g11.image_service.serviceId
@@ -210,79 +222,155 @@ Register_service.checkStaffCanledarId=function(id,result){
         }
     });
 }
-Register_service.current= function (id,day,result){
-    db.query(`with t as (
-        select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
-        swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone,
-        swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress
-        from swp490_g11.register_service
-        left join swp490_g11.status_register_service
-        on swp490_g11.register_service.status_register_id=swp490_g11.status_register_service.status_register_id
-        left join swp490_g11.staff
-        on swp490_g11.register_service.staffId=swp490_g11.staff.staffId
-        left join swp490_g11.salonowner
-        on swp490_g11.salonowner.salonId=swp490_g11.register_service.salonId
-        left join swp490_g11.service
-        on swp490_g11.register_service.serviceId=swp490_g11.service.serviceId
-        left join swp490_g11.customer
-        on swp490_g11.customer.customerId=swp490_g11.register_service.customerId
-        left join swp490_g11.address
-        on swp490_g11.address.salonId=swp490_g11.salonowner.salonId
-        where date(timeUse)=?
-        )
-        select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
-        t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,t.phone,t.phoneSalon,t.detailAddress
-        from t
-        left join swp490_g11.image_service
-        on t.serviceId=swp490_g11.image_service.serviceId
-        where t.nameStatus like 'booked' and t.salonId='${id}'
-        group by t.registerServiceId
-        order by t.timeUse desc`,[day],(err, rows, fields) => {
-        if (err) {
-            result(null,err);
-        } else {
-           var data = rows;
-            result(data);
-        }
-    });
+Register_service.current= function (id,day,staffId,result){
+    console.log(staffId=='')
+    if (staffId=='') {
+        db.query(`with t as (
+            select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
+            swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone,
+            swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress,swp490_g11.register_service.note
+            from swp490_g11.register_service
+            left join swp490_g11.status_register_service
+            on swp490_g11.register_service.status_register_id=swp490_g11.status_register_service.status_register_id
+            left join swp490_g11.staff
+            on swp490_g11.register_service.staffId=swp490_g11.staff.staffId
+            left join swp490_g11.salonowner
+            on swp490_g11.salonowner.salonId=swp490_g11.register_service.salonId
+            left join swp490_g11.service
+            on swp490_g11.register_service.serviceId=swp490_g11.service.serviceId
+            left join swp490_g11.customer
+            on swp490_g11.customer.customerId=swp490_g11.register_service.customerId
+            left join swp490_g11.address
+            on swp490_g11.address.salonId=swp490_g11.salonowner.salonId
+            where date(timeUse)=?
+            )
+            select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
+            t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,t.phone,t.phoneSalon,t.detailAddress,t.note
+            from t
+            left join swp490_g11.image_service
+            on t.serviceId=swp490_g11.image_service.serviceId
+            where t.nameStatus like 'booked' and t.salonId='${id}' 
+            group by t.registerServiceId
+            order by t.timeUse `,[day],(err, rows, fields) => {
+            if (err) {
+                result(null,err);
+            } else {
+               var data = rows;
+                result(data);
+            }
+        });
+    }else{
+        db.query(`with t as (
+            select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
+            swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone,
+            swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress,swp490_g11.register_service.note
+            from swp490_g11.register_service
+            left join swp490_g11.status_register_service
+            on swp490_g11.register_service.status_register_id=swp490_g11.status_register_service.status_register_id
+            left join swp490_g11.staff
+            on swp490_g11.register_service.staffId=swp490_g11.staff.staffId
+            left join swp490_g11.salonowner
+            on swp490_g11.salonowner.salonId=swp490_g11.register_service.salonId
+            left join swp490_g11.service
+            on swp490_g11.register_service.serviceId=swp490_g11.service.serviceId
+            left join swp490_g11.customer
+            on swp490_g11.customer.customerId=swp490_g11.register_service.customerId
+            left join swp490_g11.address
+            on swp490_g11.address.salonId=swp490_g11.salonowner.salonId
+            where date(timeUse)=?
+            )
+            select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
+            t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,t.phone,t.phoneSalon,t.detailAddress,t.note
+            from t
+            left join swp490_g11.image_service
+            on t.serviceId=swp490_g11.image_service.serviceId
+            where t.nameStatus like 'booked' and t.salonId='${id}' and t.staffId = '${staffId}'
+            group by t.registerServiceId
+            order by t.timeUse `,[day],(err, rows, fields) => {
+            if (err) {
+                result(null,err);
+            } else {
+               var data = rows;
+                result(data);
+            }
+        });
+    }
 }
-Register_service.ordersHistory = function (id,result){
-    db.query(`with t as (
-        select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
-        swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone,swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress
-        from swp490_g11.register_service
-        left join swp490_g11.status_register_service
-        on swp490_g11.register_service.status_register_id=swp490_g11.status_register_service.status_register_id
-        left join swp490_g11.staff
-        on swp490_g11.register_service.staffId=swp490_g11.staff.staffId
-        left join swp490_g11.salonowner
-        on swp490_g11.salonowner.salonId=swp490_g11.register_service.salonId
-        left join swp490_g11.service
-        on swp490_g11.register_service.serviceId=swp490_g11.service.serviceId
-        left join swp490_g11.customer
-        on swp490_g11.customer.customerId=swp490_g11.register_service.customerId
-        left join swp490_g11.address
-        on swp490_g11.address.salonId=swp490_g11.salonowner.salonId
-        where swp490_g11.register_service.salonId='${id}'
-        )
-        select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
-        t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,t.phone,t.phoneSalon,t.detailAddress
-        from t
-        left join swp490_g11.image_service
-        on t.serviceId=swp490_g11.image_service.serviceId
-        group by t.registerServiceId
-        order by t.timeUse desc;
-        `,id,(err, rows, fields) => {
-        if (err) {
-            result(null,err);
-        } else {
-           var data = rows;
-            result(data);
-        }
-    }); 
+Register_service.ordersHistory = function (id,day,staffId,result){
+    if (staffId=='') {
+        db.query(`with t as (
+            select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
+            swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone,swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress,swp490_g11.register_service.note
+            from swp490_g11.register_service
+            left join swp490_g11.status_register_service
+            on swp490_g11.register_service.status_register_id=swp490_g11.status_register_service.status_register_id
+            left join swp490_g11.staff
+            on swp490_g11.register_service.staffId=swp490_g11.staff.staffId
+            left join swp490_g11.salonowner
+            on swp490_g11.salonowner.salonId=swp490_g11.register_service.salonId
+            left join swp490_g11.service
+            on swp490_g11.register_service.serviceId=swp490_g11.service.serviceId
+            left join swp490_g11.customer
+            on swp490_g11.customer.customerId=swp490_g11.register_service.customerId
+            left join swp490_g11.address
+            on swp490_g11.address.salonId=swp490_g11.salonowner.salonId
+            where swp490_g11.register_service.salonId='${id}' and date(timeUse)=?
+            )
+            select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
+            t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,t.phone,t.phoneSalon,t.detailAddress,t.note
+            from t
+            left join swp490_g11.image_service
+            on t.serviceId=swp490_g11.image_service.serviceId
+            where t.nameStatus like 'cancelled' or t.nameStatus like 'finished'
+            group by t.registerServiceId
+            order by t.timeUse desc;
+            `,[day],(err, rows, fields) => {
+            if (err) {
+                result(null,err);
+            } else {
+               var data = rows;
+                result(data);
+            }
+        }); 
+    } else {
+        db.query(`with t as (
+            select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,
+            swp490_g11.status_register_service.name as 'nameStatus',swp490_g11.staff.name as 'nameStaff',swp490_g11.register_service.staffId,swp490_g11.salonowner.nameSalon,swp490_g11.service.name as 'nameService',swp490_g11.service.service_time,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone,swp490_g11.salonowner.phone as 'phoneSalon',swp490_g11.address.detailAddress,swp490_g11.register_service.note
+            from swp490_g11.register_service
+            left join swp490_g11.status_register_service
+            on swp490_g11.register_service.status_register_id=swp490_g11.status_register_service.status_register_id
+            left join swp490_g11.staff
+            on swp490_g11.register_service.staffId=swp490_g11.staff.staffId
+            left join swp490_g11.salonowner
+            on swp490_g11.salonowner.salonId=swp490_g11.register_service.salonId
+            left join swp490_g11.service
+            on swp490_g11.register_service.serviceId=swp490_g11.service.serviceId
+            left join swp490_g11.customer
+            on swp490_g11.customer.customerId=swp490_g11.register_service.customerId
+            left join swp490_g11.address
+            on swp490_g11.address.salonId=swp490_g11.salonowner.salonId
+            where swp490_g11.register_service.salonId='${id}' and date(timeUse)=? and swp490_g11.register_service.staffId ='${staffId}'
+            )
+            select t.registerServiceId,t.serviceId,t.salonId,t.timeRegister,t.timeUse,t.price_original,
+            t.nameStatus,t.nameStaff,t.staffId,t.nameSalon,t.nameService,swp490_g11.image_service.image,t.service_time,t.nameCustomer,t.phone,t.phoneSalon,t.detailAddress,t.note
+            from t
+            left join swp490_g11.image_service
+            on t.serviceId=swp490_g11.image_service.serviceId
+            where t.nameStatus like 'cancelled' or t.nameStatus like 'finished'
+            group by t.registerServiceId
+            order by t.timeUse desc;
+            `,[day],(err, rows, fields) => {
+            if (err) {
+                result(null,err);
+            } else {
+               var data = rows;
+                result(data);
+            }
+        }); 
+    }
 }
-Register_service.finshBooking=function (id,result){
-    db.query(`UPDATE register_service SET status_register_id='3' where registerServiceId=?`,id, (err, rows, res) => {
+Register_service.finshBooking=function (id,note,result){
+    db.query(`UPDATE register_service SET status_register_id='3',note='${note}'  where registerServiceId='${id}'`,id, (err, rows, res) => {
         if (err) {
             result(null,err);
         } else {
@@ -290,6 +378,7 @@ Register_service.finshBooking=function (id,result){
         }
     });
 }
+
 Register_service.dataBooking = function (id,result){
     db.query(`with t as (
         select swp490_g11.register_service.registerServiceId,swp490_g11.register_service.serviceId,swp490_g11.register_service.salonId,swp490_g11.register_service.timeRegister,swp490_g11.register_service.timeUse,swp490_g11.register_service.price_original,

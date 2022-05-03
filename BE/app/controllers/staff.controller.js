@@ -52,9 +52,27 @@ exports.getStaffByCustomer = function (req, res, next) {
     }
 
 }
+exports.getAllStaff = function (req, res, next) {
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
+    }
+    Staff.getAllStaff(id, function (data) {
+
+        if (data == null) {
+            res.status(400).json({ data: data, success: "get staff fail" });
+        } else {
+            if (data.length == 0) {
+                res.status(400).json({ data: data, success: "not have staff" });
+            } else {
+                res.json({ data: data, success: "get staff success" });
+            }
+        }
+    });
+}
 exports.addStaff = function (req, res, next) {
 
-    var data = {
+    var dataStaff = {
         salonId: req.user.salonId,
         name: req.body.name,
         phone: req.body.phone,
@@ -71,18 +89,27 @@ exports.addStaff = function (req, res, next) {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    try {
-        Staff.addStaff(data, function (data) {
-
-            if (data == null) {
-                res.status(400).json({ data: data, success: "add staff failed" });
-            } else {
-                res.json({ data: data, success: "add staff success" });
+    Staff.getStaff(dataStaff.salonId, function (data){
+        
+        if (data.length>=30) {
+            res.status(400).json({message:"salon của bạn chỉ thêm tối đa 30 nhân viên"});
+        } else {
+            try {
+                Staff.addStaff(dataStaff, function (data) {
+        
+                    if (data == null) {
+                        res.status(400).json({ data: data, success: "add staff failed" });
+                    } else {
+                        res.json({ data: data, success: "add staff success" });
+                    }
+                });
+            } catch (error) {
+                res.status(400).json({ data: error, success: "add staff fail" });
             }
-        });
-    } catch (error) {
-        res.status(400).json({ data: error, success: "add staff fail" });
-    }
+        }
+
+    })
+    
 
 }
 exports.updateStaff = function (req, res, next) {
@@ -119,7 +146,7 @@ exports.updateStaff = function (req, res, next) {
                         if (data.affectedRows == 0) {
                             res.status(400).json({ data: data, message: 'not have to update' });
                         } else {
-                            res.json({ data: data, message: 'update success' });
+                            res.json({ data: dataUpdate, message: 'update success' });
                         }
 
                     }
@@ -144,7 +171,7 @@ exports.impossibleStaff = function (req, res, next) {
        return res.status(400).json({message:"please login account salon"});
     }
     Staff.impossibleStaff(id, function (data){
-        res.json({message:"impossible staff success!!"});
+        res.json({message:"impossible staff success!!",data:{id:id}});
     })
 }
 exports.deleteStaff = function (req, res, next) {
@@ -192,6 +219,6 @@ exports.possibleStaff = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     Staff.possibleStaff(id, function (data){
-        res.json({message:"possible staff success!!"});
+        res.json({message:"possible staff success!!",data:{id:id}});
     })
 }

@@ -64,8 +64,14 @@ router.get('/get/impossibleService',cors(),auth,serviceController.getImpossibleS
 router.post('/staffCanledar',validate.staffCanlederOrderandBusy(),cors(),staffCanledarController.staffCanlederOrderandBusy);
 router.post('/bookingService',validate.bookingServiceForCustomer(),cors(),auth,registerServiceController.bookingServiceForCustomer);
 router.post('/current',validate.current(),cors(),auth,registerServiceController.current);
-router.get('/ordersHistory',cors(),auth,registerServiceController.ordersHistory);
-router.put('/update/finshBooking',validate.finshBooking(),validate.impossibleService(),cors(),auth,registerServiceController.finshBooking);
+router.post('/ordersHistory',validate.ordersHistory(),cors(),auth,registerServiceController.ordersHistory);
+router.put('/update/finshBooking',validate.finshBooking(),cors(),auth,registerServiceController.finshBooking);
 router.put('/impossible/staff/',validate.impossibleStaff(),cors(),auth,staffController.impossibleStaff);
 router.put('/possible/staff/',validate.possibleStaff(),cors(),auth,staffController.possibleStaff);
+router.get('/get/allStaff',cors(),auth,staffController.getAllStaff);
+router.post('/get/feedbackByStar',validate.getVoteByStar(),cors(),auth,feedbackController.getFeedbackByStar);
+router.get('/get/voteOfSalon',cors(),auth,feedbackController.getVoteOfSalon);
+router.put('/update/salonInformationForCustomer/',validate.salonInformationForCustomer(),cors(),auth,salonOwnerController.salonInformationForCustomer);
+router.put('/update/salonBusinessInformation/',validate.salonBusinessInformation(),cors(),auth,salonOwnerController.salonBusinessInformation);
+
 module.exports = router;
