@@ -58,12 +58,11 @@ exports.getHomePage = function (req, res, next) {
 }
 exports.searchSalon = function (req, res, next) {
     var name = req.body.name;
-    var district = req.body.district;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    SalonOwner.searchSalon(name,district,function (data) {
+    SalonOwner.searchSalon(name,function (data) {
         res.json({ data: data, message: "search salon" });
     })
 }
