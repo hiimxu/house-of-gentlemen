@@ -32,9 +32,10 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
         Staff.getTotalSlotSalon(staffId, function (data) {
             var slotTotal = data[0].totalSlot;
             console.log(slotTotal)
-            var timeOpen=new Date("01-01-2017 " + data[0].timeOpen );
+            var timeOpen=new Date("01-01-2017 " + data[0].timeOpen +":00" );
             var h=timeOpen.getHours();
             var m=timeOpen.getMinutes();
+            console.log(timeOpen)
             StaffCanleder.staffCanlederBusy(day, staffId, function (data) {
                
                     var slot = [];
@@ -43,10 +44,12 @@ exports.staffCanlederOrderandBusy = function (req, res, next) {
                     for (let index = 0; index < slotTotal; index++) {
                         slot.push(index+1);
                     }
+                    console.log("slot:"+slot)
                     for (let n = 0; n < data.length; n++) {
                         var index = slot.indexOf(data[n].slotBusy);
                         slot.splice(index, 1);
                     }
+                    console.log("slot1:"+slot)
                     for (let n=0 ; n<slot.length; n++){
                         var x=slot[n+1]-slot[n];
                         // console.log(x+"+"+n)
@@ -77,9 +80,7 @@ console.log(arrSlotCheck[m])
 
                        
                     }
-                    console.log(arrSlotCheck)
                     for (let n = 0; n < slot.length; n++) {
-                        
                         var hSlot=Math.floor((slot[n]-1)/4);
                         var mSlot=(slot[n]-1-4*hSlot)*15;
                         hSlot=hSlot+h;
