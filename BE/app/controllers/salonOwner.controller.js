@@ -152,6 +152,11 @@ exports.salonInformationForCustomer = function (req, res, next) {
        return res.status(400).json({message:"please login account salon"});
     }
     console.log(req.user)
+    var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
+    var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
+    if (checkTimeOpen.getHours() > checkTimeClose.getHours() || (checkTimeOpen.getHours() == checkTimeClose.getHours() && checkTimeOpen.getMinutes() > checkTimeClose.getMinutes())) {
+        return res.status(400).json({ message: "time open <time close" });
+    }
     var dataUpdate = {
         nameSalon: req.body.nameSalon,
         phone: req.body.phone,
@@ -198,6 +203,11 @@ exports.salonBusinessInformation = function (req, res, next) {
     var salonId= req.user.salonId;
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
+    }
+    var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
+    var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
+    if (checkTimeOpen.getHours() > checkTimeClose.getHours() || (checkTimeOpen.getHours() == checkTimeClose.getHours() && checkTimeOpen.getMinutes() > checkTimeClose.getMinutes())) {
+        return res.status(400).json({ message: "time open <time close" });
     }
     var accountId = req.user.account_id;
     var dataUpdate = {
@@ -253,6 +263,11 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     var salonId= req.user.salonId;
     if (salonId==null) {
        return res.status(400).json({message:"please login account salon"});
+    }
+    var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
+    var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
+    if (checkTimeOpen.getHours() > checkTimeClose.getHours() || (checkTimeOpen.getHours() == checkTimeClose.getHours() && checkTimeOpen.getMinutes() > checkTimeClose.getMinutes())) {
+        return res.status(400).json({ message: "time open <time close" });
     }
     console.log(req.user)
     var dataUpdate = {
