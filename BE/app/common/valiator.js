@@ -4,6 +4,7 @@ const testRole = ["customer", "salon"];
 var regexHour = new RegExp(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
 var regexDateTime = new RegExp(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
 var regexStar = new RegExp(/^[1-5]{1}$/)
+var regexImage = new RegExp(/^gif|jpe?g|bmp|png$/)
 exports.validateCreateAccountCustomer = () => {
     return [
         // check('account_name', 'Invalid does not Empty').not().isEmpty()
@@ -21,6 +22,22 @@ exports.validateCreateAccountCustomer = () => {
 
 
     ];
+}
+exports.deleteImageOfGallery= function () {
+    return [
+        body('imageId').isInt().withMessage('imageId : is a number'),
+       
+
+    ];
+}
+exports.addGalleryBySalon = function () {
+    return [
+        body('image').exists()
+        .not()
+        .isEmpty().withMessage('image not empty')
+      
+
+    ];  
 }
 exports.validateLogin = function () {
     return [
@@ -66,7 +83,7 @@ exports.validateCreateAccountSalon = function () {
             .isEmpty().matches(regexHour).withMessage("timeEnd: hour hh:mm"),
         body('image').exists()
             .not()
-            .isEmpty().withMessage('image not empty').isLength({ min: 1, max: 450 }).withMessage('image:min lenght 1,max lenght 450'),
+            .isEmpty().withMessage('image not empty').isLength({ min: 1, max: 450 }).withMessage('image:min lenght 1,max lenght 450').matches(regexImage).withMessage("please get link image"),
         body('email').not().isEmpty().isEmail().withMessage('validate email').isLength({ min: 3, max: 45 }).withMessage('email:min lenght 3,max lenght 45'),
         body('description').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('description of salon :min lenght 1,max lenght 450'),
         body('nameOwner').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('description of salon :min lenght 1,max lenght 45'),
@@ -212,7 +229,7 @@ exports.addServiceSalon = function () {
         body('promotion').not().isEmpty().isInt().withMessage("promotion: number"),
         body('content').not().isEmpty().isLength({ min: 1, max: 2000 }).withMessage('content:min lenght 1,max lenght 2000'),
         body('description').not().isEmpty().isLength({ min: 1, max: 200 }).withMessage('description:min lenght 1,max lenght 200'),
-        body('image').not().isEmpty().withMessage("not empty").isLength({ min: 1, max: 450 }).withMessage('image:min lenght 1,max lenght 450'),
+        body('image').not().isEmpty().withMessage("not empty").isLength({ min: 1, max: 450 }).withMessage('image:min lenght 1,max lenght 450').matches(regexImage).withMessage("please get link image"),
     ];
 }
 exports.updateServiceSalon = function () {

@@ -15,6 +15,7 @@ const statusStaffController = require('../controllers/statusStaff.controller');
 const addressSalonController=require('../controllers/address.controller');
 const registerServiceController = require('../controllers/registerService.controller');
 const staffCanledarController = require('../controllers/staffCanledar.controller');
+const galleryController = require('../controllers/gallery.controller');
 const { param,body, validationResult } = require('express-validator');
 const {check} = require('express-validator');
 const validate = require('../common/valiator');
@@ -73,5 +74,7 @@ router.post('/get/feedbackByStar',validate.getVoteByStar(),cors(),auth,feedbackC
 router.get('/get/voteOfSalon',cors(),auth,feedbackController.getVoteOfSalon);
 router.put('/update/salonInformationForCustomer/',validate.salonInformationForCustomer(),cors(),auth,salonOwnerController.salonInformationForCustomer);
 router.put('/update/salonBusinessInformation/',validate.salonBusinessInformation(),cors(),auth,salonOwnerController.salonBusinessInformation);
-
+router.get('/get/gallery',cors(),auth,galleryController.getGalleryBySalon);
+router.post('/add/gallery',cors(),auth,galleryController.addGalleryBySalon);
+router.delete('/delete/gallery',validate.deleteImageOfGallery(),cors(),auth,galleryController.deleteImageOfGallery);
 module.exports = router;
