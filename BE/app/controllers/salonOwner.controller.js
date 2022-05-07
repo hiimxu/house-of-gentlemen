@@ -216,7 +216,6 @@ exports.salonBusinessInformation = function (req, res, next) {
         taxCode: req.body.taxCode,
         timeOpen: req.body.timeOpen,
         timeClose: req.body.timeClose,
-        description:req.body.description,
         nameOwner: req.body.nameOwner,
     };
     var addressUpdate = {
