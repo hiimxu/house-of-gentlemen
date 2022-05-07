@@ -382,6 +382,7 @@ exports.getFeedbackByStar = function (req, res, next) {
     })
 }
 exports.getVoteOfSalon = function (req, res, next) {
+console.log('vote of salon')
     var salonId=req.user.salonId;
     var star = req.body.star;
     if (salonId==null) {
