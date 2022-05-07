@@ -53,14 +53,14 @@ exports.getVoteByStar = function () {
 }
 exports.getVoteOfSalonByCustomer = function () {
     return [
-        body('salonId').not().isEmpty().matches(regexStar).withMessage('salonId:int'),
+        body('salonId').not().isEmpty().isInt().withMessage('salonId:int'),
 
     ];
 }
 exports.getFeedbackByStarByCustomer = function () {
     return [
-        body('salonId').not().isEmpty().matches(regexStar).withMessage('salonId:int'),
-        body('star').not().isEmpty().matches(regexStar).withMessage('star :1-5')
+        body('salonId').not().isEmpty().isInt().withMessage('salonId:int'),
+        
     ];
 }
 exports.validateCreateAccountSalon = function () {

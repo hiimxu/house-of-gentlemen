@@ -346,17 +346,17 @@ exports.addFeedBackByCustomer = function (req, res, next) {
     try {
         FeedBack.addFeedBackByCustomer(dataFeedBack, function (data) {
             if (data == null) {
-                res.status(400).json({ result: data, message: "add feedback failed" });
+                res.status(400).json({ data: data, message: "add feedback failed" });
             } else {
                 if (data.length == 0) {
-                    res.status(400).json({ result: data, message: "add feedback failed" });
+                    res.status(400).json({ data: data, message: "add feedback failed" });
                 } else {
-                    res.json({ result: data, message: "add feedback success" });
+                    res.json({ data: data, message: "add feedback success" });
                 }
             }
         });
     } catch (error) {
-        res.status(400).json({ result: error, message: "add feedback failed" });
+        res.status(400).json({ data: error, message: "add feedback failed" });
     }
     } else {
         res.status(400).json({message:"you not have access"});
@@ -375,9 +375,9 @@ exports.getFeedbackByStar = function (req, res, next) {
     }
     FeedBack.getFeedbackByStar(salonId,star, function (data){
         if (data.length == 0) {
-            res.status(400).json({ result: data, message: "not have feedback" });
+            res.status(400).json({ data: data, message: "not have feedback" });
         } else {
-            res.json({ result: data, message: "get feedback success" });
+            res.json({ data: data, message: "get feedback success" });
         }
     })
 }
@@ -386,13 +386,13 @@ console.log('vote of salon')
     var salonId=req.user.salonId;
     var star = req.body.star;
     if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
+       return res.status(400).json({data:[],message:"please login account salon"});
     }
     FeedBack.getVoteOfSalon(salonId, function (data){
         if (data.length == 0) {
-            res.status(400).json({ result: data, message: "not have feedback" });
+            res.status(400).json({ data: data, message: "not have feedback" });
         } else {
-            res.json({ result: data, message: "get vote success" });
+            res.json({ data: data, message: "get vote success" });
         }
     })
 }
@@ -405,9 +405,9 @@ exports.getFeedbackByStarByCustomer = function (req, res, next) {
     }
     FeedBack.getFeedbackByStar(salonId,star, function (data){
         if (data.length == 0) {
-            res.status(400).json({ result: data, message: "not have feedback" });
+            res.status(400).json({ data: data, message: "not have feedback" });
         } else {
-            res.json({ result: data, message: "get feedback success" });
+            res.json({ data: data, message: "get feedback success" });
         }
     })
 }
@@ -419,9 +419,9 @@ exports.getVoteOfSalonByCustomer = function (req, res, next) {
     }
     FeedBack.getVoteOfSalon(salonId, function (data){
         if (data.length == 0) {
-            res.status(400).json({ result: data, message: "not have feedback" });
+            res.status(400).json({ data: data, message: "not have feedback" });
         } else {
-            res.json({ result: data, message: "get vote success" });
+            res.json({ data: data, message: "get vote success" });
         }
     })
 }

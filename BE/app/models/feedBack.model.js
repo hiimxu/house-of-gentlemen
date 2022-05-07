@@ -121,15 +121,51 @@ Feedback.checkPermissionCustomer= function (id,customerId,result) {
 Feedback.getFeedbackByStar = function (id,star,result){
     var rate=star*2;
     var rate2=rate+1;
-    db.query(`SELECT * FROM swp490_g11.feedback where salonId='${id}' and (rate='${rate}' or rate='${rate2}')`, (err, rows, fields) => {
-        if (err) {
-           
-            result(err);
-        } else {
-            data = rows;
-            result(data);
-        }
-    });
+    
+    if (star=='') {
+        db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
+        left join swp490_g11.customer
+        on swp490_g11.customer.customerId=swp490_g11.feedback.customerId
+        where salonId='${id}' `, (err, rows, fields) => {
+            if (err) {
+               
+                result(err);
+            } else {
+                data = rows;
+                result(data);
+            }
+        });
+    }else if(star=='1'){
+        
+            db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
+            left join swp490_g11.customer
+            on swp490_g11.customer.customerId=swp490_g11.feedback.customerId
+             where salonId='${id}' and (rate='${rate}' or rate='${rate2}' or rate ='1')`, (err, rows, fields) => {
+                if (err) {
+                   
+                    result(err);
+                } else {
+                    data = rows;
+                    result(data);
+                }
+            });
+       
+    }
+    else{
+        db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
+        left join swp490_g11.customer
+        on swp490_g11.customer.customerId=swp490_g11.feedback.customerId
+         where salonId='${id}' and (rate='${rate}' or rate='${rate2}')`, (err, rows, fields) => {
+            if (err) {
+               
+                result(err);
+            } else {
+                data = rows;
+                result(data);
+            }
+        });
+    }
+    
 }
 Feedback.getVoteOfSalon = function (id,result){
     db.query(`SELECT avg(rate)/2 as AverangeVote,count(rate) as TotalVote FROM swp490_g11.feedback
