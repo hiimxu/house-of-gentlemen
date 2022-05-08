@@ -326,7 +326,7 @@ exports.addFeedBackByCustomer = function (req, res, next) {
        return res.status(400).json({message:"please login account customer"});
     }
     var dataFeedBack = {
-        customerId: req.body.req.user.customerId,
+        customerId: req.user.customerId,
         salonId: req.body.salonId,
         content: req.body.content,
         rate: req.body.rate
