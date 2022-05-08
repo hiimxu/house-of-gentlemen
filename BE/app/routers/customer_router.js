@@ -60,6 +60,6 @@ router.get('/get/reservation',auth,cors(),registerServiceController.reservation)
 router.post('/searchsalon',cors(),salonOwnerController.searchSalon);
 router.get('/get/check/',cors(),registerServiceController.check);
 router.post('/get/feedbackByStar',validate.getFeedbackByStarByCustomer(),cors(),feedbackController.getFeedbackByStarByCustomer);
-router.post('/get/voteOfSalon',validate.getVoteOfSalonByCustomer(),cors(),auth,feedbackController.getVoteOfSalonByCustomer);
+router.post('/get/voteOfSalon',validate.getVoteOfSalonByCustomer(),cors(),feedbackController.getVoteOfSalonByCustomer);
 router.post('/get/homePage',cors(),salonOwnerController.getHomePage); 
 module.exports = router;

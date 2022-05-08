@@ -414,9 +414,7 @@ exports.getFeedbackByStarByCustomer = function (req, res, next) {
 exports.getVoteOfSalonByCustomer = function (req, res, next) {
     var salonId=req.body.salonId;
     var star = req.body.star;
-    if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
-    }
+    
     FeedBack.getVoteOfSalon(salonId, function (data){
         if (data.length == 0) {
             res.status(400).json({ data: data, message: "not have feedback" });
