@@ -136,22 +136,6 @@ Feedback.getFeedbackByStar = function (id,star,result){
                 result(data);
             }
         });
-    }else if(star=='1'){
-        
-            db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
-            left join swp490_g11.customer
-            on swp490_g11.customer.customerId=swp490_g11.feedback.customerId
-             where salonId='${id}' and (rate='${rate}' or rate='${rate2}' or rate ='1'
-             order by (swp490_g11.feedback.dateCreate) desc)`, (err, rows, fields) => {
-                if (err) {
-                   
-                    result(err);
-                } else {
-                    data = rows;
-                    result(data);
-                }
-            });
-       
     }
     else{
         db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
