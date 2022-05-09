@@ -4,7 +4,8 @@ const testRole = ["customer", "salon"];
 var regexHour = new RegExp(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/);
 var regexDateTime = new RegExp(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
 var regexStar = new RegExp(/^[1-5]{1}$/)
-var regexImage = new RegExp(/^gif|jpe?g|bmp|png$/)
+var regexImage = new RegExp(/^gif|jpe?g|bmp|png$/);
+var regexBirthDay = new RegExp(/^\s+(?:19\d{2}|20[01][0-9]|2022)[-](?:0[1-9]|1[012])[-](?:0[1-9]|[12][0-9]|3[01])\b$/)
 exports.validateCreateAccountCustomer = () => {
     return [
         // check('account_name', 'Invalid does not Empty').not().isEmpty()
@@ -134,6 +135,8 @@ exports.checkId = function () {
 exports.updateCustomerProfile = function () {
 
     return [
+        body('nameCustomer').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage(`name's customer min lenght 1,max lenght 45`),
+        body('address').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('name:min lenght 1,max lenght 450'),
         body('phone').not().isEmpty().isMobilePhone("vi-VN").withMessage("are you sure your phone"),
         body('birthday')
             .exists()
