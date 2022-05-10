@@ -116,7 +116,7 @@ exports.validateCreateAccountSalonFix = function () {
 }
 exports.change_password = function () {
     return [
-        body('account_name').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('account :min lenght 1,max lenght 45'),
+       
         body('old_password').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('password :min lenght 1,max lenght 45'),
         body('new_password').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('new password:min lenght 1,max lenght 45'),
     ];

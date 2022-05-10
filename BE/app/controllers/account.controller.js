@@ -61,10 +61,13 @@ exports.get_accountbyid = function (req, res, next) {
     }
 }
 exports.change_password = function (req, res, next) {
-
+ var user = req.user;
+if (req.user== null) {
+    return res.status(400).json({message:"please login account"})
+}
     var new_pass = req.body.new_password;
     var old_pass = req.body.old_password;
-    var acc = req.body.account_name;
+    var acc = req.user.account_name;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
