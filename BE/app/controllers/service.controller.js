@@ -113,6 +113,35 @@ exports.getServiceOfSalon = function (req, res, next) {
         });
     })
 }
+exports.getServiceOfSalonByAdmin = function (req, res, next) {
+    
+    var user = req.user
+    if (user.role== null) {
+       return res.status(400).json({ message:"Please login admin",data: []})
+    }
+    var salonId= req.body.salonId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+   
+    SalonOwner.getProfileSalonBySalonId(salonId,function (dataSalon){
+        ServiceSalon.getAllServiceSalon(salonId, function (data) {
+
+            if (data == null) {
+                res.status(400).json({ data: data, message: "get service fail" });
+            } else {
+                if (data.length == 0) {
+                    res.status(400).json({ data: data, message: "not have service" });
+                } else {
+
+                    res.json({dataSalon:dataSalon, data: data, message: "get service success" });
+                }
+            }
+        });
+    })
+}
 exports.getServiceOfSalonByCustomer = function (req, res, next) {
     var id= req.params.idSalon;
 

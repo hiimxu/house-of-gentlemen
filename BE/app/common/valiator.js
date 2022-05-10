@@ -24,6 +24,13 @@ exports.validateCreateAccountCustomer = () => {
 
     ];
 }
+exports.getServiceOfSalonByAdmin = function () {
+    return [
+        body('salonId').isInt().withMessage('salonId : is a number'),
+       
+
+    ];   
+}
 exports.deleteImageOfGallery= function () {
     return [
         body('imageId').isInt().withMessage('imageId : is a number'),
@@ -58,7 +65,19 @@ exports.getVoteOfSalonByCustomer = function () {
 
     ];
 }
+exports.getVoteOfSalonByAdmin = function () {
+    return [
+        body('salonId').not().isEmpty().isInt().withMessage('salonId:int'),
+
+    ];
+}
 exports.getFeedbackByStarByCustomer = function () {
+    return [
+        body('salonId').not().isEmpty().isInt().withMessage('salonId:int'),
+        
+    ];
+}
+exports.getFeedbackByStarByAdmin = function () {
     return [
         body('salonId').not().isEmpty().isInt().withMessage('salonId:int'),
         

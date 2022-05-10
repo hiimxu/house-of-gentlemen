@@ -397,6 +397,26 @@ console.log('vote of salon')
     })
 }
 exports.getFeedbackByStarByCustomer = function (req, res, next) {
+    
+    var salonId=req.body.salonId;
+    var star = req.body.star;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
+    FeedBack.getFeedbackByStar(salonId,star, function (data){
+        if (data.length == 0) {
+            res.status(200).json({ data: data, message: "not have feedback" });
+        } else {
+            res.json({ data: data, message: "get feedback success" });
+        }
+    })
+}
+exports.getFeedbackByStarByAdmin = function (req, res, next) {
+    var user = req.user
+    if (user.role== null) {
+       return res.status(400).json({ message:"Please login admin",data: []})
+    }
     var salonId=req.body.salonId;
     var star = req.body.star;
     const errors = validationResult(req);
@@ -413,7 +433,25 @@ exports.getFeedbackByStarByCustomer = function (req, res, next) {
 }
 exports.getVoteOfSalonByCustomer = function (req, res, next) {
     var salonId=req.body.salonId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     
+    FeedBack.getVoteOfSalon(salonId, function (data){
+        if (data.length == 0) {
+            res.status(200).json({ data: data, message: "not have feedback" });
+        } else {
+            res.json({ data: data, message: "get vote success" });
+        }
+    })
+}
+exports.getVoteOfSalonByAdmin = function (req, res, next) {
+    var salonId=req.body.salonId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+    }
     FeedBack.getVoteOfSalon(salonId, function (data){
         if (data.length == 0) {
             res.status(200).json({ data: data, message: "not have feedback" });

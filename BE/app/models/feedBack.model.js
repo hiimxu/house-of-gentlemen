@@ -120,7 +120,7 @@ Feedback.checkPermissionCustomer= function (id,customerId,result) {
 }
 Feedback.getFeedbackByStar = function (id,star,result){
     var rate=star*2;
-    var rate2=rate+1;
+    var rate2=rate-1;
     
     if (star=='') {
         db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
