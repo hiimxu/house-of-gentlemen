@@ -146,12 +146,16 @@ exports.login_account = function async(req, res, next) {
                                 let id = redata[0].account_id;
                                 SalonOwner.getProfileSalon(id, function (data) {
                                     console.log(data[0].accountId + " " + data[0].salonId)
+                                    if (data[0].possibility==3) {
+                                        return res.status(400).json({accountData: [], userData: [], message: "your account is deleted", token:[] })
+                                    }
                                     const token = jwt.sign(
                                         { account_id: data[0].accountId, account_name: acc, salonId: data[0].salonId },
                                         process.env.TOKEN_KEY,
                                         {
                                             expiresIn: "2h",
                                         }
+                                        
                                     );
                                     Account.updateToken(acc, token, function (response) {
                                         redata[0].token = token;
