@@ -351,7 +351,7 @@ exports.setDeactiveSalon = function (req, res, next) {
                 const mail_options = {
                     from: `THE house of gentlemen <${config.user}>`,
                     to: recipient,
-                    subject: 'A message from the G.O.A.T',
+                    subject: 'A message from the house of gentlemen',
                     text: get_html_message(),
                     auth: {
                         user: config.user,
@@ -418,7 +418,7 @@ exports.setActiveSalon = function (req, res, next) {
                 const mail_options = {
                     from: `THE house of gentlemen <${config.user}>`,
                     to: recipient,
-                    subject: 'A message from the G.O.A.T',
+                    subject: 'A message from the house of gentlemen',
                     text: get_html_message(),
                     auth: {
                         user: config.user,
@@ -482,7 +482,7 @@ exports.deleteSalon = function (req, res, next) {
                 const mail_options = {
                     from: `THE house of gentlemen <${config.user}>`,
                     to: recipient,
-                    subject: 'A message from the G.O.A.T',
+                    subject: 'A message from the house of gentlemen',
                     text: get_html_message(),
                     auth: {
                         user: config.user,
