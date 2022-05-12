@@ -19,6 +19,17 @@ SalonOwner.getAll = function (result) {
         }
     });
 }
+SalonOwner.checkSalon =function (salonId,result){
+    db.query("SELECT * FROM swp490_g11.salonowner where salonId=?",salonId, (err, rows, fields) => {
+        if (err) {
+           
+            result(null,err);
+        } else {
+            data = rows;
+            result(data)
+        }
+    });
+}
 SalonOwner.createSalonOwner = function (data, result) {
     db.query(`INSERT INTO salonowner SET?`, data, (err, rows, res) => {
         if (null,err) {
