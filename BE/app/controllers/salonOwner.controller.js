@@ -3,6 +3,10 @@ var Address = require('../models/address.model');
 var ImageSalon = require('../models/imageSalon.model');
 var Account = require('../models/account.model');
 const { body, validationResult } = require('express-validator');
+const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
+const config = require('../common/config');
+const OAuth2 = google.auth.OAuth2
 exports.getSalon = function (req, res, next) {
     var id = req.params.id;
     const errors = validationResult(req);
@@ -40,39 +44,39 @@ exports.getAllSalon = function (req, res, next) {
 
 }
 exports.getHomePage = function (req, res, next) {
-    var index= req.body.index;
-    if (index=='') {
-        index=1;
+    var index = req.body.index;
+    if (index == '') {
+        index = 1;
     }
     SalonOwner.getProfileAllSalon(function (data) {
-        var totalPage =Math.floor(data.length/5)+1;
-        if (index>totalPage) {
-            return res.status(400).json({data:[],totalPage, message: "1<=index<=totalPage"})
+        var totalPage = Math.floor(data.length / 5) + 1;
+        if (index > totalPage) {
+            return res.status(400).json({ data: [], totalPage, message: "1<=index<=totalPage" })
         }
-        SalonOwner.getHomePage(index,function (data){
-            res.json({data:data,totalPage,message:"get home page success"})
+        SalonOwner.getHomePage(index, function (data) {
+            res.json({ data: data, totalPage, message: "get home page success" })
 
         })
-       
+
     });
 }
 exports.searchSalon = function (req, res, next) {
     var name = req.body.name;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array(),message:"error validate" });
+        return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    SalonOwner.searchSalon(name,function (data) {
+    SalonOwner.searchSalon(name, function (data) {
         res.json({ data: data, message: "search salon" });
     })
 }
 exports.setPossitiveSalonOwner = function (req, res, next) {
     var id = req.body.id;
     var possibility = req.body.possibility;
-    var user= req.user;
-    if (user.role== null) {
-        return res.status(400).json({message:"please login admin"})
-    }else{
+    var user = req.user;
+    if (user.role == null) {
+        return res.status(400).json({ message: "please login admin" })
+    } else {
         var checkPossibility = ['1', '0'];
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -81,22 +85,22 @@ exports.setPossitiveSalonOwner = function (req, res, next) {
         if (!checkPossibility.includes(req.body.possibility)) {
             res.status(400).json({ message: "check possibility" });
             return;
-        }try {
+        } try {
             var data = SalonOwner.setPossitiveSalonOwner(id, possibility, function (data) {
                 if (data == null) {
                     res.status(400).json({ data: data, message: "set salon's possitive failed" });
                 } else {
                     if (data.affectedRows == 0) {
-                        res.status(400).json({ data: {id:id}, message: "not have data update" });
+                        res.status(400).json({ data: { id: id }, message: "not have data update" });
                     } else
                         if (data.changedRows == 0) {
-                            res.status(400).json({ data: {id:id}, message: "data not change" });
+                            res.status(400).json({ data: { id: id }, message: "data not change" });
                         }
                         else {
-                            if (possibility==1) {
-                                res.json({ data: {id:id}, message: "set salon's possitive success" });
+                            if (possibility == 1) {
+                                res.json({ data: { id: id }, message: "set salon's possitive success" });
                             } else {
-                                res.json({ data: {id:id}, message: "set salon's impossitive success" });
+                                res.json({ data: { id: id }, message: "set salon's impossitive success" });
                             }
                         }
                 }
@@ -105,16 +109,16 @@ exports.setPossitiveSalonOwner = function (req, res, next) {
             res.status(400).json({ data: data, message: "set salon's possitive failed" });
         }
     }
-    
-   
-    
-    
+
+
+
+
 }
 exports.salonOwner = function (req, res, next) {
     try {
         SalonOwner.getAll(function (data) {
             if (data == null) { res.status(400).json({ data: data, message: "get salonowner failed" }); }
-             else {
+            else {
                 res.json({ data: data, message: "get salonowner success" });
             }
         });
@@ -124,13 +128,13 @@ exports.salonOwner = function (req, res, next) {
 }
 
 exports.getSalonOwnerProfile = function (req, res, next) {
-   
 
-    var salonId= req.user.salonId;
-    if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
+
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
     }
-    
+
     try {
         SalonOwner.getProfileSalonBySalonId(salonId, function (data) {
             if (data == null) {
@@ -147,9 +151,9 @@ exports.getSalonOwnerProfile = function (req, res, next) {
     }
 }
 exports.salonInformationForCustomer = function (req, res, next) {
-    var salonId= req.user.salonId;
-    if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
     }
     console.log(req.user)
     var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
@@ -162,8 +166,8 @@ exports.salonInformationForCustomer = function (req, res, next) {
         phone: req.body.phone,
         timeOpen: req.body.timeOpen,
         timeClose: req.body.timeClose,
-        description:req.body.description,
-        
+        description: req.body.description,
+
     };
     var addressUpdate = {
         city: req.body.city,
@@ -171,38 +175,38 @@ exports.salonInformationForCustomer = function (req, res, next) {
         detailAddress: req.body.detailAddress,
     }
     var image = req.body.image;
-    var dataOk ={...dataUpdate,...addressUpdate,image}
+    var dataOk = { ...dataUpdate, ...addressUpdate, image }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-        Address.updateAddressSalon(salonId,addressUpdate, function (data){
-            ImageSalon.updateImage(salonId,image,function (data){
-                SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
-                    if (data == null) {
-                        res.status(400).json({ data: data, message: "update salon information for customer failed" });
-                    }
-                    else {
-                        
-                            res.json({ data: dataOk, message: "update salon information for customer success" });
-                        
-                    }
-                });
+    Address.updateAddressSalon(salonId, addressUpdate, function (data) {
+        ImageSalon.updateImage(salonId, image, function (data) {
+            SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
+                if (data == null) {
+                    res.status(400).json({ data: data, message: "update salon information for customer failed" });
+                }
+                else {
 
-            })
-            
+                    res.json({ data: dataOk, message: "update salon information for customer success" });
+
+                }
+            });
+
         })
 
-  
+    })
 
-        
-    
+
+
+
+
 
 }
 exports.salonBusinessInformation = function (req, res, next) {
-    var salonId= req.user.salonId;
-    if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
     }
     var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
     var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
@@ -225,17 +229,17 @@ exports.salonBusinessInformation = function (req, res, next) {
     }
     var image = req.body.image;
     var email = req.body.email;
-    var dataOk ={...dataUpdate,...addressUpdate,image,email}
+    var dataOk = { ...dataUpdate, ...addressUpdate, image, email }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    Account.updateEmail(accountId,email, function (data){
-        Address.updateAddressSalon(salonId,addressUpdate, function (data){
-            ImageSalon.updateImage(salonId,image,function (data){
-                
+    Account.updateEmail(accountId, email, function (data) {
+        Address.updateAddressSalon(salonId, addressUpdate, function (data) {
+            ImageSalon.updateImage(salonId, image, function (data) {
+
                 SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
-                    
+
                     if (data == null) {
                         res.status(400).json({ data: data, message: "update salon 's profile failed" });
                     }
@@ -249,19 +253,19 @@ exports.salonBusinessInformation = function (req, res, next) {
                 });
 
             })
-            
+
         })
 
     })
 
-        
-    
+
+
 
 }
 exports.updateSalonOwnerProfile = function (req, res, next) {
-    var salonId= req.user.salonId;
-    if (salonId==null) {
-       return res.status(400).json({message:"please login account salon"});
+    var salonId = req.user.salonId;
+    if (salonId == null) {
+        return res.status(400).json({ message: "please login account salon" });
     }
     var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
     var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
@@ -275,7 +279,7 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
         taxCode: req.body.taxCode,
         timeOpen: req.body.timeOpen,
         timeClose: req.body.timeClose,
-        description:req.body.description,
+        description: req.body.description,
         nameOwner: req.body.nameOwner,
     };
     var addressUpdate = {
@@ -285,14 +289,14 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
     }
     var image = req.body.image;
     var email = req.body.email;
-    var dataOk ={...dataUpdate,...addressUpdate,image,email}
+    var dataOk = { ...dataUpdate, ...addressUpdate, image, email }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    Account.updateEmail(account_id,email, function (data){
-        Address.updateAddressSalon(salonId,addressUpdate, function (data){
-            ImageSalon.updateImage(salonId,image,function (data){
+    Account.updateEmail(account_id, email, function (data) {
+        Address.updateAddressSalon(salonId, addressUpdate, function (data) {
+            ImageSalon.updateImage(salonId, image, function (data) {
                 SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
                     if (data == null) {
                         res.status(400).json({ data: data, message: "update salon 's profile failed" });
@@ -307,58 +311,208 @@ exports.updateSalonOwnerProfile = function (req, res, next) {
                 });
 
             })
-            
+
         })
 
     })
 
-        
-    
+
+
 
 }
 exports.setDeactiveSalon = function (req, res, next) {
     var user = req.user
-    if (user.role== null) {
-       return res.status(400).json({ message:"Please login admin",data: []})
+    if (user.role == null) {
+        return res.status(400).json({ message: "Please login admin", data: [] })
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    var salonId= req.body.salonId;
-    SalonOwner.setDeactiveSalon(salonId,function (data){
-        res.json({  message: "deactive success",data:{salonId:salonId} });
+    var salonId = req.body.salonId;
+    SalonOwner.setDeactiveSalon(salonId, function (data) {
+        SalonOwner.getEmailOfSalon(salonId, function (data) {
+            email = data[0].email;
+            const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
+            OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
+            function send_mail(name, recipient) {
+                const accessToken = OAuth2_client.getAccessToken()
+
+                const transport = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        type: 'oauth2',
+                        clientId: config.clientId,
+                        clientSecret: config.clientSecret,
+                    }
+                })
+                const mail_options = {
+                    from: `THE house of gentlemen <${config.user}>`,
+                    to: recipient,
+                    subject: 'A message from the G.O.A.T',
+                    text: get_html_message(),
+                    auth: {
+                        user: config.user,
+                        refreshToken: config.refresh_token,
+                        accessToken: accessToken,
+                    }
+                }
+                transport.sendMail(mail_options, function (error, result) {
+                    if (error) {
+                        console.log('Error:', error)
+                        return res.status(400).json({data:[],message:"check token email"})
+                    } else {
+                        console.log('Success:', result)
+                        res.json({ data: { email: email,salonId:salonId }, message: "deactive success and send a email to salon" })
+                    }
+                    transport.close();
+                   
+
+                })
+            }
+            function get_html_message(name) {
+                return `
+                    <h3>sign:salon của bạn đã bị deactive</h3>
+                        `
+            }
+            send_mail('', email)
+
+
+
+        })
+        
 
     });
 }
 exports.setActiveSalon = function (req, res, next) {
     var user = req.user
-    if (user.role== null) {
-       return res.status(400).json({ message:"Please login admin",data: []})
+    if (user.role == null) {
+        return res.status(400).json({ message: "Please login admin", data: [] })
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    var salonId= req.body.salonId;
+    var salonId = req.body.salonId;
     var joinDate = new Date()
-    SalonOwner.setActiveSalon(salonId,joinDate,function (data){
-        res.json({  message: "Active success",data:{salonId:salonId,joinDate:joinDate} });
+    SalonOwner.setActiveSalon(salonId, joinDate, function (data) {
+        SalonOwner.getEmailOfSalon(salonId, function (data) {
+            email = data[0].email;
+            const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
+            OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
+            function send_mail(name, recipient) {
+                const accessToken = OAuth2_client.getAccessToken()
 
+                const transport = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        type: 'oauth2',
+                        clientId: config.clientId,
+                        clientSecret: config.clientSecret,
+                    }
+                })
+                const mail_options = {
+                    from: `THE house of gentlemen <${config.user}>`,
+                    to: recipient,
+                    subject: 'A message from the G.O.A.T',
+                    text: get_html_message(),
+                    auth: {
+                        user: config.user,
+                        refreshToken: config.refresh_token,
+                        accessToken: accessToken,
+                    }
+                }
+                transport.sendMail(mail_options, function (error, result) {
+                    if (error) {
+                        console.log('Error:', error)
+                        return res.status(400).json({data:[],message:"check token email"})
+                    } else {
+                        console.log('Success:', result)
+                        res.json({ data: { email: email,salonId:salonId, joinDate:joinDate}, message: "active success and send a email to salon" })
+                    }
+                    transport.close();
+                   
+
+                })
+            }
+            function get_html_message(name) {
+                return `
+                    <h3>sign:salon của bạn đã được active</h3>
+                        `
+            }
+            send_mail('', email)
+
+
+
+        })
     });
 }
 exports.deleteSalon = function (req, res, next) {
     var user = req.user
-    if (user.role== null) {
-       return res.status(400).json({ message:"Please login admin",data: []})
+    if (user.role == null) {
+        return res.status(400).json({ message: "Please login admin", data: [] })
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    var salonId= req.body.salonId;
-    SalonOwner.deleteSalon(salonId,function (data){
-        res.json({  message: "delete success",data:{salonId:salonId} });
+    var salonId = req.body.salonId;
+    SalonOwner.deleteSalon(salonId, function (data) {
+        SalonOwner.getEmailOfSalon(salonId, function (data) {
+            email = data[0].email;
+            const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
+            OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
+            function send_mail(name, recipient) {
+                const accessToken = OAuth2_client.getAccessToken()
+
+                const transport = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        type: 'oauth2',
+                        clientId: config.clientId,
+                        clientSecret: config.clientSecret,
+                    }
+                })
+                const mail_options = {
+                    from: `THE house of gentlemen <${config.user}>`,
+                    to: recipient,
+                    subject: 'A message from the G.O.A.T',
+                    text: get_html_message(),
+                    auth: {
+                        user: config.user,
+                        refreshToken: config.refresh_token,
+                        accessToken: accessToken,
+                    }
+                }
+                transport.sendMail(mail_options, function (error, result) {
+                    if (error) {
+                        console.log('Error:', error)
+                        return res.status(400).json({data:[],message:"check token email"})
+                    } else {
+                        console.log('Success:', result)
+                        res.json({ data: { email: email,salonId:salonId}, message: "delete success and send a email to salon" })
+                    }
+                    transport.close();
+                   
+
+                })
+            }
+            function get_html_message(name) {
+                return `
+                    <h3>sign:salon của bạn đã bị xóa</h3>
+                        `
+            }
+            send_mail('', email)
+
+
+
+        })
 
     });
 }
