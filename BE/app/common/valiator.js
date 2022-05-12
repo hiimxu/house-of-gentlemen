@@ -24,6 +24,12 @@ exports.validateCreateAccountCustomer = () => {
 
     ];
 }
+exports.searchSalon = function () {
+    return [
+        body('name').isLength({ min: 0, max: 45 }).withMessage('name:min lenght 0,max lenght 45'),
+      
+    ];   
+}
 exports.getServiceOfSalonByAdmin = function () {
     return [
         body('salonId').isInt().withMessage('salonId : is a number'),

@@ -60,7 +60,7 @@ exports.searchSalon = function (req, res, next) {
     var name = req.body.name;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
     SalonOwner.searchSalon(name,function (data) {
         res.json({ data: data, message: "search salon" });

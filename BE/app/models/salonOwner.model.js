@@ -164,7 +164,7 @@ SalonOwner.searchSalon=function(name,result){
         on temp.salonId=swp490_g11.image_salon.salonId
         left join swp490_g11.feedback
         on temp.salonId=swp490_g11.feedback.salonId
-        where temp.nameSalon like '%${name}%' 
+        where temp.nameSalon  LIKE CONCAT('%', CONVERT('${name}', BINARY),'%')
         group by salonId`,name, (err, rows, fields) => {
         if (err) {
             result(err);
