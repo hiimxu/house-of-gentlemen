@@ -30,6 +30,7 @@ router.get('/imageSalon/',auth,cors(),imageSalonController.getImageSalon);
 router.post('/create/imageToImageSalon',validate.addImageToImageSalon(),cors(),auth,imageSalonController.addImageToImageSalon);
 router.delete('/delete/imageOfImageSalon/:id',validate.checkId(),cors(),auth,imageSalonController.deleteImageOfImageSalon);
 router.post('/create/service',validate.addServiceSalon(),cors(),auth,serviceController.addServiceSalon);
+router.post('/create/serviceUploadImage',validate.addServiceSalon(),cors(),auth,serviceController.addServiceSalonImage);
 router.delete('/delete/service/:idService',cors(),auth,serviceController.deleteServiceSalon);// khong lam delete service
 router.get('/get/Service/',auth,cors(),serviceController.getServiceOfSalon);
 router.put('/update/Service/:idService',validate.updateServiceSalon(),cors(),auth,serviceController.updateServiceSalon);

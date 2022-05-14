@@ -29,7 +29,8 @@
     "ngrok": "^4.3.1",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
-    "twilio": "^3.75.1"
+    "twilio": "^3.75.1",
+    "util": "^0.12.4"
   },
   "devDependencies": {
     "supertest": "^6.2.2"
