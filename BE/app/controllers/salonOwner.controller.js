@@ -2,6 +2,7 @@ var SalonOwner = require('../models/salonOwner.model');
 var Address = require('../models/address.model');
 var ImageSalon = require('../models/imageSalon.model');
 var Account = require('../models/account.model');
+var RegisterService = require('../models/register_service.model');
 const { body, validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
@@ -331,6 +332,9 @@ exports.setDeactiveSalon = function (req, res, next) {
     }
     var salonId = req.body.salonId;
     SalonOwner.setDeactiveSalon(salonId, function (data) {
+        RegisterService.cancelBookingOfSalon(salonId, function (data){
+            
+        })
         SalonOwner.getEmailOfSalon(salonId, function (data) {
             email = data[0].email;
             const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);

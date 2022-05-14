@@ -24,6 +24,20 @@ Register_service.getRegisterServiceById=function (id, result) {
         }
     });
 }
+Register_service.cancelBookingOfSalon=function (id, result) {
+    db.query('SET SQL_SAFE_UPDATES = 0;');
+    db.query(`UPDATE register_service
+    SET note='salon đã ngưng động',status_register_id =2
+    WHERE salonId=${id} and timeUse>now();`,id,(err, rows, fields) => {
+        if (err) {
+            result(null,err);
+        } else {
+           var data = rows;
+            result(data);
+        }
+    });
+}
+
 Register_service.checkBooking = function (id,result){
     db.query("SELECT * FROM swp490_g11.register_service where customerId=? and status_register_id=1 and timeUse>now()",id,(err, rows, fields) => {
         if (err) {
