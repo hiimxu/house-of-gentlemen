@@ -132,7 +132,7 @@ exports.addServiceSalonImage = async (req, res, next) => {
                         } else {
                             var dataImage = {
                                 serviceId: data.id,
-                                image: req.body.image
+                                image: image
                             };
                             ImageService.addImageService(dataImage, function (data) {
 
