@@ -88,7 +88,7 @@ if (req.user== null) {
                         return res.json({ message: "update password success", data: dataOk });
                     });
                 } else {
-                    return res.status(400).json({ message: "check old_password ", data: "update failed" });
+                    return res.status(400).json({ message: "check old_password " });
                 }
             })
 
@@ -147,7 +147,7 @@ exports.login_account = function async(req, res, next) {
                                 SalonOwner.getProfileSalon(id, function (data) {
                                     console.log(data[0].accountId + " " + data[0].salonId)
                                     if (data[0].possibility==3) {
-                                        return res.status(400).json({accountData: [], userData: [], message: "your account is deleted", token:[] })
+                                        return res.status(400).json({ message: "your account is deleted"})
                                     }
                                     const token = jwt.sign(
                                         { account_id: data[0].accountId, account_name: acc, salonId: data[0].salonId },
