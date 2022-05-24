@@ -294,7 +294,7 @@ exports.bookingServiceForCustomer = function (req, res, next) {
     };
     SalonOwner.checkSalon(salonId, function (data){
         if (data[0].possibility!='1'){
-            return res.status(400).json({data:{salonId},message:"salon không được phép hoạt động"});
+            return res.status(400).json({message:"salon không được phép hoạt động"});
         }else{
             
             SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
