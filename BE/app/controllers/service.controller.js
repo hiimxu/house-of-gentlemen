@@ -4,33 +4,13 @@ var ImageService = require('../models/imageService.model');
 var SalonOwner = require('../models/salonOwner.model');
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
-const maxSize = 2 * 1024 * 1024;
 const util = require("util");
-const fs = require("fs");
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './uploads')
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + file.originalname;
-        cb(null, file.fieldname + '-' + uniqueSuffix)
-    }
-})
-var uploadFile = multer({
-    storage: storage,
-    limits: { fileSize: maxSize },
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-          cb(null, true);
-        } else {
-          cb(null, false);
-          return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-        }
-      }
-}).single("file");
 
-var uploadFileMiddleware = util.promisify(uploadFile);
+
+
+
+
 
 exports.addServiceSalon = function (req, res, next) {
     var salonId = req.user.salonId;
@@ -90,80 +70,80 @@ exports.addServiceSalon = function (req, res, next) {
 
 
 }
-exports.addServiceSalonImage = async (req, res, next) => {
-    try {
-        var salonId = req.user.salonId;
-        if (salonId == null) {
-            return res.status(400).json({ message: "please login account salon" });
-        }
-        console.log(salonId);
-        await uploadFileMiddleware(req, res);
+// exports.addServiceSalonImage = async (req, res, next) => {
+//     try {
+//         var salonId = req.user.salonId;
+//         if (salonId == null) {
+//             return res.status(400).json({ message: "please login account salon" });
+//         }
+//         console.log(salonId);
+//         await uploadFileMiddleware(req, res);
 
-        if (req.file == undefined) {
-            return res.status(400).send({ message: "Please upload a image service!" });
-        }
-        var image = req.file.filename;
-    var dataService = {
-        salonId: req.user.salonId,
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description,
-        content: req.body.content,
-        promotion: req.body.promotion,
-        service_time: req.body.service_time,
-        possible: 1
-    }
-    if (parseInt(dataService.promotion) > 100 || parseInt(dataService.promotion) < 0) {
-        return res.status(400).json({ message: "0<=promotion<=100" })
-    }
-    ServiceSalon.getAllServiceSalon(salonId, function (data) {
-        if (data.length >= 30) {
-            return res.status(400).json({ message: "salon của bạn có thể tạo tối đa 30 services", data: [] })
-        }
-        else {
-            try {
-                ServiceSalon.addServiceSalon(dataService, function (data) {
-                    // res.json({ data: data, message: "add service fail" });
-                    if (data == null) {
-                        res.status(400).json({ data: data, message: "add service fail" });
-                    } else {
-                        if (data.length == 0) {
-                            res.status(400).json({ data: data, message: "add service failed" });
-                        } else {
-                            var dataImage = {
-                                serviceId: data.id,
-                                image: image
-                            };
-                            ImageService.addImageService(dataImage, function (data) {
+//         if (req.file == undefined) {
+//             return res.status(400).send({ message: "Please upload a image service!" });
+//         }
+//         var image = req.file.filename;
+//     var dataService = {
+//         salonId: req.user.salonId,
+//         name: req.body.name,
+//         price: req.body.price,
+//         description: req.body.description,
+//         content: req.body.content,
+//         promotion: req.body.promotion,
+//         service_time: req.body.service_time,
+//         possible: 1
+//     }
+//     if (parseInt(dataService.promotion) > 100 || parseInt(dataService.promotion) < 0) {
+//         return res.status(400).json({ message: "0<=promotion<=100" })
+//     }
+//     ServiceSalon.getAllServiceSalon(salonId, function (data) {
+//         if (data.length >= 30) {
+//             return res.status(400).json({ message: "salon của bạn có thể tạo tối đa 30 services", data: [] })
+//         }
+//         else {
+//             try {
+//                 ServiceSalon.addServiceSalon(dataService, function (data) {
+//                     // res.json({ data: data, message: "add service fail" });
+//                     if (data == null) {
+//                         res.status(400).json({ data: data, message: "add service fail" });
+//                     } else {
+//                         if (data.length == 0) {
+//                             res.status(400).json({ data: data, message: "add service failed" });
+//                         } else {
+//                             var dataImage = {
+//                                 serviceId: data.id,
+//                                 image: image
+//                             };
+//                             ImageService.addImageService(dataImage, function (data) {
 
-                            })
-                            data = { image: image, ...data };
-                            res.json({ data: data, message: "add service success" });
-                        }
-                    }
-                });
-            } catch (error) {
-                res.status(400).json({ data: error, message: "add service fail" });
-            }
-        }
+//                             })
+//                             data = { image: image, ...data };
+//                             res.json({ data: data, message: "add service success" });
+//                         }
+//                     }
+//                 });
+//             } catch (error) {
+//                 res.status(400).json({ data: error, message: "add service fail" });
+//             }
+//         }
 
-    })
+//     })
     
-    } catch (err) {
-        console.log(err);
+//     } catch (err) {
+//         console.log(err);
 
-        if (err.code == "LIMIT_FILE_SIZE") {
-            return res.status(500).send({
-                message: "File size cannot be larger than 2MB!",
-            });
-        }
+//         if (err.code == "LIMIT_FILE_SIZE") {
+//             return res.status(500).send({
+//                 message: "File size cannot be larger than 2MB!",
+//             });
+//         }
 
-        res.status(500).send({
-            message: `Could not upload the file: ${req.file}. ${err}`,
-        });
-    }
+//         res.status(500).send({
+//             message: `Could not upload the file: ${req.file}. ${err}`,
+//         });
+//     }
 
-}
+// }
 
 
 // van chua xong delete service vi thieu register service

@@ -108,7 +108,9 @@ SalonOwner.getProfileAllSalon = function (result) {
         on temp.salonId=swp490_g11.image_salon.salonId
         left join swp490_g11.feedback
         on temp.salonId = swp490_g11.feedback.salonId
-        group by salonId`, (err, rows, fields) => {
+        group by salonId
+        order by (star) desc
+        `, (err, rows, fields) => {
         if (err) {
 
             result(null, err);

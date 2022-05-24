@@ -87,15 +87,15 @@ Account.checkPassword = function (acc,pass, result) {
         }
     });
 };
-Account.removeAccount = function (id, result) {
-    db.query(`delete from account where account_id = ${id}`, (err, rows, fields) => {
-        if (err) {
-            result(null, err)
-        } else {
-            result("xoa account co account_id =" + id + " thanh cong");
-        }
-    });
-}
+// Account.removeAccount = function (id, result) {
+//     db.query(`delete from account where account_id = ${id}`, (err, rows, fields) => {
+//         if (err) {
+//             result(null, err)
+//         } else {
+//             result("xoa account co account_id =" + id + " thanh cong");
+//         }
+//     });
+// }
 Account.updatePasswordAccount= function (id,md5_new_pass, result) {
     console.log(md5_new_pass)
     var password='abc'

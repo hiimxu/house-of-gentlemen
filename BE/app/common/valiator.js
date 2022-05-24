@@ -24,6 +24,17 @@ exports.validateCreateAccountCustomer = () => {
 
     ];
 }
+exports.addImgaeFirebase = function () {
+    return [
+        body('name').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('image:min lenght 1,max lenght 45'),
+        body('price').not().isEmpty().isInt().withMessage("price : number"),
+        body('service_time').not().isEmpty().isInt().withMessage("service_time: number"),
+        body('promotion').not().isEmpty().isInt().withMessage("promotion: number"),
+        body('content').not().isEmpty().isLength({ min: 1, max: 2000 }).withMessage('content:min lenght 1,max lenght 2000'),
+        body('description').not().isEmpty().isLength({ min: 1, max: 200 }).withMessage('description:min lenght 1,max lenght 200'),
+      
+    ];
+}
 exports.searchSalon = function () {
     return [
         body('name').isLength({ min: 0, max: 45 }).withMessage('name:min lenght 0,max lenght 45'),

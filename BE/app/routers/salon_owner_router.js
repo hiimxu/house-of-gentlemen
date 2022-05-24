@@ -30,7 +30,7 @@ router.get('/imageSalon/',auth,cors(),imageSalonController.getImageSalon);
 router.post('/create/imageToImageSalon',validate.addImageToImageSalon(),cors(),auth,imageSalonController.addImageToImageSalon);
 router.delete('/delete/imageOfImageSalon/:id',validate.checkId(),cors(),auth,imageSalonController.deleteImageOfImageSalon);
 router.post('/create/service',validate.addServiceSalon(),cors(),auth,serviceController.addServiceSalon);
-router.post('/create/serviceUploadImage',validate.addServiceSalon(),cors(),auth,serviceController.addServiceSalonImage);
+// router.post('/create/serviceByFirebase',validate.addServiceSalon(),cors(),auth,serviceController.addServiceSalonImage);
 router.delete('/delete/service/:idService',cors(),auth,serviceController.deleteServiceSalon);// khong lam delete service
 router.get('/get/Service/',auth,cors(),serviceController.getServiceOfSalon);
 router.put('/update/Service/:idService',validate.updateServiceSalon(),cors(),auth,serviceController.updateServiceSalon);
@@ -42,12 +42,12 @@ router.get('/imageService/:id',validate.checkId(),cors(),imageServiceController.
 router.delete('/delete/imageService/:id',validate.checkId(),cors(),auth,imageServiceController.deleteImageService);
 router.post('/createFeedBackBySalon',validate.addFeedBackBySalon(),auth,cors(),feedbackController.addFeedBackBySalon);
 router.get('/getFeedbackOfSalon/',cors(),auth,feedbackController.getFeedbackOfSalon);
-router.delete('/delete/feedback/:id',validate.deleteFeedbackBySalon(),auth,cors(),feedbackController.deleteFeedbackBySalon);
-router.put('/update/feedback/:id',validate.updateFeedback(),cors(),auth,feedbackController.updateFeedbackBySalon);
-router.post('/create/feedBackDetailBySalon',validate.addFeedBackDetailBySalon(),auth,cors(),feedbackDetailController.addFeedBackDetailBySalon);
-router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number"),cors(),feedbackDetailController.getFeedbackDetail);
-router.delete('/delete/feedbackdetail/:id',validate.deleteFeedbackDetailByFeedbackDetailIdBySalon(),cors(),auth,feedbackDetailController.deleteFeedbackDetailByFeedbackDetailIdBySalon);
-router.put('/update/feedbackdetail/:id',validate.updateFeedbackDetailBySalon(),cors(),auth,feedbackDetailController.updateFeedbackDetailBySalon);
+// router.delete('/delete/feedback/:id',validate.deleteFeedbackBySalon(),auth,cors(),feedbackController.deleteFeedbackBySalon);
+// router.put('/update/feedback/:id',validate.updateFeedback(),cors(),auth,feedbackController.updateFeedbackBySalon);
+// router.post('/create/feedBackDetailBySalon',validate.addFeedBackDetailBySalon(),auth,cors(),feedbackDetailController.addFeedBackDetailBySalon);
+// router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number"),cors(),feedbackDetailController.getFeedbackDetail);
+// router.delete('/delete/feedbackdetail/:id',validate.deleteFeedbackDetailByFeedbackDetailIdBySalon(),cors(),auth,feedbackDetailController.deleteFeedbackDetailByFeedbackDetailIdBySalon);
+// router.put('/update/feedbackdetail/:id',validate.updateFeedbackDetailBySalon(),cors(),auth,feedbackDetailController.updateFeedbackDetailBySalon);
 router.get('/staff/',cors(),auth,staffController.getStaff);
 router.post('/create/staff',validate.validateStaff(),auth,cors(),staffController.addStaff);
 router.put('/update/staff/:id',validate.updateStaff(),auth,cors(),staffController.updateStaff);
