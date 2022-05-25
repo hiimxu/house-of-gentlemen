@@ -283,6 +283,18 @@ exports.updateServiceSalon = function () {
         body('image').not().isEmpty().isLength({ min: 1, max: 450 }).withMessage('image:min lenght 1,max lenght 450'),
     ];
 }
+exports.updateServiceSalonByFireBase = function () {
+    return [
+        body('name').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('name:min lenght 1,max lenght 45'),
+        param('idService').not().isEmpty().isInt().withMessage("idService:number"),
+        body('price').not().isEmpty().isInt().withMessage("price : number"),
+        body('service_time').not().isEmpty().isInt().withMessage("service_time: number"),
+        body('promotion').not().isEmpty().withMessage("not empty").isInt().withMessage("promotion: number"),
+        body('content').not().isEmpty().withMessage("content not empty").isLength({ min: 1, max: 2000 }).withMessage('content:min lenght 1,max lenght 2000'),
+        body('description').not().isEmpty().withMessage("description not empty").isLength({ min: 1, max: 200 }).withMessage('description:min lenght 1,max lenght 200'),
+      
+    ];
+}
 exports.addCategoryService = function () {
     return [
         body('categoryId').not().isEmpty().isInt().withMessage("categoryId:number and not empty"),
