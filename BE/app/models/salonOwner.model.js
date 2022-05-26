@@ -192,7 +192,8 @@ SalonOwner.searchSalon = function (name, result) {
         left join swp490_g11.feedback
         on temp.salonId=swp490_g11.feedback.salonId
         where temp.nameSalon  LIKE CONCAT('%', CONVERT('${name}', BINARY),'%')
-        group by salonId`, name, (err, rows, fields) => {
+        group by salonId
+        order by (star) desc`, name, (err, rows, fields) => {
         if (err) {
             result(err);
         } else {
