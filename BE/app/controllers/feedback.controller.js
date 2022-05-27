@@ -68,6 +68,10 @@ exports.getFeedbackOfSalon = function (req, res, next) {
 }
 exports.getFeedbackOfSalonByCustomer = function (req, res, next) {
     var id = req.params.id;
+    var customerId= req.user.customerId;
+    if (customerId==null) {
+       return res.status(400).json({message:"please login account customer"});
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
@@ -344,17 +348,25 @@ exports.addFeedBackByCustomer = function (req, res, next) {
         return res.status(400).json({message: "please check rate" });
     }
     try {
-        FeedBack.addFeedBackByCustomer(dataFeedBack, function (data) {
-            if (data == null) {
-                res.status(400).json({ data: data, message: "add feedback failed" });
-            } else {
-                if (data.length == 0) {
-                    res.status(400).json({ data: data, message: "add feedback failed" });
-                } else {
-                    res.json({ data: data, message: "add feedback success" });
-                }
+        FeedBack.checkFeedBackofSalonByCustomer(dataFeedBack.salonId,dataFeedBack.customerId,function (data){
+            if (data.length>=1) {
+                return res.status(400).json({message:"khách hàng chỉ được vote 1 lần cho mỗi salon "})
+            }else{
+                FeedBack.addFeedBackByCustomer(dataFeedBack, function (data) {
+                    if (data == null) {
+                        res.status(400).json({ data: data, message: "add feedback failed" });
+                    } else {
+                        if (data.length == 0) {
+                            res.status(400).json({ data: data, message: "add feedback failed" });
+                        } else {
+                            res.json({ data: data, message: "add feedback success" });
+                        }
+                    }
+                });
+
             }
-        });
+        })
+        
     } catch (error) {
         res.status(400).json({ data: error, message: "add feedback failed" });
     }
@@ -400,17 +412,26 @@ exports.getFeedbackByStarByCustomer = function (req, res, next) {
     
     var salonId=req.body.salonId;
     var star = req.body.star;
+    var customerId=req.user.customerId;
+    if (customerId==null) {
+        return res.status(400).json({data:[],message:"please login account customer"});
+     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });
     }
-    FeedBack.getFeedbackByStar(salonId,star, function (data){
-        if (data.length == 0) {
-            res.status(200).json({ data: data, message: "not have feedback" });
-        } else {
-            res.json({ data: data, message: "get feedback success" });
-        }
+    FeedBack.getFeedbackOfSalonByCustomer(salonId,customerId,star, function (data){
+        var dataAccount=data;
+        FeedBack.getFeedbackByStar(salonId,star, function (data){
+            if (data.length == 0) {
+                res.status(200).json({message: "not have feedback" });
+            } else {
+                res.json({dataAccount: dataAccount, data, message: "get feedback success" });
+            }
+        })
+
     })
+    
 }
 exports.getFeedbackByStarByAdmin = function (req, res, next) {
     var user = req.user

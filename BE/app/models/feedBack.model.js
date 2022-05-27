@@ -168,4 +168,55 @@ Feedback.getVoteOfSalon = function (id,result){
     });
 }
 
+Feedback.checkFeedBackofSalonByCustomer= function (idSalon,customerId,result) {
+   
+    db.query(`SELECT * FROM swp490_g11.feedback where salonId='${idSalon}' and customerId='${customerId}'`, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            result(null,err);
+        } else {
+            data = rows;
+            result(data);
+        }
+    });
+
+}
+Feedback.getFeedbackOfSalonByCustomer= function (idSalon,customerId,star,result) {
+   
+    var rate=star*2;
+    var rate2=rate-1;
+    
+    if (star=='') {
+        db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
+        left join swp490_g11.customer
+        on swp490_g11.customer.customerId=swp490_g11.feedback.customerId
+        where salonId='${idSalon}'and swp490_g11.feedback.customerId='${customerId}'
+        order by (swp490_g11.feedback.dateCreate) desc  `, (err, rows, fields) => {
+            if (err) {
+               
+                result(err);
+            } else {
+                data = rows;
+                result(data);
+            }
+        });
+    }
+    else{
+        db.query(`SELECT swp490_g11.feedback.feedBackId,swp490_g11.feedback.customerId,swp490_g11.feedback.salonId,swp490_g11.feedback.content,swp490_g11.feedback.rate,swp490_g11.feedback.wsend,swp490_g11.feedback.dateCreate,swp490_g11.customer.nameCustomer,swp490_g11.customer.phone FROM swp490_g11.feedback
+        left join swp490_g11.customer
+        on swp490_g11.customer.customerId=swp490_g11.feedback.customerId
+         where salonId='${idSalon}'and swp490_g11.feedback.customerId='${customerId}' and (rate='${rate}' or rate='${rate2}')
+         order by (swp490_g11.feedback.dateCreate) desc`, (err, rows, fields) => {
+            if (err) {
+               
+                result(err);
+            } else {
+                data = rows;
+                result(data);
+            }
+        });
+    }
+}
+
+
 module.exports =Feedback;

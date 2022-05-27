@@ -36,7 +36,7 @@ router.put('/update/feedback/:id',validate.updateFeedbackByCustomer(),cors(),aut
 router.post('/create/feedbackdetailbycustomer',validate.addFeedBackDetailByCustomer(),cors(),auth,feedbackDetailController.addFeedBackDetailByCustomer);
 router.delete('/delete/feedbackdetail/:id',validate.checkId(),cors(),auth,feedbackDetailController.deleteFeedbackDetailByFeedbackDetailId);
 router.put('/update/feedbackDetail/:id',validate.updateFeedbackDetail(),cors(),auth,feedbackDetailController.updateFeedbackDetailByCustomer);
-router.get('/getFeedbackOfSalon/:id',validate.checkId(),cors(),feedbackController.getFeedbackOfSalonByCustomer);
+router.get('/getFeedbackOfSalon/:id',validate.checkId(),cors(),auth,feedbackController.getFeedbackOfSalonByCustomer);
 router.get('/getFeedbackDetail/:feedBackId',param('feedBackId').not().isEmpty().isInt().withMessage("is number and not empty"),cors(),feedbackDetailController.getFeedbackDetail);
 router.get('/get/AllSalon',cors(),salonOwnerController.getAllSalon);
 router.get('/get/AllServicePossible',cors(),serviceController.getAllServicePossible);
@@ -59,7 +59,7 @@ router.get('/get/historyBooking',auth,cors(),registerServiceController.historyBo
 router.get('/get/reservation',auth,cors(),registerServiceController.reservation);
 router.post('/searchsalon',cors(),validate.searchSalon(),salonOwnerController.searchSalon);
 router.get('/get/check/',cors(),registerServiceController.check);
-router.post('/get/feedbackByStar',validate.getFeedbackByStarByCustomer(),cors(),feedbackController.getFeedbackByStarByCustomer);
+router.post('/get/feedbackByStar',validate.getFeedbackByStarByCustomer(),cors(),auth,feedbackController.getFeedbackByStarByCustomer);
 router.post('/get/voteOfSalon',validate.getVoteOfSalonByCustomer(),cors(),feedbackController.getVoteOfSalonByCustomer);
 router.post('/get/homePage',cors(),salonOwnerController.getHomePage); 
 module.exports = router;

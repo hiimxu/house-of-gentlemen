@@ -60,6 +60,15 @@ Service.getAllService= function (result) {
         }
     });
 }
+Service.checkService = function (id,result) {
+    db.query(`select* from service where serviceId='${id}'`, (err, rows, fields) => {
+        if (err) {
+            result(null, err)
+        } else {
+            result(rows);
+        }
+    });
+}
 Service.getAllServiceSalon= function (id,result) {
     db.query(`SELECT swp490_g11.service.serviceId,swp490_g11.service.salonId,swp490_g11.service.name,swp490_g11.service.price,swp490_g11.service.description,swp490_g11.service.content,swp490_g11.service.promotion,swp490_g11.service.service_time,swp490_g11.service.possible,swp490_g11.image_service.image FROM swp490_g11.service
     left join swp490_g11.image_service
