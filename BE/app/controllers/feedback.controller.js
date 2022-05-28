@@ -414,7 +414,7 @@ exports.getFeedbackByStarByCustomer = function (req, res, next) {
     var star = req.body.star;
     var customerId=req.user.customerId;
     if (customerId==null) {
-        return res.status(400).json({data:[],message:"please login account customer"});
+        return res.status(400).json({message:"please login account customer"});
      }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -426,6 +426,12 @@ exports.getFeedbackByStarByCustomer = function (req, res, next) {
             if (data.length == 0) {
                 res.status(200).json({message: "not have feedback" });
             } else {
+                for (let index = 0; index < data.length; index++) {
+                  if (data[index].customerId==customerId) {
+                      data.splice(index,1)
+                  }
+                    
+                }
                 res.json({dataAccount: dataAccount, data, message: "get feedback success" });
             }
         })
