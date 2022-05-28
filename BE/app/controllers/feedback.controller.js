@@ -282,8 +282,8 @@ exports.updateFeedbackByCustomer = function (req, res, next) {
     };
     dataOk ={id,...dataUpdate}
     wsend='customer';
-    var dateUpdate = new Date();
-    dataUpdate = { dateUpdate: dateUpdate, ...dataUpdate };
+    var dateCreate = new Date();
+    dataUpdate = { dateCreate: dateCreate, ...dataUpdate };
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(),message:"error validate" });

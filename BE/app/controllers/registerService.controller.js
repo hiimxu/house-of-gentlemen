@@ -107,7 +107,7 @@ exports.addRegisterService = function (req, res, next) {
         RegisterService.checkBooking(customerId, function (data){
         
             if (data.length>=5) {
-                res.json({ data: [], message: "You are only allowed to book up to 5 times in advance"})
+                res.json({ message: "You are only allowed to book up to 5 times in advance"})
             } else {
                 Service.checkService(dataRegisterService.serviceId,function (data){
                     var promotion = data[0].promotion;

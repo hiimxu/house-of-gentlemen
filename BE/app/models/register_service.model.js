@@ -172,7 +172,8 @@ Register_service.historyBooking=function(id,result){
         on t.serviceId=swp490_g11.image_service.serviceId
        where t.nameStatus like 'cancelled' or t.nameStatus like 'finished'
         group by t.registerServiceId
-        order by t.timeUse desc;
+        order by t.timeUse desc
+        limit 15;
         `,id,(err, rows, fields) => {
         if (err) {
             result(null,err);
