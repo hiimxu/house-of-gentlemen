@@ -31,7 +31,7 @@ exports.addFeedBackBySalon = function (req, res, next) {
                 if (data == null) {
                     res.status(400).json({ data: data, message: "add feedback failed" });
                 } else {
-                    res.json({ data: data, message: "add feedback success" });
+                    res.json({ data: data, message: "Bình luận thành công" });
                 }
             });
         } catch (error) {
@@ -150,7 +150,7 @@ exports.deleteFeedbackBySalon = function (req, res, next) {
                                     if (data.affectedRows == 0) {
                                         res.status(400).json({ data: data, message: "not have feedback to delete" });
                                     } else {
-                                        res.json({ data: {id:id}, message: "delete feedback success" });
+                                        res.json({ data: {id:id}, message: "Xóa thành công" });
                                     }
                 
                                 }
@@ -255,7 +255,7 @@ exports.updateFeedbackBySalon = function (req, res, next) {
                                 if (data.affectedRows==0) {
                                     res.status(400).json({ data: data, message: "check id feedback to update" });
                                 } else {
-                                    res.json({ data: dataOk, message: "update feedback success" });
+                                    res.json({ data: dataOk, message: "Bình luận thành công" });
                                 }
                 
                             }

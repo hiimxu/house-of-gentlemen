@@ -100,7 +100,7 @@ app.post("/api/salonowner/createServiceByFirebase", cors(), auth, async (req, re
             possible: 1
         }
         if (parseInt(dataService.promotion) > 100 || parseInt(dataService.promotion) < 0) {
-            return res.status(400).json({ message: "0<=promotion<=100" })
+            return res.status(400).json({ message: "kiểm tra lại thông tin khuyến mãi" })
         }
 
         ServiceSalon.getAllServiceSalon(salonId, function (data) {
@@ -112,10 +112,10 @@ app.post("/api/salonowner/createServiceByFirebase", cors(), auth, async (req, re
                     ServiceSalon.addServiceSalon(dataService, function (data) {
                         // res.json({ data: data, message: "add service fail" });
                         if (data == null) {
-                            res.status(400).json({ data: data, message: "add service fail" });
+                            res.status(400).json({ data: data, message: "tạo dịch vụ thất bại" });
                         } else {
                             if (data.length == 0) {
-                                res.status(400).json({ data: data, message: "add service failed" });
+                                res.status(400).json({ data: data, message: "tạo dịch vụ thất bại" });
                             } else {
                                 var dataImage = {
                                     serviceId: data.id,
@@ -125,12 +125,12 @@ app.post("/api/salonowner/createServiceByFirebase", cors(), auth, async (req, re
 
                                 })
                                 data = { image: image, ...data };
-                                res.json({ data: data, message: "add service success" });
+                                res.json({ data: data, message: "tạo dịch vụ thành công" });
                             }
                         }
                     });
                 } catch (error) {
-                    res.status(400).json({ data: error, message: "add service fail" });
+                    res.status(400).json({ data: error, message: "tạo dịch vụ thất bại" });
                 }
             }
 
@@ -196,7 +196,7 @@ app.put("/api/salonowner/editServiceByFirebase/:idService", cors(), auth, async 
 
         var dataOk = { id, image, ...dataUpdate }
         if (parseInt(dataUpdate.promotion) > 100 || parseInt(dataUpdate.promotion) < 0) {
-            return res.status(400).json({ message: "0<=promotion<=100" })
+            return res.status(400).json({ message: "kiểm tra lại thông tin khuyến mãi" })
         }
 
         ServiceSalon.checkPermission(id, salonId, function (data) {
@@ -208,17 +208,17 @@ app.put("/api/salonowner/editServiceByFirebase/:idService", cors(), auth, async 
                         ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
 
                             if (data == null || data.affectedRows == 0) {
-                                res.status(400).json({ message: "update service fail" });
+                                res.status(400).json({ message: "cập nhập dịch vụ thất bại" });
                             } else {
 
-                                res.json({ data: dataOk, message: "update service success" });
+                                res.json({ data: dataOk, message: "cập nhập dịch vụ thành công" });
                             }
                         });
 
                     })
 
                 } catch (error) {
-                    res.status(400).json({ data: error, message: "update service fail" });
+                    res.status(400).json({ data: error, message: "cập nhập dịch vụ thất bại" });
                 }
             }
         });
@@ -284,7 +284,7 @@ app.post("/api/account/register/salon", cors(), async (req, res) => {
         var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
         var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
         if (checkTimeOpen.getHours() > checkTimeClose.getHours() || (checkTimeOpen.getHours() == checkTimeClose.getHours() && checkTimeOpen.getMinutes() > checkTimeClose.getMinutes())) {
-            return res.status(400).json({ message: "time open <time close" });
+            return res.status(400).json({ message: "kiểm tra thời gian mở cửa và thời gian đóng cửa" });
         }
         var dtime = checkTimeClose - checkTimeOpen;
         var totalSlot = dtime / (60000 * 15);
@@ -296,7 +296,7 @@ app.post("/api/account/register/salon", cors(), async (req, res) => {
         try {
             var check = Account.checkAccount(acc, function (data) {
                 if (data.length == 1) {
-                    res.status(400).json({ data: "Account already exists", message: "Account already exists" });
+                    res.status(400).json({  message: "Tài khoản đã tồn tại" });
                 }
                 else {
                     if (rol == 'salon') {
@@ -326,7 +326,7 @@ app.post("/api/account/register/salon", cors(), async (req, res) => {
                                         if (data == null) {
                                             return res.status(400).json({ message: "mysql error" })
                                         } else {
-                                            res.json({ data_account: data_account, dataSalon: dataSalon, dataAddress: data, message: "Create account salon success" });
+                                            res.json({ data_account: data_account, dataSalon: dataSalon, dataAddress: data, message: "Đăng kí thành công" });
                                         }
                                     })
     
@@ -334,12 +334,12 @@ app.post("/api/account/register/salon", cors(), async (req, res) => {
                             });
                         });
                     } else {
-                        res.status(400).json({ message: "Create account salon failed" })
+                        res.status(400).json({ message: "Đăng kí thất bại" })
                     }
                 }
             });
         } catch (error) {
-            res.status(400).json({ data: error, message: "Create account success" });
+            res.status(400).json({ data: error, message: "Đăng kí thất bại" });
         }
 
 

@@ -283,7 +283,7 @@ exports.updateServiceSalon = function (req, res, next) {
     var image = req.body.image;
     var dataOk = { id, image, ...dataUpdate }
     if (parseInt(dataUpdate.promotion) > 100 || parseInt(dataUpdate.promotion) < 0) {
-        return res.status(400).json({ message: "0<=promotion<=100" })
+        return res.status(400).json({ message: "kiểm tra lại thông tin khuyến mãi" })
     }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -299,17 +299,17 @@ exports.updateServiceSalon = function (req, res, next) {
                     ServiceSalon.updateServiceSalon(id, dataUpdate, function (data) {
 
                         if (data == null || data.affectedRows == 0) {
-                            res.status(400).json({ data: data, message: "update service fail" });
+                            res.status(400).json({ data: data, message: "cập nhập dịch vụ thất bại" });
                         } else {
 
-                            res.json({ data: dataOk, message: "update service success" });
+                            res.json({ data: dataOk, message: "cập nhập dịch vụ thành công" });
                         }
                     });
 
                 })
 
             } catch (error) {
-                res.status(400).json({ data: error, message: "update service fail" });
+                res.status(400).json({ data: error, message: "cập nhập dịch vụ thất bại" });
             }
         }
     });

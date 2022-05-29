@@ -212,7 +212,7 @@ exports.salonBusinessInformation = function (req, res, next) {
     var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
     var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
     if (checkTimeOpen.getHours() > checkTimeClose.getHours() || (checkTimeOpen.getHours() == checkTimeClose.getHours() && checkTimeOpen.getMinutes() > checkTimeClose.getMinutes())) {
-        return res.status(400).json({ message: "time open <time close" });
+        return res.status(400).json({ message: "kiểm tra thời gian mở cửa và thời gian đóng cửa của salon" });
     }
     var accountId = req.user.account_id;
     var dataUpdate = {
@@ -242,13 +242,13 @@ exports.salonBusinessInformation = function (req, res, next) {
                 SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
 
                     if (data == null) {
-                        res.status(400).json({ data: data, message: "update salon 's profile failed" });
+                        res.status(400).json({ data: data, message: "Thay đổi thông tin thất bại" });
                     }
                     else {
                         if (data.affectedRows == 0) {
                             res.status(400).json({ data: data, message: "not have salon 's profile to update" });
                         } else {
-                            res.json({ data: dataOk, message: "update salon 's profile success" });
+                            res.json({ data: dataOk, message: "Thay đổi thông tin thành công" });
                         }
                     }
                 });

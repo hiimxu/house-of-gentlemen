@@ -85,10 +85,10 @@ if (req.user== null) {
                     var id = data[0].account_id;
 
                     var data = Account.updatePasswordAccount(id, md5_new_pass, function (response) {
-                        return res.json({ message: "update password success", data: dataOk });
+                        return res.json({ message: "Thay đổi mật khẩu thành công", data: dataOk });
                     });
                 } else {
-                    return res.status(400).json({ message: "check old_password " });
+                    return res.status(400).json({ message: "Kiểm tra lại mật khẩu hiện tại " });
                 }
             })
 
@@ -108,7 +108,7 @@ exports.login_account = function async(req, res, next) {
     var md5_pass = md5(pass);
     Account.checkAccount(acc, function (data) {
         if (data.length == 0) {
-            return res.status(400).json({ message: "Account not exist, please check account" });
+            return res.status(400).json({ message: "Tài khoản không tồn tại" });
 
         }
         else {
@@ -119,7 +119,7 @@ exports.login_account = function async(req, res, next) {
                         return res.status(400).json({ data: data, datauser: message, message: "login failed" });
                     } else {
                         if (data.length == 0) {
-                            return res.status(400).json({ data: data, userData: { message: "empty" }, message: "password wrong,please check password" });
+                            return res.status(400).json({ data: data, userData: { message: "empty" }, message: "Sai mật khẩu" });
                         } else {
 
                             var redata = data;
@@ -238,7 +238,7 @@ exports.add_account_customer = function (req, res, next) {
     try {
         var check = Account.checkAccount(acc, function (data) {
             if (data.length == 1) {
-                res.status(400).json({ message: "Account already exists" });
+                res.status(400).json({ message: "Tài khoản đã tồn tại" });
             }
             else {
                 if (rol == 'customer') {
@@ -252,19 +252,19 @@ exports.add_account_customer = function (req, res, next) {
                         Customer.createCustomer(save_customer, function (data) {
 
                             if (data == null) {
-                                res.status(400).json({ data: data, message: "create account customer failed" });
+                                res.status(400).json({message: "Đăng kí thất bại" });
                             } else {
-                                res.json({ account: data_account, data: data, message: "create account customer success" });
+                                res.json({ account: data_account, data: data, message: "Đăng kí thành công" });
                             }
                         });
                     });
                 } else {
-                    res.status(400).json({ message: "create account customer failed see role:customer" });
+                    res.status(400).json({ message: "Đăng kí thất bại" });
                 }
             }
         });
     } catch (error) {
-        res.status(400).json({ data: error, message: "create account failed" });
+        res.status(400).json({ message: "Đăng kí thất bại" });
     }
 }
 exports.add_account_salon = function (req, res, next) {
@@ -424,7 +424,7 @@ exports.forgotPassword = async function (req, res, next) {
             var id = data[0].account_id;
             var email = data[0].email;
             if (!(email == emailcheck)) {
-                return res.status(400).json({ message: "check your email" });
+                return res.status(400).json({ message: "Địa chỉ email của bạn không chính xác!" });
 
             }
             var new_password = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
@@ -490,7 +490,7 @@ exports.forgotPassword = async function (req, res, next) {
         }
         else {
 
-            res.status(400).json({ data: "Account not exists", message: "Account not exists" });
+            res.status(400).json({  message: "Tài khoản không tồn tại" });
         }
     })
 
