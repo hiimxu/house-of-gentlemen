@@ -69,7 +69,7 @@ SalonOwner.getProfileSalonBySalonId = function (id, result) {
     ,swp490_g11.salonowner.phone
     ,swp490_g11.salonowner.taxCode,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose
     ,swp490_g11.address.city,swp490_g11.address.district,swp490_g11.address.detailAddress
-    ,swp490_g11.account.email,swp490_g11.account.account_id,swp490_g11.image_salon.image,swp490_g11.salonowner.description,avg(rate)/2 as AverangeVote,swp490_g11.salonowner.nameOwner,count(rate)/2 as TotalVote 
+    ,swp490_g11.account.email,swp490_g11.account.account_id,swp490_g11.image_salon.image,swp490_g11.salonowner.description,avg(rate)/2 as AverangeVote,swp490_g11.salonowner.nameOwner,count(rate) as TotalVote 
      FROM swp490_g11.salonowner
     left join swp490_g11.address
     on swp490_g11.salonowner.salonId=swp490_g11.address.salonId
