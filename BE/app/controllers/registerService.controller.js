@@ -80,7 +80,7 @@ exports.addRegisterService = function (req, res, next) {
     var fiveDate = new Date();
     fiveDate.setDate(fiveDate.getDate() + 5);
     if (date < new Date() || date > fiveDate) {
-        return res.status(400).json({ message: "timeUse within 5days " })
+        return res.status(400).json({ message: "thời gian sử dụng dịch vuk trong vòng 5 ngày " })
     }
     var salonId= req.body.salonId;
 
@@ -107,9 +107,13 @@ exports.addRegisterService = function (req, res, next) {
         RegisterService.checkBooking(customerId, function (data){
         
             if (data.length>=5) {
-                res.json({ message: "You are only allowed to book up to 5 times in advance"})
+                res.json({ message: "bạn chỉ được phép đặt trước tối đa 5 dịch vụ"})
             } else {
                 Service.checkService(dataRegisterService.serviceId,function (data){
+                    if (data[0].possible==0) {
+                        res.status(400).json({ message:"dịch vụ này đã bị xóa,vui lòng chọn dịch vụ khác để booking"})
+                    }
+                   else{
                     var promotion = data[0].promotion;
                     SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
                         var timeCloseDay = data[0].timeClose;
@@ -139,7 +143,7 @@ exports.addRegisterService = function (req, res, next) {
                                     }
                                 }
                                 if (check > 0) {
-                                    return res.status(400).json({ message: "staff busy" });
+                                    return res.status(400).json({ message: "staff bận" });
                                 }
                                 else {
                 
@@ -155,7 +159,7 @@ exports.addRegisterService = function (req, res, next) {
                                         }
                                         RegisterService.dataBooking(data.registerServiceId, function (data){
                                             data={promotion,...data[0]}
-                                            return res.status(200).json({ data, message: "booking success" });
+                                            return res.status(200).json({ data, message: "booking thành công" });
                 
                                         })
                                         
@@ -171,6 +175,9 @@ exports.addRegisterService = function (req, res, next) {
                         }
                 
                     })
+
+                   }
+                    
                 })
                 
             }

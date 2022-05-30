@@ -369,7 +369,7 @@ exports.setDeactiveSalon = function (req, res, next) {
                         return res.status(400).json({data:[],message:"check token email"})
                     } else {
                         console.log('Success:', result)
-                        res.json({ data: { email: email,salonId:salonId }, message: "deactive success and send a email to salon" })
+                        res.json({ data: { email: email,salonId:salonId }, message: "đã ngưng hoạt động cho salon và gửi email thông báo đến chủ salon" })
                     }
                     transport.close();
                    
@@ -436,7 +436,7 @@ exports.setActiveSalon = function (req, res, next) {
                         return res.status(400).json({data:[],message:"check token email"})
                     } else {
                         console.log('Success:', result)
-                        res.json({ data: { email: email,salonId:salonId, joinDate:joinDate}, message: "active success and send a email to salon" })
+                        res.json({ data: { email: email,salonId:salonId, joinDate:joinDate}, message: "kích hoạt thành công , gửi email thông báo đến chủ salon" })
                     }
                     transport.close();
                    
@@ -500,7 +500,7 @@ exports.deleteSalon = function (req, res, next) {
                         return res.status(400).json({data:[],message:"check token email"})
                     } else {
                         console.log('Success:', result)
-                        res.json({ data: { email: email,salonId:salonId}, message: "delete success and send a email to salon" })
+                        res.json({ data: { email: email,salonId:salonId}, message: "từ chối thành công, đã gửi email thông báo đến chủ salon" })
                     }
                     transport.close();
                    
