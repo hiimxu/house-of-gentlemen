@@ -355,7 +355,7 @@ exports.bookingServiceForCustomer = function (req, res, next) {
                                         })
                                     }
                                     data={promotion,...data}
-                                    return res.status(200).json({ data, message: "booking success" });
+                                    return res.status(200).json({ data, message: "booking thành công" });
                                 })
             
             

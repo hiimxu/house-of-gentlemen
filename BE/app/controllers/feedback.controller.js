@@ -197,7 +197,7 @@ exports.deleteFeedbackByCustomer = function (req, res, next) {
                                     if (data.affectedRows == 0) {
                                         res.status(400).json({ data: data, message: "not have feedback to delete" });
                                     } else {
-                                        res.json({ data: {id:id}, message: "delete feedback success" });
+                                        res.json({ data: {id:id}, message: "xóa đánh giá thành công" });
                                     }
                 
                                 }
@@ -309,7 +309,7 @@ exports.updateFeedbackByCustomer = function (req, res, next) {
                                 if (data.affectedRows==0) {
                                     res.status(400).json({ data: data, message: "check id feedback to update" });
                                 } else {
-                                    res.json({ data: dataUpdate, message: "update feedback success" });
+                                    res.json({ data: dataUpdate, message: "cập nhập phản hồi thành công" });
                                 }
                 
                             }
@@ -359,7 +359,7 @@ exports.addFeedBackByCustomer = function (req, res, next) {
                         if (data.length == 0) {
                             res.status(400).json({ data: data, message: "add feedback failed" });
                         } else {
-                            res.json({ data: data, message: "add feedback success" });
+                            res.json({ data: data, message: "tạo phản hồi thành công" });
                         }
                     }
                 });

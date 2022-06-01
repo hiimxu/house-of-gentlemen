@@ -40,11 +40,11 @@ const upload = multer({
 var uploadFileMiddleware = util.promisify(upload);
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-console.log(process.env.TOKEN_KEY);
-console.log(process.env.API_KEY);
+
 const port = 8080;
 const cors = require('cors');
 app.use(express.static('uploads'));
+
 
 app.use(cors());
 app.options('*', cors());
