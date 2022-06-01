@@ -331,7 +331,7 @@ exports.getAllServiceSalon = function (req, res, next) {
                     res.status(400).json({ data: data, message: "get service fail" });
                 } else {
                     if (data.length == 0) {
-                        res.status(400).json({ data: data, message: "not have service" });
+                        res.status(200).json({  dataSalon: dataSalon,data: data, message: "not have service" });
                     } else {
 
                         res.json({ dataSalon: dataSalon, data: data, message: "get service success" });

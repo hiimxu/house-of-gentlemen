@@ -456,6 +456,95 @@ app.put("/api/salonowner/update/salonBusinessInformationByFireBase/", cors(), au
     }
 
 });
+app.put("/api/salonowner/update/salonInformationFirebase", cors(), auth, async (req, res) => {
+    try {
+        var salonId = req.user.salonId;
+        if (salonId == null) {
+            return res.status(400).json({ message: "please login account salon" });
+        }
+        await uploadFileMiddleware(req, res);
+        const file = req.file;
+        const nameImage = salonId + '-' + Date.now() + '-' + file.originalname;
+        const imageRef = ref(storage, nameImage);
+        const metatype = { contentType: file.mimetype, name: file.originalname };
+        await uploadBytes(imageRef, file.buffer, metatype)
+            .then((snapshot) => {
+                // res.send("uploaded!");
+            })
+            .catch((error) => console.log(error.message));
+        const listRef = ref(storage);
+        var image;
+        await listAll(listRef)
+            .then((pics) => {
+                productPictures = pics.items.map((item) => {
+                    if (item._location.path_ == nameImage) {
+                        const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${item._location.bucket}/o/${item._location.path_}?alt=media`;
+                        image = publicUrl;
+                        return {
+                            url: publicUrl,
+                            // name: item._location.path_,
+                        };
+                    }
+                });
+
+            })
+            .catch((error) => console.log(error.message));
+            var checkTimeOpen = new Date("01-01-2017 " + req.body.timeOpen + ":00");
+            var checkTimeClose = new Date("01-01-2017 " + req.body.timeClose + ":00");
+            if (checkTimeOpen.getHours() > checkTimeClose.getHours() || (checkTimeOpen.getHours() == checkTimeClose.getHours() && checkTimeOpen.getMinutes() > checkTimeClose.getMinutes())) {
+                return res.status(400).json({ message: "time open <time close" });
+            }
+            var dataUpdate = {
+                nameSalon: req.body.nameSalon,
+                phone: req.body.phone,
+                timeOpen: req.body.timeOpen,
+                timeClose: req.body.timeClose,
+                description: req.body.description,
+        
+            };
+            var addressUpdate = {
+                city: req.body.city,
+                district: req.body.district,
+                detailAddress: req.body.detailAddress,
+            }
+           
+            var dataOk = { ...dataUpdate, ...addressUpdate, image }
+            Address.updateAddressSalon(salonId, addressUpdate, function (data) {
+                ImageSalon.updateImage(salonId, image, function (data) {
+                    SalonOwner.updateProfileSalon(salonId, dataUpdate, function (data) {
+                        if (data == null) {
+                            res.status(400).json({ data: data, message: "update salon information for customer failed" });
+                        }
+                        else {
+        
+                            res.json({ data: dataOk, message: "update salon information for customer success" });
+        
+                        }
+                    });
+        
+                })
+        
+            })
+       
+      
+       
+
+
+
+
+    } catch (error) {
+        if (error.code === 'LIMIT_FILE_SIZE') {
+            return res.status(500).json({
+                message: "File size cannot be larger than 2MB!",
+            });
+        }
+
+        res.status(500).json({
+            message: `Could not upload the file: ${req.file}. ${error}`,
+        });
+    }
+
+});
 
 
 
