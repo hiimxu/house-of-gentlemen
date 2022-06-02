@@ -179,6 +179,7 @@ SalonOwner.checkTimeSalon = function (id, result) {
     });
 }
 SalonOwner.searchSalon = function (name, result) {
+    // CONCAT('%', CONVERT('${name}', BINARY),'%')
     db.query(`with temp AS(SELECT swp490_g11.salonowner.salonId,swp490_g11.salonowner.nameSalon,swp490_g11.salonowner.phone,swp490_g11.salonowner.taxCode,swp490_g11.address.detailAddress,swp490_g11.salonowner.timeOpen,swp490_g11.salonowner.timeClose,swp490_g11.address.district,swp490_g11.salonowner.description,swp490_g11.salonowner.nameOwner
         FROM swp490_g11.salonowner
         LEFT JOIN swp490_g11.address
@@ -191,7 +192,7 @@ SalonOwner.searchSalon = function (name, result) {
         on temp.salonId=swp490_g11.image_salon.salonId
         left join swp490_g11.feedback
         on temp.salonId=swp490_g11.feedback.salonId
-        where temp.nameSalon  LIKE CONCAT('%', CONVERT('${name}', BINARY),'%')
+        where temp.nameSalon  LIKE '%${name}%'
         group by salonId
         order by (star) desc`, name, (err, rows, fields) => {
         if (err) {
