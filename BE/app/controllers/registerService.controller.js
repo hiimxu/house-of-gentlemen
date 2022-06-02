@@ -2,7 +2,12 @@ var RegisterService = require('../models/register_service.model');
 var StaffCanleder = require('../models/staffCanleder.model');
 var SalonOwner = require('../models/salonOwner.model');
 var Service = require('../models/service.model');
+var Customer = require('../models/customer.model');
 var twilio = require('twilio');
+const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
+const config = require('../common/config');
+const OAuth2 = google.auth.OAuth2
 const { body, validationResult } = require('express-validator');
 var TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN,
@@ -82,7 +87,7 @@ exports.addRegisterService = function (req, res, next) {
     if (date < new Date() || date > fiveDate) {
         return res.status(400).json({ message: "thời gian sử dụng dịch vuk trong vòng 5 ngày " })
     }
-    var salonId= req.body.salonId;
+    var salonId = req.body.salonId;
 
     var dataRegisterService = {
         serviceId: req.body.serviceId,
@@ -93,102 +98,102 @@ exports.addRegisterService = function (req, res, next) {
         price_original: req.body.price_original,
         timeRegister: timeRegister,
         status_register_id: 1,
-        note:'customer booked'
+        note: 'customer booked'
     };
-    
-    SalonOwner.checkSalon(salonId, function (data){
-       
-       if (data[0].possibility!='1'){
-           return res.status(400).json({data:{salonId},message:"salon không hoạt động"});
-       }
-       else{
-        
-        
-        RegisterService.checkBooking(customerId, function (data){
-        
-            if (data.length>=5) {
-                res.json({ message: "bạn chỉ được phép đặt trước tối đa 5 dịch vụ"})
-            } else {
-                Service.checkService(dataRegisterService.serviceId,function (data){
-                    if (data[0].possible==0) {
-                        res.status(400).json({ message:"dịch vụ này đã bị xóa,vui lòng chọn dịch vụ khác để booking"})
-                    }
-                   else{
-                    var promotion = data[0].promotion;
-                    SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
-                        var timeCloseDay = data[0].timeClose;
-                        var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
-                        var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
-                        var timeUse = new Date(req.body.timeUse);
-                        // return res.json({ timeUse, message: "timeUse"})
-                        if (timeOpen.getHours() > timeUse.getHours() ||
-                            (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
-                           
-                            ) {
-                            return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
-                        } else {
-                            var slotTotal = data[0].totalSlot;
-                            var totalSlotBusy = timeBusy / 15;
-                            var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
-                            if ((slotStart + totalSlotBusy) > slotTotal+1) {
-                                return res.status(400).json({ message: "salon close at " + timeCloseDay })
-                            }
-                            StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
-                                var check = 0;
-                                for (let m = 0; m < data.length; m++) {
-                                    for (let n = 0; n < totalSlotBusy; n++) {
-                                        if (data[m].slotBusy == (n + slotStart)) {
-                                            check = check + 1;
-                                        }
-                                    }
-                                }
-                                if (check > 0) {
-                                    return res.status(400).json({ message: "staff bận" });
-                                }
-                                else {
-                
-                                    RegisterService.addRegisterService(dataRegisterService, function (data) {
-                                        var checkIndex = 0;
-                                        for (let index = 0; index < totalSlotBusy; index++) {
-                                            slotBusy = slotStart + index;
-                                            checkIndex++;
-                                            var dataStaffCanleder = {registerServiceId:data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
-                                            StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-                
-                                            })
-                                        }
-                                        RegisterService.dataBooking(data.registerServiceId, function (data){
-                                            data={promotion,...data[0]}
-                                            return res.status(200).json({ data, message: "booking thành công" });
-                
-                                        })
-                                        
-                                    })
-                
-                
-                                    
-                                }
-                            })
-                
-                
-                
+
+    SalonOwner.checkSalon(salonId, function (data) {
+
+        if (data[0].possibility != '1') {
+            return res.status(400).json({ data: { salonId }, message: "salon không hoạt động" });
+        }
+        else {
+
+
+            RegisterService.checkBooking(customerId, function (data) {
+
+                if (data.length >= 5) {
+                    res.json({ message: "bạn chỉ được phép đặt trước tối đa 5 dịch vụ" })
+                } else {
+                    Service.checkService(dataRegisterService.serviceId, function (data) {
+                        if (data[0].possible == 0) {
+                            res.status(400).json({ message: "dịch vụ này đã bị xóa,vui lòng chọn dịch vụ khác để booking" })
                         }
-                
+                        else {
+                            var promotion = data[0].promotion;
+                            SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
+                                var timeCloseDay = data[0].timeClose;
+                                var timeOpen = new Date("01-01-2017 " + data[0].timeOpen + ":00");
+                                var timeClose = new Date("01-01-2017 " + data[0].timeClose + ":00");
+                                var timeUse = new Date(req.body.timeUse);
+                                // return res.json({ timeUse, message: "timeUse"})
+                                if (timeOpen.getHours() > timeUse.getHours() ||
+                                    (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
+
+                                ) {
+                                    return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
+                                } else {
+                                    var slotTotal = data[0].totalSlot;
+                                    var totalSlotBusy = timeBusy / 15;
+                                    var slotStart = (date.getHours() - timeOpen.getHours()) * 60 / 15 + (date.getMinutes() - timeOpen.getMinutes()) / 15 + 1;
+                                    if ((slotStart + totalSlotBusy) > slotTotal + 1) {
+                                        return res.status(400).json({ message: "salon close at " + timeCloseDay })
+                                    }
+                                    StaffCanleder.checkCanlederStaff(date, staffId, function (data) {
+                                        var check = 0;
+                                        for (let m = 0; m < data.length; m++) {
+                                            for (let n = 0; n < totalSlotBusy; n++) {
+                                                if (data[m].slotBusy == (n + slotStart)) {
+                                                    check = check + 1;
+                                                }
+                                            }
+                                        }
+                                        if (check > 0) {
+                                            return res.status(400).json({ message: "staff bận" });
+                                        }
+                                        else {
+
+                                            RegisterService.addRegisterService(dataRegisterService, function (data) {
+                                                var checkIndex = 0;
+                                                for (let index = 0; index < totalSlotBusy; index++) {
+                                                    slotBusy = slotStart + index;
+                                                    checkIndex++;
+                                                    var dataStaffCanleder = { registerServiceId: data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
+                                                    StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
+
+                                                    })
+                                                }
+                                                RegisterService.dataBooking(data.registerServiceId, function (data) {
+                                                    data = { promotion, ...data[0] }
+                                                    return res.status(200).json({ data, message: "booking thành công" });
+
+                                                })
+
+                                            })
+
+
+
+                                        }
+                                    })
+
+
+
+                                }
+
+                            })
+
+                        }
+
                     })
 
-                   }
-                    
-                })
-                
-            }
-    
-        })
-    
-       }
-    })
-   
+                }
 
-    
+            })
+
+        }
+    })
+
+
+
 
 
 
@@ -203,10 +208,10 @@ exports.cancelBooking = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var registerServiceId = req.body.registerServiceId;
-    var note ='customer Canceled booking';
-    StaffCanleder.cancelBooking(registerServiceId, function (data){
-            RegisterService.cancelBooking(registerServiceId,note, function (data) {
-            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId,note}})
+    var note = 'customer Canceled booking';
+    StaffCanleder.cancelBooking(registerServiceId, function (data) {
+        RegisterService.cancelBooking(registerServiceId, note, function (data) {
+            return res.status(200).json({ message: "canceled booking service success", data: { registerServiceId, note } })
         })
     })
 }
@@ -239,23 +244,79 @@ exports.cancelBookingBySalon = function (req, res, next) {
     if (salonId == null) {
         return res.status(400).json({ message: "please login account salon" });
     }
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var registerServiceId = req.body.registerServiceId;
     var note = req.body.note;
-    StaffCanleder.cancelBookingBySalon(registerServiceId, function (data){
-            RegisterService.cancelBooking(registerServiceId,note, function (data) {
-            return res.status(200).json({ message: "canceled booking service success",data:{registerServiceId:registerServiceId,note:note} })
+    RegisterService.getRegisterServiceById(registerServiceId, function (data) {
+        var customerId = data[0].customerId;
+        Customer.checkEmailCustomer(customerId, function (data) {
+            var email = data[0].email;
+            StaffCanleder.cancelBookingBySalon(registerServiceId, function (data) {
+                RegisterService.cancelBooking(registerServiceId, note, function (data) {
+                    const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
+                    OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
+                    function send_mail(name, recipient) {
+                        const accessToken = OAuth2_client.getAccessToken()
+
+                        const transport = nodemailer.createTransport({
+                            host: 'smtp.gmail.com',
+                            port: 465,
+                            secure: true,
+                            auth: {
+                                type: 'oauth2',
+                                clientId: config.clientId,
+                                clientSecret: config.clientSecret,
+                            }
+                        })
+                        const mail_options = {
+                            from: `THE house of gentlemen <${config.user}>`,
+                            to: recipient,
+                            subject: 'A message from the house of gentlemen',
+                            text: get_html_message(),
+                            auth: {
+                                user: config.user,
+                                refreshToken: config.refresh_token,
+                                accessToken: accessToken,
+                            }
+                        }
+                        transport.sendMail(mail_options, function (error, result) {
+                            if (error) {
+                                console.log('Error:', error)
+                                return res.status(400).json({ data: [], message: "check token email" })
+                            } else {
+                                console.log('Success:', result)
+                                
+                            }
+                            transport.close();
+
+
+                        })
+                    }
+                    function get_html_message(name) {
+                        return `
+                    <h3>sign:salon đã hủy booking của bạn</h3>
+                        `
+                    }
+                    send_mail('', email)
+                    return res.status(200).json({ message: "hủy lịch thành công", data: { registerServiceId: registerServiceId, note: note } })
+                })
+            })
+
+
+
         })
+
     })
+
 }
 exports.historyBooking = function (req, res, next) {
     var customerId = req.user.customerId;
-    if (customerId==null) {
-        return res.status(400).json({message:"please login account customer"});
+    if (customerId == null) {
+        return res.status(400).json({ message: "please login account customer" });
     }
     RegisterService.historyBooking(customerId, function (data) {
         // return res.json({ data: data, message: "aaa"})
@@ -301,18 +362,18 @@ exports.bookingServiceForCustomer = function (req, res, next) {
         serviceId: req.body.serviceId,
         salonId: salonId,
         customerId: 26,
-        note:req.body.note,
+        note: req.body.note,
         staffId: req.body.staffId,
         timeUse: req.body.timeUse,
         price_original: req.body.price_original,
         timeRegister: timeRegister,
         status_register_id: 1,
     };
-    SalonOwner.checkSalon(salonId, function (data){
-        if (data[0].possibility!='1'){
-            return res.status(400).json({message:"salon không được phép hoạt động"});
-        }else{
-            Service.checkService(dataRegisterService.serviceId,function (data){
+    SalonOwner.checkSalon(salonId, function (data) {
+        if (data[0].possibility != '1') {
+            return res.status(400).json({ message: "salon không được phép hoạt động" });
+        } else {
+            Service.checkService(dataRegisterService.serviceId, function (data) {
                 var promotion = data[0].promotion;
                 SalonOwner.checkTimeSalon(dataRegisterService.salonId, function (data) {
                     var timeCloseDay = data[0].timeClose;
@@ -349,53 +410,53 @@ exports.bookingServiceForCustomer = function (req, res, next) {
                                     for (let index = 0; index < totalSlotBusy; index++) {
                                         slotBusy = slotStart + index;
                                         checkIndex++;
-                                        var dataStaffCanleder = {registerServiceId:data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
+                                        var dataStaffCanleder = { registerServiceId: data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
                                         StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
-            
+
                                         })
                                     }
-                                    data={promotion,...data}
+                                    data = { promotion, ...data }
                                     return res.status(200).json({ data, message: "booking thành công" });
                                 })
-            
-            
-                                
+
+
+
                             }
                         })
-            
-            
-            
+
+
+
                     }
-            
+
                 })
-            
+
             })
-            
+
         }
     });
 
-    
-    
+
+
 }
 exports.current = function (req, res, next) {
     var salonId = req.user.salonId;
     if (salonId == null) {
         return res.status(400).json({ message: "please login account salon" });
     }
-    var day= req.body.day;
+    var day = req.body.day;
     var staffId = req.body.staffId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var today = new Date();
-    
-    var checkDay = new Date(day+' 23:59:00')
+
+    var checkDay = new Date(day + ' 23:59:00')
     console.log(checkDay)
-    if (checkDay<today) {
-        return res.status(400).json({message:"you see history", data: []});
+    if (checkDay < today) {
+        return res.status(400).json({ message: "you see history", data: [] });
     }
-    RegisterService.current(salonId,day,staffId, function (data) {
+    RegisterService.current(salonId, day, staffId, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have current" });
         } else {
@@ -408,13 +469,13 @@ exports.ordersHistory = function (req, res, next) {
     if (salonId == null) {
         return res.status(400).json({ message: "please login account salon" });
     }
-    var day= req.body.day;
-    var staffId= req.body.staffId;
+    var day = req.body.day;
+    var staffId = req.body.staffId;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
-    RegisterService.ordersHistory(salonId,day,staffId, function (data) {
+    RegisterService.ordersHistory(salonId, day, staffId, function (data) {
         if (data.length == 0) {
             return res.json({ data: data, message: "not have history booking" });
         } else {
@@ -433,18 +494,18 @@ exports.finshBooking = function (req, res, next) {
         return res.status(400).json({ errors: errors.array(), message: "error validate" });
     }
     var note = 'booking finished';
-    StaffCanleder.finishBooking(id,function (data){
-        RegisterService.finshBooking(id,note, function (data){
-        
-            return res.json({ data: {id:id,note:note}, message: "finish booking service" });
-        
-    })
+    StaffCanleder.finishBooking(id, function (data) {
+        RegisterService.finshBooking(id, note, function (data) {
+
+            return res.json({ data: { id: id, note: note }, message: "finish booking service" });
+
+        })
 
     })
-   
+
 
 }
 exports.check = function (req, res, next) {
-   
-    res.status(200).json({ data: [], message: "ok"})
+
+    res.status(200).json({ data: [], message: "ok" })
 }

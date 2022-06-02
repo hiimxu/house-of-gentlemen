@@ -432,7 +432,7 @@ app.put("/api/salonowner/update/salonBusinessInformationByFireBase/", cors(), au
                                 if (data.affectedRows == 0) {
                                     res.status(200).json({ data: data, message: "not have salon 's profile to update" });
                                 } else {
-                                    res.json({ data: dataOk, message: "update salon 's profile success" });
+                                    res.json({ data: dataOk, message: "cập nhập thông tin thành công" });
                                 }
                             }
                         });
@@ -517,7 +517,7 @@ app.put("/api/salonowner/update/salonInformationFirebase", cors(), auth, async (
                         }
                         else {
         
-                            res.json({ data: dataOk, message: "update salon information for customer success" });
+                            res.json({ data: dataOk, message: "cập nhập thông tin cho salon thành công" });
         
                         }
                     });
@@ -535,12 +535,12 @@ app.put("/api/salonowner/update/salonInformationFirebase", cors(), auth, async (
     } catch (error) {
         if (error.code === 'LIMIT_FILE_SIZE') {
             return res.status(500).json({
-                message: "File size cannot be larger than 2MB!",
+                message: "Ảnh không thể có dung lượng lớn hơn 2M",
             });
         }
 
         res.status(500).json({
-            message: `Could not upload the file: ${req.file}. ${error}`,
+            message: `Chọn ảnh đuôi .png, .jpg and .jpeg`,
         });
     }
 
