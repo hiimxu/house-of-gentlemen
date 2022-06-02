@@ -465,58 +465,65 @@ exports.deleteSalon = function (req, res, next) {
         return res.status(400).json({ errors: errors.array() });
     }
     var salonId = req.body.salonId;
-    SalonOwner.deleteSalon(salonId, function (data) {
-        SalonOwner.getEmailOfSalon(salonId, function (data) {
-            email = data[0].email;
-            const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
-            OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
-            function send_mail(name, recipient) {
-                const accessToken = OAuth2_client.getAccessToken()
-
-                const transport = nodemailer.createTransport({
-                    host: 'smtp.gmail.com',
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        type: 'oauth2',
-                        clientId: config.clientId,
-                        clientSecret: config.clientSecret,
+    SalonOwner.checkSalon(salonId, function (data) {
+        var id = data[0].accountId;
+        var account= data[0].salonId+Date.now()+Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 22);
+        Account.deleteSalon(id,account, function (data){
+            SalonOwner.deleteSalon(salonId, function (data) {
+                SalonOwner.getEmailOfSalon(salonId, function (data) {
+                    email = data[0].email;
+                    const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
+                    OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
+                    function send_mail(name, recipient) {
+                        const accessToken = OAuth2_client.getAccessToken()
+        
+                        const transport = nodemailer.createTransport({
+                            host: 'smtp.gmail.com',
+                            port: 465,
+                            secure: true,
+                            auth: {
+                                type: 'oauth2',
+                                clientId: config.clientId,
+                                clientSecret: config.clientSecret,
+                            }
+                        })
+                        const mail_options = {
+                            from: `THE house of gentlemen <${config.user}>`,
+                            to: recipient,
+                            subject: 'A message from the house of gentlemen',
+                            text: get_html_message(),
+                            auth: {
+                                user: config.user,
+                                refreshToken: config.refresh_token,
+                                accessToken: accessToken,
+                            }
+                        }
+                        transport.sendMail(mail_options, function (error, result) {
+                            if (error) {
+                                console.log('Error:', error)
+                                return res.status(400).json({data:[],message:"check token email"})
+                            } else {
+                                console.log('Success:', result)
+                                res.json({ data: { email: email,salonId:salonId}, message: "từ chối thành công, đã gửi email thông báo đến chủ salon" })
+                            }
+                            transport.close();
+                           
+        
+                        })
                     }
+                    function get_html_message(name) {
+                        return `
+                            <h3>sign:salon của bạn đã bị xóa</h3>
+                                `
+                    }
+                    send_mail('', email)
+        
+        
+        
                 })
-                const mail_options = {
-                    from: `THE house of gentlemen <${config.user}>`,
-                    to: recipient,
-                    subject: 'A message from the house of gentlemen',
-                    text: get_html_message(),
-                    auth: {
-                        user: config.user,
-                        refreshToken: config.refresh_token,
-                        accessToken: accessToken,
-                    }
-                }
-                transport.sendMail(mail_options, function (error, result) {
-                    if (error) {
-                        console.log('Error:', error)
-                        return res.status(400).json({data:[],message:"check token email"})
-                    } else {
-                        console.log('Success:', result)
-                        res.json({ data: { email: email,salonId:salonId}, message: "từ chối thành công, đã gửi email thông báo đến chủ salon" })
-                    }
-                    transport.close();
-                   
-
-                })
-            }
-            function get_html_message(name) {
-                return `
-                    <h3>sign:salon của bạn đã bị xóa</h3>
-                        `
-            }
-            send_mail('', email)
-
-
-
+        
+            });
         })
-
-    });
+    })
+   
 }

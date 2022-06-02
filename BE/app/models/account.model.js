@@ -108,6 +108,16 @@ Account.updatePasswordAccount= function (id,md5_new_pass, result) {
         }
     });
 }
+Account.deleteSalon = function (id,account, result){
+   db.query(`UPDATE swp490_g11.account SET account_name = '${account}' where account_id =?`,id,(err, rows, fields) => {
+        
+        if (err) {
+            result(null, err)
+        } else {
+            result("delete salon")
+        }
+    }); 
+}
 Account.updateToken=function (account_name, token,result) {
     console.log(token)
     var password='abc'
