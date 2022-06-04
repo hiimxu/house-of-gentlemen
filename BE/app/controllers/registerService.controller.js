@@ -104,7 +104,7 @@ exports.addRegisterService = function (req, res, next) {
     SalonOwner.checkSalon(salonId, function (data) {
 
         if (data[0].possibility != '1') {
-            return res.status(400).json({ data: { salonId }, message: "salon không hoạt động" });
+            return res.status(400).json({ data: { salonId }, message: "Salon đã ngừng hoạt động" });
         }
         else {
 
@@ -112,11 +112,11 @@ exports.addRegisterService = function (req, res, next) {
             RegisterService.checkBooking(customerId, function (data) {
 
                 if (data.length >= 5) {
-                    res.json({ message: "bạn chỉ được phép đặt trước tối đa 5 dịch vụ" })
+                    res.json({ message: "Bạn chỉ được phép đặt trước tối đa 5 dịch vụ" })
                 } else {
                     Service.checkService(dataRegisterService.serviceId, function (data) {
                         if (data[0].possible == 0) {
-                            res.status(400).json({ message: "dịch vụ này đã bị xóa,vui lòng chọn dịch vụ khác để booking" })
+                            res.status(400).json({ message: "Dịch vụ này đã bị xóa,vui lòng chọn dịch vụ khác để booking" })
                         }
                         else {
                             var promotion = data[0].promotion;
@@ -130,7 +130,7 @@ exports.addRegisterService = function (req, res, next) {
                                     (timeOpen.getHours() == timeUse.getHours() && timeOpen.getMinutes() > timeUse.getMinutes())
 
                                 ) {
-                                    return res.status(400).json({ message: "salon open at " + data[0].timeOpen });
+                                    return res.status(400).json({ message: "Salon open at " + data[0].timeOpen });
                                 } else {
                                     var slotTotal = data[0].totalSlot;
                                     var totalSlotBusy = timeBusy / 15;
@@ -156,6 +156,7 @@ exports.addRegisterService = function (req, res, next) {
                                                 var checkIndex = 0;
                                                 for (let index = 0; index < totalSlotBusy; index++) {
                                                     slotBusy = slotStart + index;
+                                        
                                                     checkIndex++;
                                                     var dataStaffCanleder = { registerServiceId: data.registerServiceId, staffId: staffId, slotTotal: slotTotal, slotBusy: slotBusy, date: date };
                                                     StaffCanleder.addStaffCanderToRegisterService(dataStaffCanleder, function (data) {
@@ -257,52 +258,53 @@ exports.cancelBookingBySalon = function (req, res, next) {
             var email = data[0].email;
             StaffCanleder.cancelBookingBySalon(registerServiceId, function (data) {
                 RegisterService.cancelBooking(registerServiceId, note, function (data) {
-                    const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
-                    OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
-                    function send_mail(name, recipient) {
-                        const accessToken = OAuth2_client.getAccessToken()
-
-                        const transport = nodemailer.createTransport({
-                            host: 'smtp.gmail.com',
-                            port: 465,
-                            secure: true,
-                            auth: {
-                                type: 'oauth2',
-                                clientId: config.clientId,
-                                clientSecret: config.clientSecret,
-                            }
-                        })
-                        const mail_options = {
-                            from: `THE house of gentlemen <${config.user}>`,
-                            to: recipient,
-                            subject: 'A message from the house of gentlemen',
-                            text: get_html_message(),
-                            auth: {
-                                user: config.user,
-                                refreshToken: config.refresh_token,
-                                accessToken: accessToken,
-                            }
-                        }
-                        transport.sendMail(mail_options, function (error, result) {
-                            if (error) {
-                                console.log('Error:', error)
-                                return res.status(400).json({ data: [], message: "check token email" })
-                            } else {
-                                console.log('Success:', result)
-                                
-                            }
-                            transport.close();
-
-
-                        })
-                    }
-                    function get_html_message(name) {
-                        return `
-                    <h3>sign:salon đã hủy booking của bạn</h3>
-                        `
-                    }
-                    send_mail('', email)
                     return res.status(200).json({ message: "hủy lịch thành công", data: { registerServiceId: registerServiceId, note: note } })
+                    // const OAuth2_client = new OAuth2(config.clientId, config.clientSecret);
+                    // OAuth2_client.setCredentials({ refresh_token: config.refresh_token });
+                    // function send_mail(name, recipient) {
+                    //     const accessToken = OAuth2_client.getAccessToken()
+
+                    //     const transport = nodemailer.createTransport({
+                    //         host: 'smtp.gmail.com',
+                    //         port: 465,
+                    //         secure: true,
+                    //         auth: {
+                    //             type: 'oauth2',
+                    //             clientId: config.clientId,
+                    //             clientSecret: config.clientSecret,
+                    //         }
+                    //     })
+                    //     const mail_options = {
+                    //         from: `THE house of gentlemen <${config.user}>`,
+                    //         to: recipient,
+                    //         subject: 'A message from the house of gentlemen',
+                    //         text: get_html_message(),
+                    //         auth: {
+                    //             user: config.user,
+                    //             refreshToken: config.refresh_token,
+                    //             accessToken: accessToken,
+                    //         }
+                    //     }
+                    //     transport.sendMail(mail_options, function (error, result) {
+                    //         if (error) {
+                    //             console.log('Error:', error)
+                    //             return res.status(400).json({ data: [], message: "check token email" })
+                    //         } else {
+                    //             console.log('Success:', result)
+                                
+                    //         }
+                    //         transport.close();
+
+
+                    //     })
+                    // }
+                    // function get_html_message(name) {
+                    //     return `
+                    // <h3>sign:salon đã hủy booking của bạn</h3>
+                    //     `
+                    // }
+                    // send_mail('', email)
+                    // return res.status(200).json({ message: "hủy lịch thành công", data: { registerServiceId: registerServiceId, note: note } })
                 })
             })
 

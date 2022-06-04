@@ -66,8 +66,8 @@ exports.addGalleryBySalon = function () {
 }
 exports.validateLogin = function () {
     return [
-        body('account').not().isEmpty().isLength({ min: 3, max: 45 }).withMessage('account :min lenght 3,max lenght 45'),
-        body('password').not().isEmpty().isLength({ min: 3, max: 45 }).withMessage('password :min lenght 3,max lenght 45'),
+        body('account').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('account :min lenght 1,max lenght 45'),
+        body('password').not().isEmpty().isLength({ min: 1, max: 45 }).withMessage('password :min lenght 1,max lenght 45'),
 
     ];
 }
